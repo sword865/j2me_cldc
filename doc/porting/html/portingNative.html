@@ -1,0 +1,860 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="book-no-index" />
+    <meta name="LASTUPDATED" content="02/20/03 12:37:46" />
+    <title>Native Code</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="portingFloatingPoint.html" />
+    <link rel="Next" href="portingEvent.html" />
+    <link rel="Index" href="portingJavaDebugger.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" class="full-width">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="portingFloatingPoint.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="portingEvent.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp422649"> </a><h2 class="pChapNum">
+Chapter &#160; 11
+</h2>
+<a name="wp433196"> </a><h2 class="pTitle">
+Native Code
+</h2>
+<hr class="pHr"/>
+<a name="wp436386"> </a><p class="pBody">
+A Java virtual machine commonly needs access to various native functions in order to interact with the outside world. For instance, all the low-level graphics functions, file access functions, networking functions, or other similar routines that depend on the underlying operating system services typically need to be written in native code.
+</p>
+<a name="wp436408"> </a><p class="pBody">
+The way these native functions are made available to the Java virtual machine can vary from one virtual machine implementation to another. In order to minimize the work that is needed when porting the native functions, the <em class="cEmphasis">Java Native Interface</em><a href="#wp436500"><span class="Footnote">1</span></a> (JNI) standard was created. The Java Native Interface generally serves two purposes: 1) JNI serves as a common interface for virtual machine implementers so that the same native functions will work unmodified with different virtual machines; 2) JNI provides Java-level APIs that make it possible for a Java programmer to dynamically load libraries and access native functions in those libraries.
+</p>
+<a name="wp436418"> </a><p class="pBody">
+Unfortunately, because of its general nature, JNI is rather expensive and introduces a significant memory and performance overhead to native function calls. Also, the ability to dynamically load and call arbitrary native functions from Java programs could pose security problems in the absence of the full Java 2 security model.
+</p>
+<a name="wp439842"> </a><p class="pBody">
+KVM does not support the Java Native Interface (JNI). Rather, KVM supports an interface called <em class="cEmphasis">K Native Interface</em> (KNI), which implements a logical subset of JNI that is significantly more efficient in terms of performance and memory consumption. In addition, KVM also supports an older interface that allows native functions to be added to the KVM in a VM-specific fashion. Information on KNI is provided below in <a  href="portingNative.html#wp436382"><span style="color: #3366CC">Section&#160;11.1 &quot;Using the K Native Interface (KNI)</span></a>&#8221;. Information for writing native functions using the old-style native interface is provided in <a  href="portingNative.html#wp422794"><span style="color: #3366CC">Section&#160;11.2 &quot;Implementing old-style native methods</span></a>.&#8221;
+</p>
+<a name="wp436382"> </a><h2 class="pHeading1">
+11.1	Using the K Native Interface (KNI)
+</h2>
+<a name="wp439754"> </a><p class="pBody">
+Starting from KVM 1.0.4, KVM has a new interface for writing native functions. The high-level goal of this new interface, <em class="cEmphasis">K Native Interface (KNI)</em>, is to allow native functions to be added to the KVM (and other small-footprint virtual machines) in a manner that is both highly efficient and fully independent of the internal structures of the virtual machine. The <em class="cEmphasis">K Native Interface (KNI) Specification</em>, (Sun Microsystems, Inc., 2001) (<em class="cEmphasis">KNI Specification)</em> defines a logical subset of the Java Native Interface (JNI) that is well-suited for low-power, memory-constrained devices. KNI follows the function naming conventions and other aspects of the JNI as far as this is possible and reasonable within the strict memory limits of CLDC target devices and in the absence of the full Java 2 security model. Since KNI is intended to be significantly more lightweight than JNI, some aspects of the interface, such as the parameter passing conventions, have been completely redesigned and are significantly different from JNI.
+</p>
+<a name="wp436595"> </a><p class="pBody">
+The K Native Interface is described in more detail in the <em class="cEmphasis">KNI Specification</em>. Please refer to this specification to learn about the K Native Interface and its usage.
+</p>
+<a name="wp436613"> </a><p class="pBody">
+<b class="cBold">Things to remember when getting started with KNI: </b>One of the key goals of the KNI is to isolate the native function programmer from the implementation details of the virtual machine. Instead of writing native functions using KVM-specific functions and data structures (as required by the old-style native interface described in <a  href="portingNative.html#wp422794"><span style="color: #3366CC">Section&#160;11.2 &quot;Implementing old-style native methods</span></a>&#8221;), KNI allows native functions to be written using a set of functions that operate identically and efficiently across a wide variety of virtual machines. To ensure portability of native code, the native function programmer <em class="cEmphasis">shall not use any KVM-specific include files or KVM-specific functions or data types</em>. Rather, the programmer must include the file &#8220;kni.h&#8221; and use functions and data types defined in that file.
+</p>
+<a name="wp422794"> </a><h2 class="pHeading1">
+11.2	Implementing old-style native methods
+</h2>
+<hr class="pHr"/><div class="note">
+<a name="wp425339"> </a>
+<b>Note &#8211;</b>  It is highly recommended that you use KNI for writing native functions to the KVM. The use of the old-style API is strongly discouraged for all other purposes than for writing asynchronous native functions (<a  href="portingNative.html#wp433595"><span style="color: #3366CC">Section&#160;11.4 &quot;Asynchronous native methods</span></a>&#8221;).
+<hr class="pHr"/></div>
+<a name="wp436556"> </a><p class="pBody">
+<b class="cBold">WARNING:</b> You should not write old-style native methods unless you have thoroughly read through the implementation and understand its structures. Most of the material in this porting guide is moderately straightforward. The material in this subsection is not!
+</p>
+<a name="wp436570"> </a><p class="pBody">
+Old-style native methods must be written extremely carefully. Inattention to detail will cause fatal errors in the virtual machine.
+</p>
+<a name="wp433311"> </a><h3 class="pHeading2">
+11.2.1	Include files
+</h3>
+<a name="wp439530"> </a><p class="pBody">
+Your code containing old-style native functions should begin with the line
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;#include &lt;global.h&gt;<a name="wp439531"> </a>
+</pre></div>
+<a name="wp439532"> </a><p class="pBody">
+which causes all include files that are part of KVM to be included. You might also need to <code class="cCode">#include</code> additional files.
+</p>
+<a name="wp433279"> </a><h3 class="pHeading2">
+11.2.2	Accessing arguments from old-style native methods
+</h3>
+<a name="wp433303"> </a><p class="pBody">
+When a native method is called, its arguments are on top of the Java stack. A static method&#8217;s arguments should be popped from the stack in the <em class="cEmphasis">reverse order</em> from which they were pushed. <a  href="portingNative.html#wp439206">CODE&#160;EXAMPLE&#160;3</a> shows an example of this coding style:
+</p>
+<a name="wp439206"> </a><div class="pCodeCaption">
+CODE&#160;EXAMPLE&#160;3 	Handling arguments of native static methods
+</div>
+<a name="wp439232"> </a><p class="pBody">
+<em class="cEmphasis">Java code:</em>
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+static native void<a name="wp439207"> </a>
+drawRectangle(int x, int y, int width, int height);<a name="wp439208"> </a>
+</pre></div>
+<a name="wp439210"> </a><p class="pBody">
+<em class="cEmphasis">Native implementation:</em>
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+static void Java_com_sun_kjava_Graphics_drawRectangle() {<a name="wp439211"> </a>
+&#160;&#160;&#160;&#160;int height = popStack();<a name="wp439212"> </a>
+&#160;&#160;&#160;&#160;int width = &#160;popStack();<a name="wp439213"> </a>
+&#160;&#160;&#160;&#160;int y = &#160;&#160;&#160;&#160;&#160;popStack();<a name="wp439214"> </a>
+&#160;&#160;&#160;&#160;int x = &#160;&#160;&#160;&#160;&#160;popStack();<a name="wp439215"> </a>
+&#160;&#160;&#160;&#160;windowSystemDrawRectangle(x, y, width, height);<a name="wp439216"> </a>
+}<a name="wp439217"> </a>
+</pre></div>
+<a name="wp434746"> </a><p class="pBody">
+An instance method (non-static method) must pop the <code class="cCode">this</code> argument off the stack after it has popped the rest of the arguments. 
+</p>
+<hr class="pHr"/><div class="note">
+<a name="wp439545"> </a>
+<b>Note &#8211;</b>  Failing to pop the <code class="cCode">this</code> argument in a native instance method will almost surely cause a fatal error in the virtual machine.
+<hr class="pHr"/></div>
+<a name="wp434750"> </a><p class="pBody">
+<a  href="portingNative.html#wp434786">Table&#160;12</a> shows the macros that should be used to pop arguments off the stack:</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq434784">
+  <caption><a name="wp434786"> </a><div class="pTableCaption">
+TABLE&#160;12&#160;&#160;&#8211;&#160;&#160;Macros for popping arguments from the stack
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp434790"> </a><div style="text-align: left" class="pTableHead">
+C type
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp434792"> </a><div style="text-align: left" class="pTableHead">
+Macro for popping
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp434794"> </a><div class="pTableText">
+<code class="cCode">char</code>, <code class="cCode">byte</code>, <code class="cCode">int</code>, <code class="cCode">long</code>
+</div>
+</td>
+    <td><a name="wp434796"> </a><div class="pTableText">
+<code class="cCode">popStack()</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434798"> </a><div class="pTableText">
+<code class="cCode">float</code>
+</div>
+</td>
+    <td><a name="wp434800"> </a><div class="pTableText">
+<code class="cCode">popStackAsType(float)</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434802"> </a><div class="pTableText">
+<code class="cCode">long64</code>, <code class="cCode">ulong64</code>
+</div>
+</td>
+    <td><a name="wp434804"> </a><div class="pTableText">
+<code class="cCode">popLong()</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434806"> </a><div class="pTableText">
+<code class="cCode">double</code>
+</div>
+</td>
+    <td><a name="wp434808"> </a><div class="pTableText">
+<code class="cCode">popDouble()</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434810"> </a><div class="pTableText">
+<code class="cCode">pointerType</code>
+</div>
+</td>
+    <td><a name="wp434812"> </a><div class="pTableText">
+<code class="cCode">popStackAsType(pointerType)</code>
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp433317"> </a><h3 class="pHeading2">
+11.2.3	Returning a result from an old-style native function
+</h3>
+<a name="wp434495"> </a><p class="pBody">
+If a native method returns a result, it must push that result onto the stack. The native code should use the appropriate macro shown in <a  href="portingNative.html#wp434899">Table&#160;13</a> to push the result back onto the stack:</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq434897">
+  <caption><a name="wp434899"> </a><div class="pTableCaption">
+TABLE&#160;13&#160;&#160;&#8211;&#160;&#160;Macros for pushing arguments onto the stack
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp434903"> </a><div style="text-align: left" class="pTableHead">
+C type
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp434905"> </a><div style="text-align: left" class="pTableHead">
+Macro for pushing
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp434907"> </a><div class="pTableText">
+<code class="cCode">char</code>, <code class="cCode">byte</code>, <code class="cCode">int</code>, <code class="cCode">long</code>
+</div>
+</td>
+    <td><a name="wp434909"> </a><div class="pTableText">
+<code class="cCode">pushStack()</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434911"> </a><div class="pTableText">
+<code class="cCode">float</code>
+</div>
+</td>
+    <td><a name="wp434913"> </a><div class="pTableText">
+<code class="cCode">pushStackAsType(float)</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434915"> </a><div class="pTableText">
+<code class="cCode">long64, ulong64</code>
+</div>
+</td>
+    <td><a name="wp434917"> </a><div class="pTableText">
+<code class="cCode">pushLong()</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434919"> </a><div class="pTableText">
+<code class="cCode">double</code>
+</div>
+</td>
+    <td><a name="wp434921"> </a><div class="pTableText">
+<code class="cCode">pushDouble()</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434923"> </a><div class="pTableText">
+<code class="cCode">pointerType</code>
+</div>
+</td>
+    <td><a name="wp434925"> </a><div class="pTableText">
+<code class="cCode">pushStackAsType(pointerType)</code>
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp434122"> </a><h3 class="pHeading2">
+11.2.4	Shortcuts
+</h3>
+<a name="wp434117"> </a><p class="pBody">
+Some native code uses the macro <code class="cCode">topStack</code> instead of popping the last argument off the stack. It then sets <code class="cCode">topStack</code> to the value it wants to return.
+</p>
+<a name="wp434131"> </a><p class="pBody">
+This practice is not encouraged. It should only be used for &#8220;one-liners&#8221; that access the argument and return the value in a single statement. <code class="cCode">pushStack</code> and <code class="cCode">popStack</code> cannot be used in this case, since C would not guarantee their order of evaluation.
+</p>
+<a name="wp435212"> </a><p class="pBody">
+In general, it is safer to pop the value, perform the calculation, and push the value back onto the stack as three separate steps.
+</p>
+<a name="wp435213"> </a><h3 class="pHeading2">
+11.2.5	Callbacks
+</h3>
+<a name="wp435214"> </a><p class="pBody">
+Native code cannot call back into Java code. KVM provides a mechanism by which native code can alter the interpreter state to begin executing a new piece of code. Upon finishing executing that code, the mechanism can indicate a new C function which should be called.
+</p>
+<a name="wp433332"> </a><h3 class="pHeading2">
+11.2.6	Exception handling in old-style native code
+</h3>
+<a name="wp433333"> </a><p class="pBody">
+If the native code needs to throw an error or exception, it should call the function
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+void raiseException(const char* exceptionClassName)<a name="wp439306"> </a>
+</pre></div>
+<a name="wp439307"> </a><p class="pBody">
+where the exceptionClassName argument is the <code class="cCode">exception</code> class or <code class="cCode">error</code> class.
+</p>
+<a name="wp433338"> </a><h3 class="pHeading2">
+11.2.7	Useful functions in old-style native code
+</h3>
+<a name="wp433339"> </a><p class="pBody">
+Other useful functions that a native method might need to call are the following:
+</p>
+<ul class="pBullet1"><a name="wp424274"> </a><div class="pBullet1"><li><code class="cCode">void fatalError(const char* errorMessage);<br /></code>The code calls this method to indicate that a serious error has occurred. <br />The <code class="cCode">errorMessage</code> argument is a brief explanation of the problem. This method does not return.</li></div>
+<a name="wp433344"> </a><div class="pBullet1Plus"><li><code class="cCode">CLASS getClass(const char *name);<br /></code>This method returns the class whose name is the indicated argument. You might want to coerce the return result to be an <code class="cCode">INSTANCE_CLASS</code> or an <code class="cCode">ARRAY_CLASS</code>.</li></div>
+<a name="wp424299"> </a><div class="pBullet1Plus"><li><code class="cCode">STRING_INSTANCE instantiateString(const char* string, <br /></code>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<code class="cCode">int length);<br /></code>This method converts the given C string into a Java <code class="cCode">string</code>.</li></div>
+<a name="wp424312"> </a><div class="pBullet1Plus"><li><code class="cCode">char *getStringContents(STRING_INSTANCE string);<br /></code>The instance argument must be a Java <code class="cCode">string</code>. It is converted into a null-terminated C string, and returned as the result.<br /><br />The string is placed into a global buffer. If your code must hold onto this string for any length of time, you must copy the buffer into stack-allocated storage, or allocate space from the Java heap.</li></div>
+<a name="wp433160"> </a><div class="pBullet1Plus"><li><code class="cCode">INSTANCE instantiate(INSTANCE_CLASS class);<br /></code>Creates a new Java instance of the specified class.</li></div>
+<a name="wp433142"> </a><div class="pBullet1Plus"><li><code class="cCode">ARRAY instantiateArray(ARRAY_CLASS arrayClass, long length);<br /></code>Creates a Java array of the specified type and length.</li></div>
+<a name="wp439678"> </a><div class="pBullet1Plus"><li><code class="cCode">SHORTARRAY createCharArray(const char* utf8stringArg, <br /></code>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<code class="cCode">int utf8length, <br /></code>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<code class="cCode">int* unicodelengthP,<br /></code>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<code class="cCode">bool_t is_permanent);<br /></code>Creates a Java character array from the C string passed as an argument.</li></div>
+<a name="wp439669"> </a><div class="pBullet1Last"><li><code class="cCode">char* mallocBytes(long sizeInBytes);<br /></code>Allocates a memory block in the garbage-collected heap that is big enough to hold <code class="cCode">sizeInBytes</code> number of bytes. You can create a temporary root (<a  href="portingNative.html#wp433347"><span style="color: #3366CC">Section&#160;11.2.8 &quot;Garbage collection issues</span></a>&#8221;) to prevent the memory block from being garbage-collected.</li></div>
+</ul>
+<a name="wp433347"> </a><h3 class="pHeading2">
+11.2.8	Garbage collection issues
+</h3>
+<a name="wp433348"> </a><p class="pBody">
+The C stack is not scanned when the KVM performs a garbage collection. If your native code allocates new Java objects, you must take special precautions to prevent your new Java objects from being garbage collected inadvertently.
+</p>
+<a name="wp435672"> </a><p class="pBody">
+Since the release 1.0.2, KVM includes a compacting garbage collector. Any time that your native code performs an allocation, objects in the Java heap can move. This includes any arguments passed to your native function and any previous heap allocations performed by your native code.
+</p>
+<hr class="pHr"/><div class="note">
+<a name="wp435221"> </a>
+<b>Note &#8211;</b>  We strongly recommend that you do not write native methods that perform allocation from the Java heap. You greatly increase the chances that your code will have hard-to-find and hard-to-reproduce bugs.
+<hr class="pHr"/></div>
+<a name="wp439989"> </a><p class="pBody">
+
+</p>
+<hr class="pHr"/><div class="note">
+<a name="wp435681"> </a>
+<b>Note &#8211;</b>  If, for example, you need to create a structure, it is better to create that structure in Java code, and pass it as an argument to the native code.
+<hr class="pHr"/></div>
+<a name="wp435409"> </a><p class="pBody">
+If your code must perform allocation, it is important that you
+</p>
+<ul class="pBullet1"><a name="wp435392"> </a><div class="pBullet1"><li>Pop all arguments off the stack before you perform any allocation.</li></div>
+<a name="wp435393"> </a><div class="pBullet1Last"><li>Push the return value (if any) onto the stack after you have performed any allocation.</li></div>
+</ul>
+<a name="wp435394"> </a><p class="pBody">
+The garbage collector can get erroneous results if an allocation occurs while an argument or return value is on the Java stack. The rest of this chapter describes how your code can interact correctly with the garbage collector.
+</p>
+<a name="wp435637"> </a><h4 class="pHeading3">
+11.2.8.1	Heap Space and Permanent Space
+</h4>
+<a name="wp435638"> </a><p class="pBody">
+In order to simplify the garbage collector, the KVM&#8217;s memory is divided into two spaces: &#8220;permanent space&#8221; and &#8220;heap space&#8221;.
+</p>
+<a name="wp435639"> </a><p class="pBody">
+All objects created in permanent space are, well, permanent. These objects are
+</p>
+<ul class="pBullet1"><a name="wp435640"> </a><div class="pBullet1"><li>never freed by the garbage collector,</li></div>
+<a name="wp435641"> </a><div class="pBullet1Plus"><li>never scanned by the garbage collector to see if they contain pointers to other objects,</li></div>
+<a name="wp435642"> </a><div class="pBullet1Last"><li>never relocated.</li></div>
+</ul>
+<a name="wp435647"> </a><p class="pBody">
+Among the objects that are allocated in permanent space are
+</p>
+<ul class="pBullet1"><a name="wp435708"> </a><div class="pBullet1"><li>class structures,</li></div>
+<a name="wp435709"> </a><div class="pBullet1Plus"><li>Java byte codes,</li></div>
+<a name="wp435711"> </a><div class="pBullet1Plus"><li>method tables,</li></div>
+<a name="wp435713"> </a><div class="pBullet1Plus"><li>field tables,</li></div>
+<a name="wp435714"> </a><div class="pBullet1Last"><li>interned instances of <code class="cCode">java.lang.String</code> (but not all strings).</li></div>
+</ul>
+<a name="wp435717"> </a><p class="pBody">
+These objects are never moved and never freed after they are created.
+</p>
+<a name="wp435648"> </a><p class="pBody">
+Structures that have a possibly limited lifetime are allocated in heap space. Among these are
+</p>
+<ul class="pBullet1"><a name="wp435718"> </a><div class="pBullet1"><li>all Java instances (except for interned <code class="cCode">String</code>s),</li></div>
+<a name="wp435724"> </a><div class="pBullet1Plus"><li>threads,</li></div>
+<a name="wp435726"> </a><div class="pBullet1Last"><li>stack chunks.</li></div>
+</ul>
+<a name="wp435730"> </a><p class="pBody">
+These structures are liable to move any time an allocation occurs. Your code must be following the rules specified in the following subsections to ensure that your code lives happily with the garbage collector.
+</p>
+<a name="wp435476"> </a><h4 class="pHeading3">
+11.2.8.2	Asserting no allocation
+</h4>
+<a name="wp439335"> </a><p class="pBody">
+The KVM provides the two macros <code class="cCode">ASSERTING_NO_ALLOCATION</code> and <code class="cCode">END_ASSERTING_NO_ALLOCATION</code>, which are used as shown in <a  href="portingNative.html#wp439339">CODE&#160;EXAMPLE&#160;4</a>:
+</p>
+<a name="wp439339"> </a><div class="pCodeCaption">
+CODE&#160;EXAMPLE&#160;4 	Forbidding garbage collection
+</div>
+<div class="pPreformatted"><pre class="pPreformatted">
+ASSERTING_NO_ALLOCATION<a name="wp439344"> </a>
+&#160;&#160;&#160;&#160;non allocating code<a name="wp439345"> </a>
+END_ASSERTING_NO_ALLOCATION;<a name="wp439346"> </a>
+</pre></div>
+<a name="wp439637"> </a><p class="pBody">
+These macros are provided for use only in <code class="cCode">DEBUG</code> mode to guarantee that no allocation is performed by the code between the <code class="cCode">ASSERTING</code>... and the <code class="cCode">END_ASSERTING</code>... macro.
+</p>
+<a name="wp439628"> </a><p class="pBody">
+If your code is compiled with <code class="cCode">INCLUDEDEBUGCODE</code> set to a non-zero value, then any allocation inside the specified code causes a fatal error.
+</p>
+<a name="wp435479"> </a><p class="pBody">
+If you use the macros, make sure that the non-allocating code inside the macros does not perform a <code class="cCode">return</code>. The macro <code class="cCode">END_ASSERTING_NO_ALLOCATION</code> contains cleanup code that must be executed.
+</p>
+<a name="wp435484"> </a><p class="pBody">
+You are encouraged to use these macros to indicate safe regions of code in which heap-allocated objects will not move.
+</p>
+<a name="wp435287"> </a><h4 class="pHeading3">
+11.2.8.3	Handles in old-style native functions
+</h4>
+<a name="wp435289"> </a><p class="pBody">
+To deal with the fact that heap-allocated objects in the KVM can move, the garbage collector makes use of temporary &#8220;handles.&#8221; A handle is an indirect pointer to an object. Rather than being the address of the object itself, a handle is the address of a memory location that contains the address of the object.
+</p>
+<a name="wp435290"> </a><p class="pBody">
+The memory location that contains the address of the object must not itself be in the Java heap. In general, it is the address of a variable (for global roots) or the address of a location on the C stack (for temporary roots).
+</p>
+<ul class="pBullet1"><a name="wp435302"> </a><div class="pBullet1"><li>If the object is possibly in the Java heap, then the memory location that contains the address of the object must be registered with the garbage collector. It can either be a temporary root (see <a  href="portingNative.html#wp435798">§11.2.8.4</a>) or a permanent root (see <a  href="portingNative.html#wp435490">§11.2.8.5</a>).</li></div>
+<a name="wp435797"> </a><div class="pBullet1Last"><li>If the object is not in the Java heap, then the handle does not need to be registered with the garbage collector.</li></div>
+</ul>
+<a name="wp435851"> </a><p class="pBody">
+All type names in the KVM that end with <code class="cCode">_HANDLE</code> indicate handles. If an argument has a handle as one of its arguments, the argument must be an indirect pointer, and must be registered with the garbage collector if the object could be in the Java heap.
+</p>
+<a name="wp435861"> </a><p class="pBody">
+<a  href="portingNative.html#wp439368">CODE&#160;EXAMPLE&#160;5</a> shows an example:
+</p>
+<a name="wp439368"> </a><div class="pCodeCaption">
+CODE&#160;EXAMPLE&#160;5 	Creating a handle
+</div>
+<div class="pPreformatted"><pre class="pPreformatted">
+CLASS getClassX(CHAR_HANDLE name, int start, int length);<a name="wp439375"> </a>
+<a name="wp439376"> </a>
+/* Case 1, We are calling it with an argument that is known */<a name="wp439377"> </a>
+/*         not to be in the heap. */<a name="wp439378"> </a>
+const char *x = &#8220;java/lang/Object&#8221;;<a name="wp439379"> </a>
+result = getClassX(&amp;x, 0, strlen(x));<a name="wp439380"> </a>
+<a name="wp439381"> </a>
+/* Case 2. We are calling it with a heap argument */<a name="wp439382"> </a>
+START_TEMPORARY_ROOTS<a name="wp439383"> </a>
+&#160;&#160;&#160;&#160;DECLARE_TEMPORARY_ROOT(char *, x, mallocBytes(100));<a name="wp439384"> </a>
+&#160;&#160;&#160;&#160;sprintf(x, &#8220;java/lang/%s&#8221;, arg);<a name="wp439385"> </a>
+&#160;&#160;&#160;&#160;result = getClassX(&amp;x, 0, strlen(x));<a name="wp439386"> </a>
+END_TEMPORARY_ROOTS<a name="wp439387"> </a>
+</pre></div>
+<a name="wp435798"> </a><h4 class="pHeading3">
+11.2.8.4	Temporary Roots
+</h4>
+<a name="wp435271"> </a><p class="pBody">
+The most common method is to use <code class="cCode">START_TEMPORARY_ROOTS</code> and <code class="cCode">END_TEMPORARY_ROOTS</code> to delimit a region of code. Within this region of code, the macro
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<code style="font-style: normal" class="cCode">&#160;&#160;&#160;&#160;DECLARE_TEMPORARY_ROOT(</code>type<code style="font-style: normal" class="cCode">,</code> variable<code style="font-style: normal" class="cCode">,</code>value<code class="cCode">)</code><a name="wp435256"> </a>
+</pre></div>
+<a name="wp435225"> </a><p class="pBody">
+creates a local variable of the specified type with the specified initial value. The value must either be a pointer to an object in the heap, or it must be a value that is clearly not in the heap (such as <code class="cCode">NULL</code>, a pointer to permanent space, or the like).<a href="#wp435311"><span class="Footnote">2</span></a> The value <code class="cCode">&amp;variable</code> is registered with the garbage collector as a temporary root. 
+</p>
+<a name="wp435285"> </a><p class="pBody">
+You are allowed to change the value of <code class="cCode">variable</code>, provided that any new value is always either a pointer to an object in the heap, or a value that is clearly not in the heap.
+</p>
+<a name="wp435286"> </a><p class="pBody">
+The garbage collector ensures whenever a garbage collection occurs, the value of the variable is updated if the value has moved. In addition, <code class="cCode">&amp;variable</code> is a handle, and can be passed as an argument to any function that expects a handle.
+</p>
+<a name="wp435313"> </a><p class="pBody">
+Your code must not <code class="cCode">return</code>. The <code class="cCode">END_TEMPORARY_ROOTS</code> contains cleanup code that must be executed.
+</p>
+<a name="wp435317"> </a><p class="pBody">
+<a  href="portingNative.html#wp439408">CODE&#160;EXAMPLE&#160;6</a> below shows some sample code for a native method that takes a <code class="cCode">String</code> and two integers as arguments, and which must allocate a temporary buffer.
+</p>
+<a name="wp439408"> </a><div class="pCodeCaption">
+CODE&#160;EXAMPLE&#160;6 	Temporary roots
+</div>
+<div class="pPreformatted"><pre class="pPreformatted">
+START_TEMPORARY_ROOTS<a name="wp439425"> </a>
+&#160;&#160;&#160;&#160;int y = popStack();<a name="wp439435"> </a>
+&#160;&#160;&#160;&#160;int x = popStack();<a name="wp439426"> </a>
+&#160;&#160;&#160;&#160;DECLARE_TEMPORARY_ROOT(STRING_INSTANCE, string, <a name="wp439439"> </a>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;popStackAsType(STRING_INSTANCE));<a name="wp439440"> </a>
+&#160;&#160;&#160;&#160;DECLARE_TEMPORARY_ROOT(char*, buffer, mallocBytes(100));<a name="wp439427"> </a>
+&#160;&#160;&#160;&#160;/*<em class="cEmphasis"> code that might perform allocation </em>*/<a name="wp439642"> </a>
+END_TEMPORARY_ROOTS<a name="wp439429"> </a>
+</pre></div>
+<a name="wp439407"> </a><p class="pBody">
+If the code clearly cannot perform any allocation, then you could instead have written
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;char* buffer = mallocBytes(100);<a name="wp435367"> </a>
+</pre></div>
+<a name="wp435885"> </a><p class="pBody">
+Less commonly used is the macro
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;DECLARE_TEMPORARY_ROOT_FROM_BASE(type, var, value, base)<a name="wp435886"> </a>
+</pre></div>
+<a name="wp435890"> </a><p class="pBody">
+In this case <em class="cEmphasis">base</em> must be a pointer to an object in the heap, and <em class="cEmphasis">value</em> must be a pointer into the middle of the object. The variable <code class="cCode">var</code> is assigned the value <em class="cEmphasis">value</em>. The garbage collector will treat <em style="font-style: italic" class="cEmphasis">base</em> as a root. If <em class="cEmphasis">base</em> is moved by the garbage collector, the value of <code class="cCode">var</code> will be adjusted appropriately.
+</p>
+<a name="wp435490"> </a><h4 class="pHeading3">
+11.2.8.5	Global roots
+</h4>
+<a name="wp432634"> </a><p class="pBody">
+If your code initializes a C variable to point to an object in the Java heap, you can use the code shown in <a  href="portingNative.html#wp439445">CODE&#160;EXAMPLE&#160;7</a>. There is currently no function for removing a variable from the set of global roots.
+</p>
+<a name="wp439445"> </a><div class="pCodeCaption">
+CODE&#160;EXAMPLE&#160;7 	Creating a global root
+</div>
+<div class="pPreformatted"><pre class="pPreformatted">
+<code class="cCode">variable = &lt;value&gt;</code><a name="wp439463"> </a>
+makeGlobalRoot(&amp;(cell **)variable);<a name="wp439449"> </a>
+</pre></div>
+<a name="wp435521"> </a><p class="pBody">
+This code ensures that the garbage collector knows that the specified variable contains a value that must be protected from garbage collection. If the garbage collector moves the object, the variable is updated to point to the new value.
+</p>
+<a name="wp432616"> </a><h4 class="pHeading3">
+11.2.8.6	Debugging your native code
+</h4>
+<a name="wp435542"> </a><p class="pBody">
+A special garbage collector is provided to help you debug your native code and to ensure that it does not have any garbage collection problems. You access this garbage collector by replacing the file <code class="cCode">collector.c</code> with <code class="cCode">collectorDebug.c</code>. In addition, you should set the compiler flags <code class="cCode">INCLUDEDEBUGCODE</code> and <code class="cCode">EXCESSIVE_GARBAGE_COLLECTION</code> to 1.
+</p>
+<a name="wp435577"> </a><p class="pBody">
+This replaces the compact-in-place garbage collector with a 10-space Cheney style<a href="#wp435576"><span class="Footnote">3</span></a> garbage collection algorithm. A garbage-collection will occur on every allocation, and also on some operations that might have allocated but didn&#8217;t. Every object moves on every garbage collection. In addition, this code makes use of memory-protection so that any attempts to read or write a bad pointer will generate a memory fault. 
+</p>
+<a name="wp435578"> </a><p class="pBody">
+This code uses the following implementation-dependent functions:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;void* allocateVirtualMemory_md(long size);<a name="wp435594"> </a>
+&#160;&#160;&#160;&#160;void  freeVirtualMemory_md(void *address, long size);<a name="wp439477"> </a>
+&#160;&#160;&#160;&#160;void  protectVirtualMemory_md(void *address, long size, <a name="wp439478"> </a>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;int protection);<a name="wp439479"> </a>
+</pre></div>
+<a name="wp435605"> </a><p class="pBody">
+Implementations of these three functions for Windows and for Unix are provided. You must implement these functions on your target platform.
+</p>
+<a name="wp435628"> </a><h4 class="pHeading3">
+11.2.8.7	Two-space Cheney garbage collector
+</h4>
+<a name="wp435629"> </a><p class="pBody">
+The file <code class="cCode">collectorDebug.c</code> (see <a  href="portingNative.html#wp432616">§11.2.8.6</a>) also includes an implementation of a two-space non-debugging Cheney garbage collector. You get this implementation by setting the compiler flag <code class="cCode">CHENEY_TWO_SPACE</code> to a non-zero value.
+</p>
+<a name="wp435614"> </a><p class="pBody">
+The Cheney collector is smaller and faster than the standard garbage collector. However, it uses twice as much heap space. If your implementations has a lot of available memory, but needs a faster garbage collector, you might consider using this garbage collector.
+</p>
+<a name="wp435615"> </a><p class="pBody">
+This collector is not supported by Sun, and is provided as is.
+</p>
+<a name="wp435579"> </a><h3 class="pHeading2">
+11.2.9	Initialization and reinitialization of global variables
+</h3>
+<a name="wp433354"> </a><p class="pBody">
+Generally, the C language guarantees that all global and static variables are initialized to <code class="cCode">0</code> (zero).
+</p>
+<a name="wp432679"> </a><p class="pBody">
+The current implementation is designed to work within an embedded environment. For example, on the PalmOS, the user can start the virtual machine, exit a program, and then restart the virtual machine with a different set of arguments. There is no re-initialization of global or static variables between the two runs.
+</p>
+<a name="wp432685"> </a><p class="pBody">
+In general, your code cannot assume the initial value of any variable. You have several options for determining when it is necessary to perform one-time only initialization.
+</p>
+<ul class="pBullet1"><a name="wp432690"> </a><div class="pBullet1"><li>You can use the function <code class="cCode">InitializeNativeCode()</code> to either initialize your variables, or to set a flag indicating that initialization needs to be performed.</li></div>
+<a name="wp432691"> </a><div class="pBullet1Plus"><li>If a private native method is called as part of static initialization of a class, the method&#8217;s native implementation will be called the first time the class is used. The native implementation can perform any initialization necessary for the class.</li></div>
+<a name="wp432699"> </a><div class="pBullet1Last"><li>If a variable is part of the global root set (see <code class="cCode">makeGlobalRoot()</code> above), its value is guaranteed to be 0 the next time that the virtual machine is run.</li></div>
+</ul>
+<a name="wp436508"> </a><h2 class="pHeading1">
+11.3	Native code lookup tables
+</h2>
+<a name="wp436509"> </a><p class="pBody">
+Regardless of whether you use the KNI (<a  href="portingNative.html#wp436382"><span style="color: #3366CC">Section&#160;11.1 &quot;Using the K Native Interface (KNI)</span></a>&#8221;) or the old-style native method implementation technology (<a  href="portingNative.html#wp422794"><span style="color: #3366CC">Section&#160;11.2 &quot;Implementing old-style native methods</span></a>&#8221;), as part of the build process you must create the lookup tables that map methods to the corresponding native implementation.
+</p>
+<a name="wp436510"> </a><p class="pBody">
+The JavaCodeCompact (JCC) generates these tables automatically. You should use this utility to generate the lookup tables whether or not you are using the other features of JavaCodeCompact.
+</p>
+<a name="wp436514"> </a><p class="pBody">
+JavaCodeCompact is more fully described in <a  href="portingJCC.html#wp418771"><span style="color: #3366CC">Chapter&#160;14</span></a>. The specific details for creating the file containing the lookup tables can be found in <a  href="portingJCC.html#wp435793"><span style="color: #3366CC">Section&#160;14.5 &quot;Executing JavaCodeCompact</span></a>.&#8221;
+</p>
+<a name="wp436518"> </a><p class="pBody">
+The name of the C function that implements a native method must be the same name that JNI<a href="#wp436521"><span class="Footnote">4</span></a> would assign to the native method.
+</p>
+<a name="wp433595"> </a><h2 class="pHeading1">
+11.4	Asynchronous native methods
+</h2>
+<hr class="pHr"/><div class="note">
+<a name="wp433596"> </a>
+<b>Note &#8211;</b>  The KNI implementation does not allow asynchronous native methods to be written using the KNI API. In order to write asynchronous native methods for the KVM, you must use the old-style native function interface as described in this section.
+<hr class="pHr"/></div>
+<a name="wp436646"> </a><p class="pBody">
+From the operating system viewpoint, KVM is just one process (C program) with only one native thread of execution. The multithreading capabilities of KVM have been implemented entirely in software without utilizing the possible multitasking capabilities of the underlying operating system. This approach not only makes the virtual machine highly portable and independent of the operating system, but also greatly simplifies the virtual machine design and improves the readability of the codebase, as the virtual machine designer does not have to worry about mutual exclusion and other problems typically associated with multithreaded software.
+</p>
+<a name="wp433367"> </a><p class="pBody">
+However, an unfortunate side effect of the approach described above is that by default, all native methods in KVM are &#8220;blocking.&#8221; This means that when a native function is called from the virtual machine, all the threads in the VM stop executing until the native method completes execution.
+</p>
+<a name="wp433373"> </a><p class="pBody">
+As a general guideline, all the native functions called from KVM should be written so that they complete their execution as soon as possible. However, in many environments this is not desirable or fully possible. For this reason, KVM includes an implementation of &#8220;asynchronous native methods&#8221; described below.
+</p>
+<a name="wp433385"> </a><h3 class="pHeading2">
+11.4.1	Design of asynchronous methods
+</h3>
+<a name="wp432143"> </a><p class="pBody">
+The standard implementation of KVM runs as a single &#8220;task&#8221; from the operating system&#8217;s point of view. If a native method performs an operation that can block, the entire KVM blocks.
+</p>
+<a name="wp432154"> </a><p class="pBody">
+Asynchronous native methods are intended to solve this problem. When such a native method is called, the operation is performed &#8220;off-line&#8221; in an implementation-dependent manner. Other Java threads can continue running normally. When the native call finishes, the Java thread that originally called the native method continues.
+</p>
+<a name="wp439566"> </a><p class="pBody">
+To use asynchronous native methods, you must include
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;<code class="cCode">#define ASYNCHRONOUS_NATIVE_FUNCTIONS 1</code><a name="wp439567"> </a>
+</pre></div>
+<a name="wp439568"> </a><p class="pBody">
+in your machine-dependent include file.
+</p>
+<a name="wp439569"> </a><p class="pBody">
+Asynchronous native methods cannot be defined in the same file as normal native methods. In addition to their normal includes, they must also add the include file <code class="cCode">async.h</code>.
+</p>
+<a name="wp439570"> </a><p class="pBody">
+Asynchronous methods should always have the following form:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+ASYNC_FUNCTION_START(functionname)<a name="wp439571"> </a>
+&#160;&#160;&#160;&#160;<em class="cEmphasis">code</em><a name="wp439572"> </a>
+ASYNC_FUNCTION_END<a name="wp439573"> </a>
+</pre></div>
+<a name="wp434526"> </a><p class="pBody">
+Your code must never use <code class="cCode">pushStack()</code>, <code class="cCode">popStack()</code>, <code class="cCode">topStack</code>, or any macro or function that references the stack pointer, the frame pointer, or the current thread. Instead, you must use the alternative macros shown in <a  href="portingNative.html#wp435083">Table&#160;14</a>.</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq435081">
+  <caption><a name="wp435083"> </a><div class="pTableCaption">
+TABLE&#160;14&#160;&#160;&#8211;&#160;&#160;Macros used in asynchronous methods
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp435087"> </a><div style="text-align: left" class="pTableHead">
+Native function macro
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp435089"> </a><div style="text-align: left" class="pTableHead">
+Asynchronous native function macro
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp435147"> </a><div class="pTableText">
+<code class="cCode">popStack</code>
+</div>
+</td>
+    <td><a name="wp435163"> </a><div class="pTableText">
+<code class="cCode">ASYNC_popStack</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp435149"> </a><div class="pTableText">
+<code class="cCode">pushStack</code>
+</div>
+</td>
+    <td><a name="wp435165"> </a><div class="pTableText">
+<code class="cCode">ASYNC_pushStack</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp435151"> </a><div class="pTableText">
+<code class="cCode">popLong</code>
+</div>
+</td>
+    <td><a name="wp435167"> </a><div class="pTableText">
+<code class="cCode">ASYNC_popLong</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp435153"> </a><div class="pTableText">
+<code class="cCode">pushLong</code>
+</div>
+</td>
+    <td><a name="wp435169"> </a><div class="pTableText">
+<code class="cCode">ASYNC_pushLong</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp435155"> </a><div class="pTableText">
+<code class="cCode">popStackAsType</code>
+</div>
+</td>
+    <td><a name="wp435171"> </a><div class="pTableText">
+<code class="cCode">ASYNC_popStackAsType</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp435157"> </a><div class="pTableText">
+<code class="cCode">pushStackAsType</code>
+</div>
+</td>
+    <td><a name="wp435173"> </a><div class="pTableText">
+<code class="cCode">ASYNC_pushStackAsType</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp435159"> </a><div class="pTableText">
+<code class="cCode">raiseException</code>
+</div>
+</td>
+    <td><a name="wp435175"> </a><div class="pTableText">
+<code class="cCode">ASYNC_raiseException</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp435161"> </a><div class="pTableText">
+<code class="cCode">topStack</code>
+</div>
+</td>
+    <td><a name="wp435177"> </a><div class="pTableText">
+do not use this macro
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp434548"> </a><p class="pBody">
+In addition, your code must not perform a &#8220;return.&#8221; It must complete through the end, since <code class="cCode">ASYNC_FUNCTION_END</code> may generate some necessary cleanup code.
+</p>
+<a name="wp440064"> </a><p class="pBody">
+All the macros in <a  href="portingNative.html#wp435083">Table&#160;14</a> have been designed so that if the symbol <code class="cCode">ASYNCHRONOUS_NATIVE_FUNCTIONS</code> is 0, the asynchronous method compiles into a normal native method.
+</p>
+<a name="wp436167"> </a><p class="pBody">
+It is also important to note that unlike regular native methods, asynchronous native methods cannot allocate any memory from the Java heap. Because of this limitation, extra caution is often necessary when writing asynchronous native methods, since many internal routines in KVM may indirectly allocate memory from the Java heap.
+</p>
+<hr class="pHr"/><div class="note">
+<a name="wp436181"> </a>
+<b>Note &#8211;</b>  IMPORTANT: We repeat that asynchronous native methods <em class="cEmphasis">must not </em>allocate memory from the Java heap. Make sure that you read the paragraph above.
+<hr class="pHr"/></div>
+<a name="wp432094"> </a><p class="pBody">
+If you use asynchronous native methods, you must define the following machine-specific functions.
+</p>
+<ul class="pBullet1"><a name="wp432241"> </a><div class="pBullet1"><li><code class="cCode">void Yield_md()</code></li></div>
+<a name="wp440009"> </a><p class="pIndented1">
+Pause this operating system task momentarily and allow other tasks to run.
+</p>
+<a name="wp436194"> </a><div class="pBullet1Plus"><li><code class="cCode">void CallAsyncNativeFunction_md(ASYNCIOCB *iocb, 		 void(*afp)(ASYNCIOCB *))</code></li></div>
+<a name="wp440005"> </a><p class="pIndented1">
+Call an asynchronous native function. This function is called by the <code class="cCode">ASYNC_FUNCTION_START</code> macro to start a new asynchronous function. The function takes as a parameter a data structure that is used by the garbage collector to keep up to date object pointers used by the native code, and a function to call. This function will typically start a new native thread and have that call the supplied function with the <code class="cCode">ASYNCIOCB</code> as its parameter.
+</p>
+<a name="wp432736"> </a><div class="pBullet1Last"><li><code class="cCode">enterSystemCriticalSection()<br />exitSystemCriticalSection()</code></li></div>
+</ul>
+<a name="wp437534"> </a><p class="pIndented1">
+Enter or exit a critical section. The operating system must guarantee that at most one operating system task is allowed to be inside the critical section at a time.
+</p>
+<a name="wp432269"> </a><h3 class="pHeading2">
+11.4.2	Implementation of asynchronous methods
+</h3>
+<a name="wp432272"> </a><p class="pBody">
+We envision two possible implementations of asynchronous methods.
+</p>
+<a name="wp432288"> </a><p class="pBody">
+In the current reference implementation, the function <code class="cCode">CallAsyncNativeFunction_md</code> spawns off a separate operating system task which performs the indicated function. For example, in a Posix implementation one could use <code class="cCode">pthread_create</code>.
+</p>
+<a name="wp436250"> </a><p class="pBody">
+<a  href="portingNative.html#wp437560">CODE&#160;EXAMPLE&#160;8</a> below shows one possible implementation of a method<br /><code class="cCode">	int</code> <code class="cCode">readBytes(byte[]</code> <code class="cCode">dst,</code> <code class="cCode">int</code> <code class="cCode">offset,</code> <code class="cCode">int</code> <code class="cCode">length)<br /></code>using this style of asynchronous native methods. This particular example assumes that the garbage collector does not move objects.
+</p>
+<a name="wp437560"> </a><div class="pCodeCaption">
+CODE&#160;EXAMPLE&#160;8 	Asynchronous implementation of ReadBytes
+</div>
+<div class="pPreformatted"><pre class="pPreformatted">
+ASYNC_FUNCTION_START(ReadBytes)<a name="wp437401"> </a>
+&#160;&#160;&#160;&#160;long &#160;&#160;length = ASYNC_popStack();<a name="wp437402"> </a>
+&#160;&#160;&#160;&#160;long &#160;&#160;offset = ASYNC_popStack();<a name="wp437403"> </a>
+&#160;&#160;&#160;&#160;BYTEARRAY dst = ASYNC_popStackAsType(BYTEARRAY);<a name="wp437404"> </a>
+&#160;&#160;&#160;&#160;INSTANCE instance = ASYNC_popStackAsType(INSTANCE);/* this*/<a name="wp437405"> </a>
+&#160;&#160;&#160;&#160;long fd = getFD(instance);<a name="wp437406"> </a>
+&#160;&#160;&#160;&#160;ASYNC_enableGarbageCollection();<a name="wp437407"> </a>
+&#160;&#160;&#160;&#160;length = read(fd, dst-&gt;bdata + offset, length);<a name="wp437408"> </a>
+&#160;&#160;&#160;&#160;ASYNC_disableGarbageCollection();<a name="wp437409"> </a>
+&#160;&#160;&#160;&#160;ASYNC_pushStack((length == 0) ? -1 : length);<a name="wp437438"> </a>
+ASYNC_FUNCTION_END<a name="wp437510"> </a>
+</pre></div>
+<a name="wp437441"> </a><p class="pBody">
+In an alternative implementation (<a  href="portingNative.html#wp439142">CODE&#160;EXAMPLE&#160;9</a>), <code class="cCode">CallAsyncNativeFunction_md</code> simply calls the function <code class="cCode">f</code> directly. It assumes that the function <code class="cCode">f</code> starts an operation, but does not wait for its completion. The operating system is required to provide some sort of interrupt or callback to indicate when the operation is complete.
+</p>
+<a name="wp439085"> </a><p class="pBody">
+The second implementation is far more operating system-dependent. It might be impossible to write native methods that can work both synchronously and asynchronously, depending on the value of a flag.
+</p>
+<a name="wp439142"> </a><div class="pCodeCaption">
+CODE&#160;EXAMPLE&#160;9 	Alternative asynchronous implementation of ReadBytes
+</div>
+<div class="pPreformatted"><pre class="pPreformatted">
+static void ReadBytes(THREAD thisThread)<a name="wp439101"> </a>
+{<a name="wp439102"> </a>
+&#160;&#160;&#160;&#160;long &#160;&#160;length = ASYNC_popStack();<a name="wp439103"> </a>
+&#160;&#160;&#160;&#160;long &#160;&#160;offset = ASYNC_popStack();<a name="wp439104"> </a>
+&#160;&#160;&#160;&#160;BYTEARRAY dst = ASYNC_popStackAsType(BYTEARRAY);<a name="wp439105"> </a>
+&#160;&#160;&#160;&#160;INSTANCE instance = ASYNC_popStackAsType(INSTANCE);<a name="wp439106"> </a>
+&#160;&#160;&#160;&#160;long fd = getFD(instance);<a name="wp439107"> </a>
+&#160;&#160;&#160;&#160;THREAD thisThread = CurrentThread;<a name="wp439108"> </a>
+&#160;&#160;&#160;&#160;/* Call OS to perform I/O. Perform callback when done. */<a name="wp439109"> </a>
+&#160;&#160;&#160;&#160;AsyncRead(fd, p + offset, length, ReadBytesDone,thisThread);<a name="wp439149"> </a>
+}<a name="wp439150"> </a>
+<a name="wp439151"> </a>
+/* Callback function when I/O is finished */<a name="wp439113"> </a>
+static void ReadBytesDone(void *parm, int length)<a name="wp439114"> </a>
+{<a name="wp439115"> </a>
+&#160;&#160;&#160;&#160;THREAD thisThread = (THREAD)parm;<a name="wp439116"> </a>
+&#160;&#160;&#160;&#160;ASYNC_pushStack((length == 0) ? -1 : length);<a name="wp439117"> </a>
+&#160;&#160;&#160;&#160;ASYNC_RESUME_THREAD();<a name="wp439118"> </a>
+}<a name="wp439089"> </a>
+</pre></div>
+<a name="wp434717"> </a><p class="pBody">
+Refer to <a  href="portingEvent.html#wp432430"><span style="color: #3366CC">Section&#160;12.1.4 &quot;Asynchronous notification</span></a>,&#8221; for further information on writing asynchronous code.
+</p>
+
+  <a name="wp436500"> </a><div class="pFootNote">
+<a href="#wp436408"><span class="Footnote">1</span></a>The Java Native Interface: Programmer&#8217;s Guide and Specification (Java Series) by Sheng Liang (Addison Wesley, 
+1999).
+
+</div>
+<a name="wp435311"> </a><div class="pFootNote">
+<a href="#wp435225"><span class="Footnote">2</span></a>The main purpose of this limitation is that the variable should not have a random integer as its value, and 
+that the variable must be initialized. 
+
+</div>
+<a name="wp435576"> </a><div class="pFootNote">
+<a href="#wp435577"><span class="Footnote">3</span></a>C.J. Cheney. A non-recursive list compacting algorithm. Communications of the ACM, 13(11):677-8, 
+November&#160;1970.
+
+</div>
+<a name="wp436521"> </a><div class="pFootNote">
+<a href="#wp436518"><span class="Footnote">4</span></a>See The Java Native Interface: Programmer&#8217;s Guide and Specification (Java Series) by Sheng Liang (Addison 
+Wesley, 1999), for complete information on the JNI naming scheme. This information is available online at 
+http://java.sun.com/docs/books/jni/index.html.
+
+</div>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" class="full-width">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="portingFloatingPoint.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="portingEvent.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KVM Porting Guide <br /> , CLDC 1.1</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    
+<p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169; 2003 Sun Microsystems, Inc. 
+  All rights reserved.</p>
+  </body>
+</html>

@@ -1,0 +1,109 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="book-no-index" />
+    <meta name="LASTUPDATED" content="10/19/02 17:07:30" />
+    <title>KNI Goals</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="01-Introduction.html" />
+    <link rel="Next" href="03-Scope.html" />
+    <link rel="Index" href="07-Examples.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" width="100%">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="01-Introduction.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="03-Scope.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp434413"> </a><h2 class="pChapNum">
+Chapter &#160; 2
+</h2>
+<a name="wp442667"> </a><h2 class="pNewHTMLPage">
+KNI Goals
+</h2>
+<hr class="pHr"/>
+<a name="wp442673"> </a><p class="pBody">
+A Java virtual machine commonly needs access to various native functions in order to interact with the outside world. For instance, all the low-level graphics functions, file access functions, networking functions, or other similar routines that depend on the underlying operating system services typically need to be written in native code.
+</p>
+<a name="wp442675"> </a><p class="pBody">
+The way these native functions are made available to the Java virtual machine can vary considerably from one virtual machine implementation to another. In order to minimize the work that is needed when porting the native functions, the Java Native Interface (JNI) standard was created.
+</p>
+<a name="wp442677"> </a><p class="pBody">
+In a traditional Java virtual machine implementation, the Java Native Interface serves two purposes:
+</p>
+<ol class="pList1"><a name="wp442679"> </a><div class="pList1"><li>JNI serves as a common interface for virtual machine implementers so that the same native functions will work unmodified with different virtual machines.</li></div>
+<a name="wp442681"> </a><div class="pList1Last"><li>JNI provides Java-level APIs that make it possible for a Java programmer to dynamically load libraries and access native functions in those libraries.</li></div>
+</ol>
+<a name="wp442683"> </a><p class="pBody">
+Unfortunately, because of its general nature, JNI is rather expensive and introduces a significant memory and performance overhead to the way the JVM calls native functions. Also, the ability to dynamically load and call arbitrary native functions from Java programs could pose significant security problems in the absence of the full Java 2 security model.
+</p>
+<a name="wp442834"> </a><p class="pBody">
+<b class="cBold">High-level goal of the KNI</b>. The high-level goal of the K Native Interface Specification is to define a logical subset of the Java Native Interface that is appropriate for low-power, memory-constrained devices. KNI follows the function naming conventions and other aspects of the JNI as far as this is possible and reasonable within the strict memory limits of CLDC target devices and in the absence of the full Java 2 security model. Since KNI is intended to be significantly more lightweight than JNI, some aspects of the interface, such as the parameter passing conventions, have been completely redesigned and are significantly different from JNI.
+</p>
+<a name="wp443014"> </a><p class="pBody">
+More specifically, the goals of the KNI include the following:
+</p>
+<ul class="pBullet1"><a name="wp442634"> </a><div class="pBullet1"><li><b class="cBold">Source-level portability of native code</b>. KNI is intended to make it possible to share source code of native functions so that the same native function source code can be used in multiple virtual machines without modifications (of course, native code that is operating system specific will have to be ported from one system to another.)</li></div>
+<a name="wp442635"> </a><div class="pBullet1Plus"><li><b class="cBold">Isolation of virtual machine implementation details from the native functions</b>. KNI is intended to isolate the native function programmer from virtual machine implementation details. When writing new native functions, the programmer is not required to know anything about garbage collection details, object layout, class data structures, include file dependencies, or any other VM-specific implementation details.</li></div>
+<a name="wp442825"> </a><div class="pBullet1Last"><li><b class="cBold">Memory efficiency and minimal performance overhead</b>. KNI is intended to be significantly more efficient and compact than a full JNI implementation. Unlike in JNI, no temporary data structures or &#8220;marshalling&#8221; of parameter passing is required at the implementation level.</li></div>
+</ul>
+<a name="wp442935"> </a><p class="pBody">
+As mentioned above, KNI is a &#8220;logical subset&#8221; of JNI that follows the JNI conventions as much as it makes sense given the strict memory constraints, but with some considerable design and implementation differences. The list below summarizes the most significant design differences between the JNI and KNI:
+</p>
+<ol class="pList1"><a name="wp442936"> </a><div class="pList1"><li><b class="cBold">KNI is an implementation-level API</b>. KNI is an implementation-level API that is targeted primarily at VM implementers and device manufacturers who need to add new native functions to an existing J2ME virtual machine. Unlike JNI, the presence of the KNI is completely invisible to the Java programmer.</li></div>
+<a name="wp442943"> </a><div class="pList1Plus"><li><b class="cBold">No binary compatibility of native code</b>. KNI is intended to provide source-level compatibility of native code. Unlike JNI, KNI does not guarantee that binary libraries containing native code could be linked into different virtual machines without recompilation.</li></div>
+<a name="wp442950"> </a><div class="pList1Plus"><li><b class="cBold">No support for dynamically loaded native libraries</b>. KNI does not provide any mechanisms for dynamically loading native libraries into the virtual machine. Hence, any new functionality added via the native function mechanism must be done by modifying the VM native function tables and rebuilding from source. This is compliant with the security requirements imposed by the CLDC Specification.</li></div>
+<a name="wp442993"> </a><div class="pList1Plus"><li><b class="cBold">No Java-level access to arbitrary native functions</b>. Unlike JNI, KNI provides no Java-level APIs to invoke other native functions than those that have been pre-built into the Java virtual machine implementation. This is compliant with the security requirements imposed by the CLDC Specification.</li></div>
+<a name="wp442964"> </a><div class="pList1Plus"><li><b class="cBold">No class creation, object instantiation or Java method calling from native functions</b>. To greatly simplify the implementation of the native interface and to keep the implementation small and less error-prone, KNI does not provide any mechanisms for creating new Java classes, instantiating objects (other than strings), or calling Java methods from native code. When creating new objects that need to be manipulated in native code, the necessary objects must be created at the Java level and passed to native code as parameters.</li></div>
+<a name="wp443292"> </a><div class="pList1Last"><li><b class="cBold">Parameter passing conventions are different from JNI</b>. To reduce implementation overhead, the parameter passing conventions of KNI are significantly different from JNI. KNI uses a &#8220;register-based&#8221; approach in which arguments can be read directly from the stack frame in an implementation-independent fashion. Unlike in the old KVM native interface, no explicit pushing or popping of parameters is required or allowed.</li></div>
+</ol>
+<a name="wp443072"> </a><p class="pBody">
+
+</p>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" width="100%">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="01-Introduction.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="03-Scope.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KNI Specification <br /> K Native Interface (KNI), 1.0</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    <p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169;
+       2002 Sun Microsystems, Inc. All rights reserved.</p>
+  </body>
+</html>

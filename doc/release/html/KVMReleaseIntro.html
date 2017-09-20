@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="book-no-index" />
+    <meta name="LASTUPDATED" content="02/20/03 18:26:38" />
+    <title>Introduction</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="copyright.html" />
+    <link rel="Next" href="KVMReleaseInstall.html" />
+    <link rel="Index" href="KVMReleaseQA.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" class="full-width">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="copyright.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="KVMReleaseInstall.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp821919"> </a><h2 class="pChapNum">
+Chapter &#160; 1
+</h2>
+<a name="wp824145"> </a><h2 class="pTitle">
+Introduction
+</h2>
+<hr class="pHr"/>
+<a name="wp826361"> </a><p class="pBody">
+These release notes provide information about the release of Sun&#8217;s reference implementation of the <em style="font-style: italic" class="cEmphasis">Connected, Limited Device Configuration (CLDC) Specification</em><span style="font-style: normal">, version 1.1, for the Java</span><em style="font-style: italic" class="cEmphasis">&#8482;</em><span style="font-style: normal"> 2 Platform, Micro Edition (J2ME</span><em style="font-style: italic" class="cEmphasis">&#8482;</em><span style="font-style: normal">).</span>
+</p>
+<a name="wp826425"> </a><p class="pBody">
+CLDC 1.1 is the result of two Java Community Process efforts (JSR-30, JSR-139) that have standardized a small-footprint Java<em style="font-style: italic" class="cEmphasis">&#8482;</em><span style="font-style: normal"> platform for resource-constrained consumer devices. The CLDC specification effort was done in collaboration with a large number of companies representing different industries. Target devices for CLDC are characterized generally as follows:</span>
+</p>
+<a name="wp826403"> </a><div class="pBullet1Plus"><li>at least 160-192 kilobytes of total memory, including both RAM and flash or ROM, available for the Java platform.</li></div>
+<a name="wp826404"> </a><div class="pBullet1Plus"><li>Limited power, often battery powered operation.</li></div>
+<a name="wp826405"> </a><div class="pBullet1Plus"><li>Connectivity to some kind of a network, often with a wireless, intermittent connection and with limited (often 9600 bps or less) bandwidth.</li></div>
+<a name="wp826406"> </a><div class="pBullet1Plus"><li>User interfaces with varying degrees of sophistication down to and including none.</li></div>
+<a name="wp826407"> </a><p class="pBody">
+Cell phones, two-way pagers, personal digital assistants (PDAs), pocket organizers, home appliances, and point of sale terminals are some, but not all, of the devices that might be supported by CLDC.
+</p>
+<a name="wp826383"> </a><p class="pBody">
+The CLDC reference implementation runs on Sun&#8217;s K Virtual Machine (KVM)<em style="font-style: italic" class="cEmphasis">&#8482;</em><span style="font-style: normal"> implementation, which is provided as part of this release.</span>
+</p>
+<a name="wp826896"> </a><p class="pBody">
+The CLDC Specification document is available for public downloading at <br /><a href="http://jcp.org/jsr/detail/139.jsp" target="_blank">
+<span class="cWebJump">http://jcp.org/jsr/detail/139.jsp</span></a>.
+</p>
+<a name="wp826379"> </a><p class="pBody">
+Note that CLDC is intended to serve as the &#8220;lowest common denominator&#8221; building block for various kinds of resource-constrained, Java Powered<em class="cEmphasis">&#8482;</em> devices. As such, CLDC is not a complete, self-sufficient solution; it needs to be complemented by <em class="cEmphasis">profiles</em>. For instance, all user interface aspects are outside the scope of CLDC Specification. Another Java Community Process effort called <em class="cEmphasis">Mobile Information Device Profile</em> (MIDP) has defined the necessary remaining Java platform features and libraries for two-way communication devices such as cell phones, while the JSR-75 effort is focusing on PDA-type devices. Other profiles for other vertical markets or device categories might be defined later.
+</p>
+<a name="wp826650"> </a><h2 class="pHeading1">
+1.1	Supported Platforms
+</h2>
+<a name="wp826459"> </a><p class="pBody">
+The <em style="font-style: italic" class="cEmphasis">J2ME CLDC Reference Implementation</em><span style="font-style: normal"> runs on the Windows 2000 platform. CLDC-compliant ports for the the Solaris</span><em style="font-style: italic" class="cEmphasis">&#8482;</em><span style="font-style: normal"> and Linux operating systems are also provided as part of this package. (Refer to </span><a  href="KVMReleaseQA.html#wp826208"><span style="color: #3366CC">Section&#160;3.1 &#8220;Testing</span></a>&#8221; for the exact compliant configurations that have been tested.)
+</p>
+<a name="wp821949"> </a><h2 class="pHeading1">
+1.2	Items Included in This Release
+</h2>
+<a name="wp821953"> </a><p class="pBody">
+This release includes the source code and binaries for:
+</p>
+<ul class="pBullet1"><a name="wp821955"> </a><div class="pBullet1"><li>K Virtual Machine (KVM)</li></div>
+<a name="wp826373"> </a><div class="pBullet1Plus"><li>Preverifier tool (for preverifying Java class files)</li></div>
+<a name="wp826374"> </a><div class="pBullet1Plus"><li>JavaCodeCompact tool (for prelinking/preloading system classes into KVM)</li></div>
+<a name="wp826807"> </a><div class="pBullet1Plus"><li>Debug agent (for plugging the KVM into a third party debugging environment)</li></div>
+<a name="wp826566"> </a><div class="pBullet1Last"><li>Java Application Manager (JAM) reference implementation</li></div>
+</ul>
+<a name="wp821957"> </a><div class="pBullet1Plus"><li>CLDC 1.1 class libraries</li></div>
+<a name="wp826253"> </a><p class="pBody">
+Please refer to the <em class="cEmphasis">KVM Porting Guide</em> (CLDC 1.1), (Sun Microsystems, Inc., 2003)<span style="font-style: italic"> </span><span style="font-style: normal">(provided in this package) </span>for more information on the preverifier tool, JavaCodeCompact tool, debug agent and the JAM.
+</p>
+<a name="wp826969"> </a><p class="pBody">
+The release includes the following documentation:
+</p>
+<ul class="pBullet1"><a name="wp826661"> </a><div class="pBullet1"><li><em class="cEmphasis">J2ME CLDC Reference Implementation Release Notes</em><em style="font-style: italic" class="cEmphasis"> </em><span style="font-style: normal">(this document)</span></li></div>
+<a name="wp826567"> </a><div class="pBullet1Plus"><li>CLDC API document version 1.1 (In Javadoc format), (regenerated from the latest libraries)</li></div>
+<a name="wp821969"> </a><div class="pBullet1Plus"><li><em class="cEmphasis">KVM Porting Guide</em> (CLDC 1.1), (Sun Microsystems, Inc., 2003)</li></div>
+<a name="wp826695"> </a><div class="pBullet1Plus"><li><em style="font-style: italic" class="cEmphasis">KDWP (KVM Debug Wire Protocol) Specification</em><span style="font-style: normal">, (Sun Microsystems, Inc., 2002)</span></li></div>
+<a name="wp827277"> </a><div class="pBullet1Last"><li>K Native Interface (KNI) Specification, (Sun Microsystems, Inc., 2002)</li></div>
+</ul>
+<a name="wp829475"> </a><h2 class="pHeading1">
+1.3	New Features
+</h2>
+<a name="wp829482"> </a><p class="pBody">
+CLDC 1.1 is the first public release of the <em style="font-style: italic" class="cEmphasis">CLDC Specification</em>, version 1.1. This release implements all the new features that have been added in CLDC 1.1, including:
+</p>
+<ul class="pBullet2"><a name="wp829509"> </a><div class="pBullet2"><li>Floating point support has been added.</li></div>
+<ul class="pBullet3"><a name="wp829510"> </a><div class="pBullet3"><li>All floating point byte codes are supported by CLDC 1.1.</li></div>
+<a name="wp829511"> </a><div class="pBullet3Plus"><li>Classes Float and Double have been added.</li></div>
+<a name="wp829512"> </a><div class="pBullet3Last"><li>Various methods have been added to the other library classes to handle floating point values.</li></div>
+</ul>
+<a name="wp829513"> </a><div class="pBullet2Plus"><li>Weak reference support (small subset of the J2SE weak reference classes) has been added.</li></div>
+<a name="wp829514"> </a><div class="pBullet2Plus"><li>Classes Calendar, Date and TimeZone have been redesigned to be more J2SE-compliant.</li></div>
+<a name="wp829515"> </a><div class="pBullet2Plus"><li>Error handling requirements have been clarified, and one new error class, NoClassDefFoundError, has been added.</li></div>
+<a name="wp829516"> </a><div class="pBullet2Plus"><li>In CLDC 1.1, Thread objects have names, like threads in J2SE do. The method Thread.getName() has been introduced, and the Thread class has a few new constructors that have been inherited from J2SE.</li></div>
+<a name="wp829517"> </a><div class="pBullet2Plus"><li>Various minor library changes and bug fixes, such as the addition of the following fields and methods:</li></div>
+<ul class="pBullet3"><a name="wp829518"> </a><div class="pBullet3"><li>Boolean.TRUE and Boolean.FALSE</li></div>
+<a name="wp829519"> </a><div class="pBullet3Plus"><li>Date.toString()</li></div>
+<a name="wp829520"> </a><div class="pBullet3Plus"><li>Random.nextInt(int n)</li></div>
+<a name="wp829521"> </a><div class="pBullet3Plus"><li>String.intern()</li></div>
+<a name="wp829522"> </a><div class="pBullet3Plus"><li>String.equalsIgnoreCase()</li></div>
+<a name="wp829523"> </a><div class="pBullet3Last"><li>Thread.interrupt()</li></div>
+</ul>
+<a name="wp829524"> </a><div class="pBullet2Plus"><li>Minimum total memory budget for CLDC has been raised from 160 to 192 kilobytes, mainly because of the added floating point functionality.</li></div>
+<a name="wp829525"> </a><div class="pBullet2Plus"><li>Specification text tightened and obsolete subsections removed.</li></div>
+<a name="wp829526"> </a><div class="pBullet2Last"><li>Much more detailed verifier specification (&#8220;CLDC Byte Code Typechecker Specification&#8221;) is provided as an appendix.</li></div>
+</ul>
+<a name="wp827340"> </a><p class="pBody">
+For a more detailed summary of the differences between CLDC 1.0 and 1.1, refer to the CLDC Specification version 1.1.
+</p>
+<a name="wp827337"> </a><p class="pBody">
+In addition to providing support for features that are specific to <em class="cEmphasis">CLDC Specification</em> version 1.1, this release includes a number of other new features:
+</p>
+<ul class="pBullet2"><a name="wp826986"> </a><div class="pBullet2"><li>Revised class loader implementation.</li></div>
+<a name="wp826990"> </a><div class="pBullet2Last"><li>Revised native finalizer support.</li></div>
+</ul>
+<a name="wp827024"> </a><p class="pBody">
+For most up-to-date information, refer to the CLDC product website <br />(<a href="http://java.sun.com/products/cldc" target="_blank">
+<span class="cWebJump">http://java.sun.com/products/cldc</span></a>).
+</p>
+<a name="wp827025"> </a><h2 class="pHeading1">
+1.4	Prerequisites and Dependencies
+</h2>
+<a name="wp827026"> </a><p class="pBody">
+For more details on the Connected, Limited Device Configuration standardization effort, please refer to the <em class="cEmphasis">Connected, Limited Device Configuration Specification, </em>Java Community Process, Sun Microsystems, Inc., version 1.1, Sun Microsystems, Inc.:<br /><a href="http://jcp.org/jsr/detail/139.jsp" target="_blank">
+<span class="cWebJump">http://jcp.org/jsr/detail/139.jsp</span></a>
+</p>
+<a name="wp826556"> </a><p class="pBody">
+Please refer to the <em class="cEmphasis">KVM Porting Guide</em> (CLDC 1.1), (Sun Microsystems, Inc., 2003)<span style="font-style: italic"> </span><span style="font-style: normal">for information about porting the K Virtual Machine to new platforms.</span>
+</p>
+<a name="wp827366"> </a><h2 class="pHeading1">
+1.5	Frequently Asked Questions
+</h2>
+<a name="wp827044"> </a><p class="pBody">
+A Frequently Asked Questions (FAQ) document for the CLDC reference implementation is available at the following website:
+</p>
+<a name="wp829425"> </a><p class="pBody">
+<a href="http://java.sun.com/products/cldc/faqs.html" target="_blank">
+<span class="cWebJump">http://java.sun.com/products/cldc/faqs.html</span></a>
+</p>
+<a name="wp827052"> </a><p class="pBody">
+The following FAQ documents might also be useful:
+</p>
+<a name="wp829443"> </a><p class="pBody">
+<a href="http://java.sun.com/products/midp/faq.html" target="_blank">
+<span class="cWebJump">http://java.sun.com/products/midp/faq.html</span></a>
+</p>
+<a name="wp829429"> </a><p class="pBody">
+<a href="http://java.sun.com/products/j2mewtoolkit/FAQ.html" target="_blank">
+<span class="cWebJump">http://java.sun.com/products/j2mewtoolkit/FAQ.html</span></a>
+</p>
+<a name="wp827077"> </a><p class="pBody">
+
+</p>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" class="full-width">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="copyright.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="KVMReleaseInstall.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">Release Notes <br /> CLDC, 1.1</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    
+<p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169; 2003 Sun Microsystems, Inc. 
+  All rights reserved.</p>
+  </body>
+</html>

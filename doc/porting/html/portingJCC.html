@@ -1,0 +1,239 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="book-no-index" />
+    <meta name="LASTUPDATED" content="02/20/03 12:37:51" />
+    <title>JavaCodeCompact (JCC)</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="portingVerifier.html" />
+    <link rel="Next" href="portingJAM.html" />
+    <link rel="Index" href="portingJavaDebugger.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" class="full-width">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="portingVerifier.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="portingJAM.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp418771"> </a><h2 class="pChapNum">
+Chapter &#160; 14
+</h2>
+<a name="wp431766"> </a><h2 class="pTitle">
+JavaCodeCompact (JCC)
+</h2>
+<hr class="pHr"/>
+<a name="wp435953"> </a><p class="pBody">
+KVM supports the <em class="cEmphasis">JavaCodeCompact</em> (JCC) utility (also known as the class prelinker, preloader or ROMizer). This utility allows Java classes to be linked directly in the virtual machine, reducing VM startup time considerably.
+</p>
+<a name="wp435954"> </a><p class="pBody">
+At the implementation level, the JavaCodeCompact utility combines Java class files and produces a C file that can be compiled and linked with the Java virtual machine.
+</p>
+<a name="wp433192"> </a><p class="pBody">
+In conventional class loading, you use javac to compile Java source files into Java class files. These class files are loaded into a Java system, either individually, or as part of a jar archive file. Upon demand, the class loading mechanism resolves references to other class definitions.
+</p>
+<a name="wp433197"> </a><p class="pBody">
+JavaCodeCompact provides an alternative means of program linking and symbol resolution, one that provides a less-flexible model of program building, but which helps reduce the VM&#8217;s bandwidth and memory requirements.
+</p>
+<a name="wp433198"> </a><p class="pBody">
+JavaCodeCompact can:
+</p>
+<ul class="pBullet2"><a name="wp433199"> </a><div class="pBullet2"><li>combine multiple input files</li></div>
+<a name="wp433200"> </a><div class="pBullet2Plus"><li>determine an object instance&#8217;s layout and size</li></div>
+<a name="wp433201"> </a><div class="pBullet2Last"><li>load only designated class members, discarding others.</li></div>
+</ul>
+<a name="wp434338"> </a><h2 class="pHeading1">
+14.1	JavaCodeCompact options
+</h2>
+<a name="wp432767"> </a><p class="pBody">
+JavaCodeCompact accepts a large number of arguments and options. Only the options currently supported by KVM are given below.
+</p>
+<ul class="pBullet1"><a name="wp434074"> </a><div class="pBullet1"><li><code class="cCode">filename</code></li></div>
+<a name="wp434083"> </a><p class="pIndented1">
+Designates the name of a file to be used as input, the contents of which should be included in the output. File names with a <code class="cCode">.class</code> suffix are read as single-class files.
+</p>
+<a name="wp434087"> </a><p class="pIndented1">
+File names with <code class="cCode">.jar</code> or <code class="cCode">.zip</code> suffixes are read as Zip files. Class files contained as elements of these files are read. Other elements are silently ignored.
+</p>
+<a name="wp433277"> </a><div class="pBullet1Plus"><li><code class="cCode">-o output filename</code></li></div>
+<a name="wp434088"> </a><p class="pIndented1">
+Designates the name of the output file to be produced. In the absence of this option, a file is produced with the name <code class="cCode">ROMjava.c</code>.
+</p>
+<a name="wp433331"> </a><div class="pBullet1Plus"><li><code class="cCode">-nq</code></li></div>
+<a name="wp434143"> </a><p class="pIndented1">
+Prevents JavaCodeCompact from converting the byte codes into their &#8220;quickened&#8221; form. This option is currently required by KVM.
+</p>
+<a name="wp433517"> </a><div class="pBullet1Plus"><li>-<code class="cCode">classpath path</code></li></div>
+<a name="wp434094"> </a><p class="pIndented1">
+Specifies the path JavaCodeCompact uses to look up classes. Directories and zip files are separated by the delimiting character defined by the Java constant <code class="cCode">java.io.File.pathSeparatorChar</code>. This character is usually a colon on the Unix platform, and a semicolon on the Windows platform.
+</p>
+<a name="wp434260"> </a><p class="pIndented1">
+Multiple classpath options are cumulative, and are searched left-to-right. This option is used in conjunction with the <code class="cCode">-c</code> cumulative-linking option, and with the <code class="cCode">-memberlist</code> selective-linking option.
+</p>
+<a name="wp434261"> </a><div class="pBullet1Plus"><li><code class="cCode">-memberlist filename</code></li></div>
+<a name="wp434264"> </a><p class="pIndented1">
+Performs selective loading as directed by the indicated file. This file is an ASCII file, as produced by JavaFilter, containing the names of classes and class members.
+</p>
+<a name="wp433802"> </a><div class="pBullet1Plus"><li>-v</li></div>
+<a name="wp434296"> </a><p class="pIndented1">
+Turns up the verbosity of the linking process. This option is cumulative. Currently up to three levels of verbosity are understood. This option is only of interest as a debugging aid.
+</p>
+<a name="wp434341"> </a><div class="pBullet1Last"><li><code style="font-style: normal" class="cCode">-arch </code><em style="font-style: italic" class="cEmphasis">Architecture</em></li></div>
+</ul>
+<a name="wp434342"> </a><p class="pIndented1">
+Specify the architecture for which you are generating a romized image. At this time, you must specify <code class="cCode">KVM</code> as the architecture.
+</p>
+<a name="wp435486"> </a><h2 class="pHeading1">
+14.2	Porting JavaCodeCompact
+</h2>
+<a name="wp435498"> </a><p class="pBody">
+With one exception, JavaCodeCompact outputs C code that is completely platform-independent.
+</p>
+<a name="wp435499"> </a><p class="pBody">
+To initialize a variable that is <code class="cCode">final static long</code> or <code class="cCode">final static double</code>, JavaCodeCompact performs the appropriate initialization using the two macros:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;ROM_STATIC_LONG(high-32-bits, low-32-bits)<a name="wp436901"> </a>
+&#160;&#160;&#160;&#160;ROM_STATIC_DOUBLE(high-32-bits, low-32-bits)<a name="wp436902"> </a>
+</pre></div>
+<a name="wp436903"> </a><p class="pBody">
+If you have initialized either the compiler <code class="cCode">BIG_ENDIAN</code> or <code class="cCode">LITTLE_ENDIAN</code> to a non-zero value, the file <code class="cCode">src/VmCommon/h/rom.h</code> generates default values for these macros. 
+</p>
+<a name="wp435509"> </a><p class="pBody">
+If you have not defined <code class="cCode">BIG_ENDIAN</code> or <code class="cCode">LITTLE_ENDIAN</code>, or if for some reason the macros defined in <code class="cCode">rom.h</code> are inappropriate for your platform, you should create appropriate definitions for <code class="cCode">ROM_STATIC_LONG</code> and/or <code class="cCode">ROM_STATIC_DOUBLE</code> in a platform-dependent location.
+</p>
+<a name="wp435517"> </a><p class="pBody">
+There are no other known platform or port dependencies.
+</p>
+<a name="wp434339"> </a><h2 class="pHeading1">
+14.3	Compiling JavaCodeCompact
+</h2>
+<a name="wp434350"> </a><p class="pBody">
+The sources for JavaCodeCompact are in the directory <code class="cCode">tools/jcc/src</code>. 
+</p>
+<a name="wp434387"> </a><p class="pBody">
+On Unix and Windows machines, you compile JavaCodeCompact by typing the command &#8220;<code class="cCode">gnumake</code>&#8221; in the <code class="cCode">tools/jcc/</code> directory. This compiles all <code class="cCode">.java</code> files in the <code class="cCode">tools/jcc/src</code> subdirectory, and places the resulting compiled file in the <code class="cCode">tools/jcc/classes</code> directory.
+</p>
+<a name="wp434389"> </a><p class="pBody">
+You may need to make modifications to the <code class="cCode">Makefile</code> in the <code class="cCode">tools/jcc/</code> directory to indicate the location of your <code class="cCode">javac</code> compiler.
+</p>
+<a name="wp434396"> </a><h2 class="pHeading1">
+14.4	JavaCodeCompact files
+</h2>
+<a name="wp436925"> </a><p class="pBody">
+The directory <code class="cCode">tools/jcc</code> contains a <code class="cCode">Makefile</code> that shows all the steps necessary to execute JavaCodeCompact. This Makefile currently has two targets:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+unix<a name="wp436926"> </a>
+windows<a name="wp436930"> </a>
+</pre></div>
+<a name="wp436932"> </a><p class="pBody">
+each of which can be used to create all the files necessary for that platform.
+</p>
+<a name="wp435726"> </a><p class="pBody">
+On the <code class="cCode">unix</code> and <code class="cCode">windows</code> platforms, two files are created:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+ROMjavaPlatform.c<a name="wp436941"> </a>
+nativeFunctionTablePlatform.c<a name="wp436943"> </a>
+</pre></div>
+<a name="wp436942"> </a><p class="pBody">
+The first file contains the C data structures that correspond to the classes in the zip file. The second file contains tables necessary for using native functions (see <a  href="portingNative.html#wp436508">§11.3</a>). This second file should be compiled and linked into KVM whether or not you are planning to use the other features of the JavaCodeCompact utility.
+</p>
+<a name="wp435793"> </a><h2 class="pHeading1">
+14.5	Executing JavaCodeCompact
+</h2>
+<a name="wp435931"> </a><p class="pBody">
+The JavaCodeCompact utility is used to built the platform-specific file <code class="cCode">nativeFunctionTablePlatform.c</code>, which contains tables necessary for calling native methods. 
+</p>
+<a name="wp437081"> </a><p class="pBody">
+This file must be built even if you are not using the ability of JavaCodeCompact to pre-load classes for you. If you are not ROMizing your system classes (in other words, you are loading all system classes dynamically), you may skip Step 4 below.
+</p>
+<a name="wp437082"> </a><p class="pBody">
+The simplest method for using the JavaCodeCompact utility is to either use the Makefile provided or to modify it for your platform. The following lists the steps that the Makefile performs:
+</p>
+<ol class="pList1"><a name="wp435578"> </a><div class="pList1"><li>Compile all the .java files in the <code class="cCode">api/src</code> directory. The resulting class files are verified and merged into a single zip file <code class="cCode">classes.zip</code>. This zip file is copied to the <code class="cCode">tools/jcc</code> directory.</li></div>
+<a name="wp434421"> </a><div class="pList1Plus"><li>Compile the sources for JCC as described in <a  href="portingJCC.html#wp434339">§14.3</a> above.</li></div>
+<a name="wp435817"> </a><div class="pList1Plus"><li>Copy <code class="cCode">classes.zip</code> to <code class="cCode">classesPlatform.zip</code>. Remove from this platform-dependent zip file any classes or packages that should not be used on your platform.</li></div>
+<a name="wp435866"> </a><div class="pList1Plus"><li>Execute your system&#8217;s equivalent of the following command in the <code class="cCode">jcc</code> directory:<br /><br />&#160;<code class="cCode">&#160;		env CLASSPATH=classes \<br />&#160;&#160;&#160;&#160;&#160;&#160;JavaCodeCompact -nq -arch KVM \<br />&#160;&#160;&#160;&#160;&#160;&#160;-o ROMjavaPlatform.c classesPlatform.zip&#160;&#160;&#160;<br /><br /></code>The &#8220;<code class="cCode">env CLASSPATH-classes</code>&#8221; sets an environment variable indicating that the code for executing JavaCodeCompact can be found in the subdirectory called <code class="cCode">classes</code>. Next on the command line is the name of the class whose main method is to be executed (<code class="cCode">JavaCodeCompact</code>), and the arguments to that method.<br /></li></div>
+<a name="wp435822"> </a><div class="pList1Plus"><li>Execute your system&#8217;s equivalent of the following command in the <code class="cCode">jcc</code> directory:<br /><br />&#160;<code class="cCode">&#160;		env CLASSPATH=classes \<br />&#160;&#160;&#160;&#160;&#160;&#160;JavaCodeCompact -nq -arch KVM_Native <br />&#160;&#160;&#160;&#160;&#160;&#160;-o nativeFunctionTablePlatform.c classesPlatform.zip&#160;</code><br /><br />This command creates the file containing the native function tables necessary to link native methods to the corresponding C code.</li></div>
+<a name="wp434454"> </a><div class="pList1Last"><li>Recompile all the sources for KVM. You must ensure that the preprocessor macro <code class="cCode">ROMIZING</code> is set to a non-zero integer value. You must also ensure that the file <code class="cCode">ROMjavaPlatform.c</code> is included as one of your source files.</li></div>
+</ol>
+<a name="wp432403"> </a><p class="pBody">
+The resulting kvm image will include, pre-loaded, all of the class files that were in the original <code class="cCode">classesPlatform.zip</code> file. 
+</p>
+<a name="wp427641"> </a><h2 class="pHeading1">
+14.6	Limitations
+</h2>
+<a name="wp435481"> </a><p class="pBody">
+The current implementation of JavaCodeCompact requires that the class files that you compact constitute a &#8220;transitive closure.&#8221; If class <code class="cCode">A</code> is compacted, and class <code class="cCode">A</code>&#8217;s constant pool references class B, then class <code class="cCode">B</code> must also be included as part of the compaction.
+</p>
+<a name="wp435526"> </a><p class="pBody">
+Class A includes Class B in its constant pool if any of the following conditions are true:
+</p>
+<ul class="pBullet2"><a name="wp435530"> </a><div class="pBullet2"><li>Class A is a direct subclass of class B, or class A directly implements class B.</li></div>
+<a name="wp435536"> </a><div class="pBullet2Plus"><li>Class A creates an instance of class B, or an array of class B.</li></div>
+<a name="wp435537"> </a><div class="pBullet2Plus"><li>Class A calls a method that is defined in class B.</li></div>
+<a name="wp435538"> </a><div class="pBullet2Last"><li>Class A checks to see if an object is an instance of type B, or casts an object to type B.</li></div>
+</ul>
+<a name="wp435539"> </a><p class="pBody">
+Note that the following do not cause class B to be included in class A&#8217;s constant pool. Under certain circumstances, it may be possible to compact A without also compacting B.
+</p>
+<ul class="pBullet2"><a name="wp435542"> </a><div class="pBullet2"><li>Class A has an instance variable of type B</li></div>
+<a name="wp435543"> </a><div class="pBullet2Plus"><li>Class A has a method whose argument or return type includes type B in its signature.</li></div>
+<a name="wp435544"> </a><div class="pBullet2Last"><li>Class A creates an instance of class B using the <code class="cCode">Class.forName()</code> method.</li></div>
+</ul>
+<a name="wp435548"> </a><p class="pBody">
+JavaCodeCompact will fail and give you an error message if you fail to include a class file that it requires.
+</p>
+<a name="wp435480"> </a><p class="pBody">
+
+</p>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" class="full-width">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="portingVerifier.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="portingJAM.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KVM Porting Guide <br /> , CLDC 1.1</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    
+<p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169; 2003 Sun Microsystems, Inc. 
+  All rights reserved.</p>
+  </body>
+</html>

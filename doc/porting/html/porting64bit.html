@@ -1,0 +1,322 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="book-no-index" />
+    <meta name="LASTUPDATED" content="02/20/03 12:37:43" />
+    <title>64-bit Support</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="portingClassLoad.html" />
+    <link rel="Next" href="portingFloatingPoint.html" />
+    <link rel="Index" href="portingJavaDebugger.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" class="full-width">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="portingClassLoad.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="portingFloatingPoint.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp418771"> </a><h2 class="pChapNum">
+Chapter &#160; 9
+</h2>
+<a name="wp431766"> </a><h2 class="pTitle">
+64-bit Support
+</h2>
+<hr class="pHr"/>
+<a name="wp426713"> </a><p class="pBody">
+We do not require your compiler to support 64-bit arithmetic. However, having a 64-bit capable compiler makes porting much easier.
+</p>
+<a name="wp426762"> </a><h2 class="pHeading1">
+9.1	Setup
+</h2>
+<a name="wp433084"> </a><p class="pBody">
+<b class="cBold">If your compiler supports 64-bit integers</b>, you should define the types <code class="cCode">long64</code> and <code class="cCode">ulong64</code> in one of your platform-dependent include files. The meaning of these two types is shown below in </p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq433053">
+  <caption><a name="wp433056"> </a><div class="pTableCaption">
+TABLE&#160;7&#160;&#160;&#8211;&#160;&#160;64-bit types
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp433060"> </a><div style="text-align: left" class="pTableHead">
+Type
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp433062"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp433064"> </a><div class="pTableText">
+<code class="cCode">long64</code>
+</div>
+</td>
+    <td><a name="wp433066"> </a><div class="pTableText">
+A signed 64-bit integer.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433068"> </a><div class="pTableText">
+ulong64
+</div>
+</td>
+    <td><a name="wp433070"> </a><div class="pTableText">
+An unsigned 64-bit integer.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+<a  href="porting64bit.html#wp433056">Table&#160;7</a>.
+</p>
+<a name="wp426743"> </a><p class="pBody">
+You should consider setting one of the two compiler constants <code class="cCode">BIG_ENDIAN</code> or <code class="cCode">LITTLE_ENDIAN</code> to a non-zero value. This is only required if you are using the Java Code Compactor, but KVM can produce better code if it knows the endianness of your machine.
+</p>
+<a name="wp426639"> </a><p class="pBody">
+For example, using the Gnu C compiler or the Solaris C compiler, you would write:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;<code class="cCode">typedef long long long64;</code><a name="wp433017"> </a>
+&#160;&#160;&#160;&#160;<code class="cCode">typedef unsigned long long ulong64;</code><a name="wp433018"> </a>
+</pre></div>
+<a name="wp433019"> </a><p class="pBody">
+Using Microsoft Visual C/C++, you would write:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;<code class="cCode">typedef __int64 long64;</code><a name="wp433034"> </a>
+&#160;&#160;&#160;&#160;<code class="cCode">typedef unsigned __int64 ulong64;</code><a name="wp433041"> </a>
+</pre></div>
+<a name="wp433129"> </a><p class="pBody">
+<b class="cBold">If Your compiler does not support 64-bit integers</b>,<a href="#wp433128"><span class="Footnote">1</span></a> you must set the preprocessor constant <code class="cCode">COMPILER_SUPPORTS_LONG</code> to zero. You must define exactly one of <code class="cCode">BIG_ENDIAN</code> or <code class="cCode">LITTLE_ENDIAN<a href="#wp433132"><span class="Footnote">2</span></a></code> to have a non-zero value.
+</p>
+<a name="wp426920"> </a><p class="pBody">
+The types <code class="cCode">long64</code> and <code class="cCode">ulong64</code> are defined to be a structure consisting of two fields, each an unsigned <code class="cCode">long</code> word, named <code class="cCode">high</code> and <code class="cCode">low</code>. The <code class="cCode">high</code> field is first if your machine is big endian; the <code class="cCode">low</code> field is first if your machine is little endian.
+</p>
+<a name="wp431977"> </a><p class="pBody">
+You must define the functions shown in <a  href="porting64bit.html#wp432029">Table&#160;8</a>. If your platform supports floating point, you must also define the functions shown in <a  href="porting64bit.html#wp432062">Table&#160;9</a>.
+</p>
+<a name="wp432101"> </a><p class="pBody">
+Any of these functions can be implemented as a macro instead.</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq432027">
+  <caption><a name="wp432029"> </a><div class="pTableCaption">
+TABLE&#160;8&#160;&#160;&#8211;&#160;&#160;Implementing longs
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp432033"> </a><div style="text-align: left" class="pTableHead">
+Function or Constant
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp432035"> </a><div style="text-align: left" class="pTableHead">
+Java equivalent
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp432037"> </a><div class="pTableText">
+<code class="cCode">long64  ll_mul(long64 a, long64 b);</code>
+</div>
+</td>
+    <td><a name="wp432039"> </a><div class="pTableText">
+<code class="cCode">a * b</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp432041"> </a><div class="pTableText">
+<code class="cCode">long64  ll_div(long64 a, long64 b);</code>
+</div>
+</td>
+    <td><a name="wp432043"> </a><div class="pTableText">
+<code class="cCode">a / b</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp432045"> </a><div class="pTableText">
+<code class="cCode">long64  ll_rem(long64 a, long64 b);</code>
+</div>
+</td>
+    <td><a name="wp432047"> </a><div class="pTableText">
+<code class="cCode">a % b</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp432049"> </a><div class="pTableText">
+<code class="cCode">long64  ll_shl(long64 a, int b);</code>
+</div>
+</td>
+    <td><a name="wp432051"> </a><div class="pTableText">
+<code class="cCode">a &lt;&lt; b</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp432053"> </a><div class="pTableText">
+<code class="cCode">long64  ll_shr(long64 a, int b);</code>
+</div>
+</td>
+    <td><a name="wp432055"> </a><div class="pTableText">
+<code class="cCode">a &gt;&gt; b</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp432057"> </a><div class="pTableText">
+<code class="cCode">long64  ll_ushr(long64 a, int b);</code>
+</div>
+</td>
+    <td><a name="wp432059"> </a><div class="pTableText">
+<code class="cCode">a &gt;&gt;&gt; b</code>
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq432060">
+  <caption><a name="wp432062"> </a><div class="pTableCaption">
+TABLE&#160;9&#160;&#160;&#8211;&#160;&#160;Implementing both longs and floats
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp432066"> </a><div style="text-align: left" class="pTableHead">
+Function or Constant
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp432068"> </a><div style="text-align: left" class="pTableHead">
+Java equivalent
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp432070"> </a><div class="pTableText">
+<code class="cCode">long64&#160;&#160;&#160;float2ll(float f);</code>
+</div>
+</td>
+    <td><a name="wp432072"> </a><div class="pTableText">
+<code class="cCode">(long)f</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp432074"> </a><div class="pTableText">
+<code class="cCode">long64&#160;&#160;&#160;double2ll(double d);</code>
+</div>
+</td>
+    <td><a name="wp432076"> </a><div class="pTableText">
+<code class="cCode">(long)d</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp432078"> </a><div class="pTableText">
+<code class="cCode">float&#160;&#160;&#160;&#160;ll2float(long64 a);</code>
+</div>
+</td>
+    <td><a name="wp432080"> </a><div class="pTableText">
+<code class="cCode">(float)a</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp432082"> </a><div class="pTableText">
+<code class="cCode">double&#160;&#160;&#160;ll2double(long64 a);</code>
+</div>
+</td>
+    <td><a name="wp432084"> </a><div class="pTableText">
+<code class="cCode">(double)a</code>
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp427615"> </a><h2 class="pHeading1">
+9.2	Alignment issues
+</h2>
+<a name="wp427616"> </a><p class="pBody">
+When an object of Java type <code class="cCode">long</code> or <code class="cCode">double</code> is on the Java stack or in the constant pool, its address will be a multiple of 4.
+</p>
+<a name="wp427729"> </a><p class="pBody">
+Some hardware platforms (such as SPARC) require that 64-bit types be aligned so that their address is a multiple of 8.
+</p>
+<a name="wp427641"> </a><p class="pBody">
+If your platform requires that 64-bit integers be aligned on 8-byte boundaries, set
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;#define NEED_LONG_ALIGNMENT 1<a name="wp433137"> </a>
+</pre></div>
+<a name="wp433138"> </a><p class="pBody">
+If your platform requires double-precision floating point numbers be aligned on 8-byte boundaries, set
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;#define NEED_DOUBLE_ALIGNMENT 1<a name="wp433146"> </a>
+</pre></div>
+<a name="wp433147"> </a><p class="pBody">
+The compiler can generates better code when these values are <code class="cCode">0</code>.
+</p>
+
+  <a name="wp433128"> </a><div class="pFootNote">
+<a href="#wp433129"><span class="Footnote">1</span></a>Or your code must be strictly ANSI C standard.
+
+</div>
+<a name="wp433132"> </a><div class="pFootNote">
+<a href="#wp433129"><span class="Footnote">2</span></a>See Jonathan Swift, Gulliver&#8217;s Travels, Part I: A Voyage to Lilliput, for more information on the big-endian, 
+little-endian controversy.
+
+</div>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" class="full-width">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="portingClassLoad.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="portingFloatingPoint.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KVM Porting Guide <br /> , CLDC 1.1</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    
+<p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169; 2003 Sun Microsystems, Inc. 
+  All rights reserved.</p>
+  </body>
+</html>

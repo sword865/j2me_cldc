@@ -1,0 +1,596 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="508 Compliant Book Without Index" />
+    <meta name="LASTUPDATED" content="10/18/02 16:56:35" />
+    <title>ThreadReference Command Set</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="06-StringRef.html" />
+    <link rel="Next" href="08-ArrayRef.html" />
+    <link rel="Index" href="13-Appendix.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" width="100%">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="06-StringRef.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="08-ArrayRef.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp434464"> </a><h2 class="pChapNum">
+Chapter &#160; 7
+</h2>
+<a name="wp442155"> </a><h2 class="pNewHTMLPage">
+ThreadReference Command Set
+</h2>
+<hr class="pHr"/>
+<a name="wp439712"> </a><p class="pBody">
+This command set is numbered (11) to match the equivalent JDWP command set.
+</p>
+<a name="wp432600"> </a>
+&#160;Name Command (1)
+
+<a name="wp432602"> </a><p class="pBody">
+Returns the thread name. 
+</p>
+<a name="wp432604"> </a><h5 class="pHeading4">
+Out Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq445005">
+  <caption><a name="wp445008"> </a><div class="pTableCaption">
+TABLE&#160;17&#160;&#160;&#8211;&#160;&#160;Structure of Out Data for Name Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp445014"> </a><div class="pTableText">
+<code class="cCode">threadID</code>
+</div>
+</td>
+    <td><a name="wp445016"> </a><div class="pTableText">
+<em class="cEmphasis">threadObject</em>
+</div>
+</td>
+    <td><a name="wp445018"> </a><div class="pTableText">
+The thread object ID. &#160; 
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp434465"> </a><h5 class="pHeading4">
+Reply Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq445037">
+  <caption><a name="wp445040"> </a><div class="pTableCaption">
+TABLE&#160;18&#160;&#160;&#8211;&#160;&#160;Structure of Reply Data for Name Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp445046"> </a><div class="pTableText">
+<code class="cCode">string</code>
+</div>
+</td>
+    <td><a name="wp445048"> </a><div class="pTableText">
+<em class="cEmphasis">threadName</em>
+</div>
+</td>
+    <td><a name="wp445050"> </a><div class="pTableText">
+The thread name.&#160; 
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp434466"> </a>
+&#160;Suspend Command (2)
+
+<a name="wp432618"> </a><p class="pBody">
+Suspends the thread. 
+</p>
+<a name="wp432620"> </a><p class="pBody">
+Unlike <code class="cCode">java.lang.Thread.suspend()</code>, suspends of both the virtual machine and individual threads are counted. Before a thread can run again, it must be resumed the same number of times it has been suspended. 
+</p>
+<a name="wp432622"> </a><p class="pBody">
+Suspending single threads with this command has the same dangers as is the case with method <code class="cCode">java.lang.Thread.suspend()</code>. If the suspended thread holds a monitor needed by another running thread, deadlock is possible in the target VM (at least until the suspended thread is resumed again).
+</p>
+<a name="wp432624"> </a><p class="pBody">
+The suspended thread is guaranteed to remain suspended until resumed through one of the JDI resume methods mentioned above.
+</p>
+<a name="wp432626"> </a><p class="pBody">
+Note that this doesn&#39;t change the status of the thread (see the <code class="cCode">ThreadStatus</code> command.) For example, if it was <code class="cCode">Running</code>, it still appears to other threads to be running. 
+</p>
+<a name="wp432628"> </a><h5 class="pHeading4">
+Out Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq445070">
+  <caption><a name="wp445073"> </a><div class="pTableCaption">
+TABLE&#160;19&#160;&#160;&#8211;&#160;&#160;Structure of Out Data for Suspend Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp445079"> </a><div class="pTableText">
+<code class="cCode">threadID</code>
+</div>
+</td>
+    <td><a name="wp445081"> </a><div class="pTableText">
+<em class="cEmphasis">threadObject</em>
+</div>
+</td>
+    <td><a name="wp445083"> </a><div class="pTableText">
+The thread object ID. &#160; 
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp434467"> </a><h5 class="pHeading4">
+Reply Data 
+</h5>
+<a name="wp432635"> </a><p class="pBody">
+(None) 
+</p>
+<a name="wp432639"> </a>
+&#160;Resume Command (3)
+
+<a name="wp432641"> </a><p class="pBody">
+Resumes the execution of a given thread. If this thread was not previously suspended by the front-end, calling this command has no effect. Otherwise, the count of pending suspends on this thread is decremented. If it is decremented to 0, the thread continues to execute. 
+</p>
+<a name="wp432643"> </a><h5 class="pHeading4">
+Out Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq445102">
+  <caption><a name="wp445105"> </a><div class="pTableCaption">
+TABLE&#160;20&#160;&#160;&#8211;&#160;&#160;Structure of Out Data for Resume Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp445111"> </a><div class="pTableText">
+<code class="cCode">threadID</code>
+</div>
+</td>
+    <td><a name="wp445113"> </a><div class="pTableText">
+<em class="cEmphasis">threadObject</em>
+</div>
+</td>
+    <td><a name="wp445115"> </a><div class="pTableText">
+The thread object ID. &#160;
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp434468"> </a><h5 class="pHeading4">
+Reply Data 
+</h5>
+<a name="wp432650"> </a><p class="pBody">
+(None) 
+</p>
+<a name="wp432654"> </a>
+&#160;Status Command (4)
+
+<a name="wp432656"> </a><p class="pBody">
+Returns the current status of a thread. The thread status reply indicates the thread status the last time it was running. The suspend status provides information on the thread&#39;s suspension, if any. 
+</p>
+<a name="wp432658"> </a><h5 class="pHeading4">
+Out Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq445134">
+  <caption><a name="wp445137"> </a><div class="pTableCaption">
+TABLE&#160;21&#160;&#160;&#8211;&#160;&#160;Structure of Out Data for Status Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp445143"> </a><div class="pTableText">
+<code class="cCode">threadID</code>
+</div>
+</td>
+    <td><a name="wp445145"> </a><div class="pTableText">
+<em class="cEmphasis">threadObject</em>
+</div>
+</td>
+    <td><a name="wp445147"> </a><div class="pTableText">
+The thread object ID. &#160;
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp434469"> </a><h5 class="pHeading4">
+Reply Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq445166">
+  <caption><a name="wp445169"> </a><div class="pTableCaption">
+TABLE&#160;22&#160;&#160;&#8211;&#160;&#160;Structure of Reply Data for Status Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp445175"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp445177"> </a><div class="pTableText">
+<em class="cEmphasis">threadStatus</em>
+</div>
+</td>
+    <td><a name="wp445179"> </a><div class="pTableText">
+One of the thread status codes. See <code class="cCode">KDWP.ThreadStatus</code>&#160; 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445181"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp445183"> </a><div class="pTableText">
+<em class="cEmphasis">suspendStatus</em>
+</div>
+</td>
+    <td><a name="wp445185"> </a><div class="pTableText">
+One of the suspend status codes. See <code class="cCode">KDWP.SuspendStatus</code>&#160;
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp440975"> </a>
+&#160;Frames Command (6)
+
+<a name="wp432674"> </a><p class="pBody">
+Returns the current call stack of a suspended thread. The sequence of frames starts with the currently executing frame, followed by its caller, and so on. The thread must be suspended, and the returned <code class="cCode">frameID</code> is valid only while the thread is suspended. 
+</p>
+<a name="wp432676"> </a><h5 class="pHeading4">
+Out Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq445210">
+  <caption><a name="wp445213"> </a><div class="pTableCaption">
+TABLE&#160;23&#160;&#160;&#8211;&#160;&#160;Structure of Out Data for Frames Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp445219"> </a><div class="pTableText">
+<code class="cCode">threadID</code>
+</div>
+</td>
+    <td><a name="wp445221"> </a><div class="pTableText">
+<em class="cEmphasis">threadObject</em>
+</div>
+</td>
+    <td><a name="wp445223"> </a><div class="pTableText">
+The thread object ID. &#160;
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445225"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp445227"> </a><div class="pTableText">
+<em class="cEmphasis">startFrame</em>
+</div>
+</td>
+    <td><a name="wp445229"> </a><div class="pTableText">
+The index of the first frame to retrieve.&#160;
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445231"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp445233"> </a><div class="pTableText">
+<em class="cEmphasis">length</em>
+</div>
+</td>
+    <td><a name="wp445235"> </a><div class="pTableText">
+The count of frames to retrieve (-1 means all remaining).
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp434471"> </a><h5 class="pHeading4">
+Reply Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq445254">
+  <caption><a name="wp445257"> </a><div class="pTableCaption">
+TABLE&#160;24&#160;&#160;&#8211;&#160;&#160;Structure of Reply Data for Frames Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp445263"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp445265"> </a><div class="pTableText">
+<em class="cEmphasis">frames</em>
+</div>
+</td>
+    <td><a name="wp445267"> </a><div class="pTableText">
+ number of frames retrieved&#160; 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="3" rowspan="1"><a name="wp445269"> </a><div class="pTableText">
+Repeated <em class="cEmphasis">frames</em> times:
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445275"> </a><div class="pTableText">
+<code class="cCode">frameID</code>
+</div>
+</td>
+    <td><a name="wp445277"> </a><div class="pTableText">
+<em class="cEmphasis">frameID</em>
+</div>
+</td>
+    <td><a name="wp445279"> </a><div class="pTableText">
+The ID of this frame. &#160; 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445281"> </a><div class="pTableText">
+<code class="cCode">location</code>
+</div>
+</td>
+    <td><a name="wp445283"> </a><div class="pTableText">
+<em class="cEmphasis">location</em>
+</div>
+</td>
+    <td><a name="wp445285"> </a><div class="pTableText">
+The current location of this frame&#160; 
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp434472"> </a>
+&#160;FrameCount Command (7)
+
+<a name="wp432690"> </a><p class="pBody">
+Returns the count of frames on this thread&#39;s stack. The thread must be suspended, and the returned count is valid only while the thread is suspended. 
+</p>
+<a name="wp432692"> </a><h5 class="pHeading4">
+Out Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq445305">
+  <caption><a name="wp445308"> </a><div class="pTableCaption">
+TABLE&#160;25&#160;&#160;&#8211;&#160;&#160;Structure of Out Data for FrameCount Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp445314"> </a><div class="pTableText">
+<code class="cCode">threadID</code>
+</div>
+</td>
+    <td><a name="wp445316"> </a><div class="pTableText">
+<em class="cEmphasis">threadObject</em>
+</div>
+</td>
+    <td><a name="wp445318"> </a><div class="pTableText">
+The thread object ID. &#160;
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp434473"> </a><h5 class="pHeading4">
+Reply Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq445337">
+  <caption><a name="wp445340"> </a><div class="pTableCaption">
+TABLE&#160;26&#160;&#160;&#8211;&#160;&#160;Structure of Reply Data for FrameCount Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp445346"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp445348"> </a><div class="pTableText">
+<em class="cEmphasis">frameCount</em>
+</div>
+</td>
+    <td><a name="wp445350"> </a><div class="pTableText">
+The count of frames on this thread&#39;s stack. &#160; 
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp434474"> </a>
+&#160;Stop Command (10)
+
+<a name="wp432706"> </a><p class="pBody">
+Stops the thread with an asynchronous exception, as if done by <code class="cCode">java.lang.Thread.stop</code>. 
+</p>
+<a name="wp432708"> </a><h5 class="pHeading4">
+Out Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq445370">
+  <caption><a name="wp445373"> </a><div class="pTableCaption">
+TABLE&#160;27&#160;&#160;&#8211;&#160;&#160;Structure of Out Data for Stop Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp445379"> </a><div class="pTableText">
+<code class="cCode">threadID</code>
+</div>
+</td>
+    <td><a name="wp445381"> </a><div class="pTableText">
+<em class="cEmphasis">threadObject</em>
+</div>
+</td>
+    <td><a name="wp445383"> </a><div class="pTableText">
+The thread object ID. &#160;
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445385"> </a><div class="pTableText">
+<code class="cCode">objectID</code>
+</div>
+</td>
+    <td><a name="wp445387"> </a><div class="pTableText">
+<em class="cEmphasis">throwable</em>
+</div>
+</td>
+    <td><a name="wp445389"> </a><div class="pTableText">
+Asynchronous exception. This object must be an instance of <code class="cCode">java.lang.Throwable</code> or a subclass&#160;
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp434475"> </a><h5 class="pHeading4">
+Reply Data 
+</h5>
+<a name="wp432715"> </a><p class="pBody">
+(None) 
+</p>
+<a name="wp432719"> </a>
+&#160;SuspendCount Command (12)
+
+<a name="wp432721"> </a><p class="pBody">
+Get the suspend count for this thread. The suspend count is the number of times the thread has been suspended through the thread-level or VM-level suspend commands without a corresponding resume.
+</p>
+<a name="wp432723"> </a><h5 class="pHeading4">
+Out Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq445408">
+  <caption><a name="wp445411"> </a><div class="pTableCaption">
+TABLE&#160;28&#160;&#160;&#8211;&#160;&#160;Structure of Out Data for SuspendCount Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp445417"> </a><div class="pTableText">
+<code class="cCode">threadID</code>
+</div>
+</td>
+    <td><a name="wp445419"> </a><div class="pTableText">
+<em class="cEmphasis">threadObject</em>
+</div>
+</td>
+    <td><a name="wp445421"> </a><div class="pTableText">
+The thread object ID. &#160; 
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp434476"> </a><h5 class="pHeading4">
+Reply Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq445440">
+  <caption><a name="wp445443"> </a><div class="pTableCaption">
+TABLE&#160;29&#160;&#160;&#8211;&#160;&#160;Structure of Reply Data for SuspendCount Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp445449"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp445451"> </a><div class="pTableText">
+<em class="cEmphasis">suspendCount</em>
+</div>
+</td>
+    <td><a name="wp445453"> </a><div class="pTableText">
+The number of outstanding suspends of this thread. &#160;
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp434501"> </a><p class="pBody">
+
+</p>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" width="100%">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="06-StringRef.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="08-ArrayRef.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KDWP Specification <br /> KVM Debug Wire Protocol, 1.0</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    <p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169;
+       2002 Sun Microsystems, Inc. All rights reserved. Use is
+       subject to license terms. Third-party software, including
+       font  technology,  is copyrighted  and  licensed from  Sun
+       suppliers. Sun, Sun Microsystems, the Sun logo, Java and
+       Solaris are trademarks or registered trademarks of Sun
+       Microsystems, Inc. in the US and other countries.  Federal
+       Acquisitions: Commercial Software - Government Users
+       Subject to Standard License Terms and Conditions.</p>
+
+    <p class="copyright"><a
+       href="copyright.html">Copyright</a> &#169; 2002
+       Sun Microsystems, Inc. Tous droits r&#233;serv&#233;s.
+       Distribu&#233; par des licences qui en restreignent
+       l'utilisation.  Le logiciel d&#233;tenu par des tiers, et
+       qui comprend la technologie relative aux polices de
+       caract&#232;res, est prot&#233;g&#233; par un copyright et
+       licenci&#233; par des fournisseurs de Sun.  Sun, Sun
+       Microsystems, le logo Sun, Java et Solaris sont des
+       marques de fabrique ou des marques d&#233;pos&#233;es de
+       Sun Microsystems, Inc. aux Etats-Unis et dans d'autres
+       pays. </p>	
+  </body>
+</html>

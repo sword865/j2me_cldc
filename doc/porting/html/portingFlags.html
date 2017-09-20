@@ -1,0 +1,737 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="book-no-index" />
+    <meta name="LASTUPDATED" content="02/21/03 16:01:13" />
+    <title>Compilation Flags, Definitions and Macros</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="portingDirStruct.html" />
+    <link rel="Next" href="portingStartup.html" />
+    <link rel="Index" href="portingJavaDebugger.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" class="full-width">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="portingDirStruct.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="portingStartup.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp419538"> </a><h2 class="pChapNum">
+Chapter &#160; 6
+</h2>
+<a name="wp431761"> </a><h2 class="pTitle">
+Compilation Flags, Definitions and Macros
+</h2>
+<hr class="pHr"/>
+<a name="wp420641"> </a><p class="pBody">
+This section lists various C preprocessor flags, definitions and macros that are defined in <code class="cCode">VmCommon/h/main.h</code>. Understanding the meaning of these flags helps you in porting efforts, so please read the documentation below and in file <code class="cCode">VmCommon/h/main.h</code>. 
+</p>
+<hr class="pHr"/><div class="note">
+<a name="wp432193"> </a>
+<b>Note &#8211;</b>  Rather than changing the values provided in <code class="cCode">VmCommon/h/main.h</code>, these values should be preferably be overridden in your port-specific <code class="cCode">machine_md.h</code> file. <br /><br />Also note that in our reference implementation, many of these flags are commonly overridden from makefiles.
+<hr class="pHr"/></div>
+<a name="wp432201"> </a><p class="pBody">
+For each definition, we give a brief summary and its default definition. These flags and macros are documented also in <code class="cCode">VmCommon/h/main.h</code>.
+</p>
+<a name="wp432228"> </a><h2 class="pHeading1">
+6.1	General compilation options
+</h2>
+<a name="wp432245"> </a><p class="pBody">
+The following definitions control the general platform-dependent compiler options that you must set before starting your porting efforts. Incorrect settings typically cause the virtual machine to malfunction.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define COMPILER_SUPPORTS_LONG 1<a name="wp432251"> </a>
+</pre></div>
+<a name="wp432276"> </a><p class="pIndented1">
+Turn this flag on if your compiler has support for long (64 bit) integers.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define NEED_LONG_ALIGNMENT 0<a name="wp432303"> </a>
+</pre></div>
+<a name="wp435849"> </a><p class="pIndented1">
+Instructs the KVM to know that your host operating system and compiler generally assume all 64-bit integers to be aligned on eight-byte boundaries.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define NEED_DOUBLE_ALIGNMENT 0<a name="wp435850"> </a>
+</pre></div>
+<a name="wp435851"> </a><p class="pIndented1">
+Instructs the KVM to know that your host operating system and compiler generally assume all double floating point numbers to be aligned on eight-byte boundaries (this flag is meaningful only if floating point support is turned on.)
+</p>
+<a name="wp432554"> </a><p class="pBody">
+Additional notes. The compiler generates better code if it knows the &#8220;endianness&#8221; of your machine. You should set one of the following two variables to &#8220;1&#8221; in your machine-specific header file. 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;<code class="cCode">#define BIG_ENDIAN 0</code><a name="wp435622"> </a>
+&#160;&#160;&#160;<code class="cCode">#define LITTLE_ENDIAN 0</code><a name="wp435623"> </a>
+</pre></div>
+<a name="wp433939"> </a><p class="pBody">
+It is unnecessary to set one of these &#8220;endian&#8221; variables to &#8220;1&#8221; if you reset <code class="cCode">COMPILER_SUPPORTS_LONG </code>to zero. (See <a  href="porting64bit.html#wp418771"><span style="color: #3366CC">Chapter&#160;9</span></a> for more details.)
+</p>
+<a name="wp435611"> </a><p class="pBody">
+Also note that if your compiler supports 64-bit integer arithmetic and you have set the flag
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<code class="cCode">#define COMPILER_SUPPORTS_LONG </code><a name="wp435612"> </a>
+</pre></div>
+<a name="wp435618"> </a><p class="pBody">
+you should supply definitions for the types <code class="cCode">long64</code> and <code class="cCode">ulong64</code>. If your compiler does not support 64-bit integers (or you have set the flag to <code class="cCode">0</code> for some other reason), structure definitions of these two types are created for you automatically. (See <a  href="porting64bit.html#wp418771"><span style="color: #3366CC">Chapter&#160;9</span></a>.)
+</p>
+<a name="wp434697"> </a><h2 class="pHeading1">
+6.2	General system configuration options
+</h2>
+<a name="wp434698"> </a><p class="pBody">
+The following definitions allow you to control which components and features to include in your port.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define IMPLEMENTS_FLOAT 1<a name="wp432318"> </a>
+</pre></div>
+<a name="wp432319"> </a><p class="pIndented1">
+Turns floating point support in KVM on or off. Should be &#8216;1&#8217; in those implementations that are compliant with CLDC Specification version 1.1, and &#8216;0&#8217; in those implementations that are compliant with CLDC Specification version 1.0.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define PATH_SEPARATOR &#8216;:&#8217;<a name="wp432721"> </a>
+</pre></div>
+<a name="wp433859"> </a><p class="pIndented1">
+Path separator character used in CLASSPATH. This definition is meaningful only when utilizing the default class loader for command line based systems. (Defined in <code class="cCode">VmCommon/h/loader.h</code>.)
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define ROMIZING 1<a name="wp433869"> </a>
+</pre></div>
+<a name="wp433870"> </a><p class="pIndented1">
+Turns class prelinking/preloading (JavaCodeCompact) support on or off. If this option is turned on, KVM prelinks all the system classes directly in the virtual machine, speeding up application startup considerably. Refer to <a  href="portingJCC.html#wp418771"><span style="color: #3366CC">Chapter&#160;14</span></a> for details.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define USE_JAM 0<a name="wp432386"> </a>
+</pre></div>
+<a name="wp432387"> </a><p class="pIndented1">
+Includes or excludes the optional Java Application Manager (JAM) component in the virtual machine. Refer to <a  href="portingJAM.html#wp418771"><span style="color: #3366CC">Chapter&#160;15</span></a> for details.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define ASYNCHRONOUS_NATIVE_FUNCTIONS 0<a name="wp432405"> </a>
+</pre></div>
+<a name="wp432406"> </a><p class="pIndented1">
+Instructs the KVM to use optional asynchronous native functions. Refer to <a  href="portingNative.html#wp433595"><span style="color: #3366CC">Section&#160;11.4 &quot;Asynchronous native methods</span></a>&#8221; and <a  href="portingEvent.html#wp424501"><span style="color: #3366CC">Chapter&#160;12</span></a> for details.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define USE_KNI 1<a name="wp434768"> </a>
+</pre></div>
+<a name="wp434769"> </a><p class="pIndented1">
+This option was introduced in KVM 1.0.4. When enabled, the system will include some code that is needed by the K Native Interface (KNI). If you do not intend to use KNI (you should!), we recommend you to turn this option off, because old-style native functions will run slightly faster with this option turned off. Refer to the KNI Specification for further information on KNI.
+</p>
+<a name="wp432422"> </a><h2 class="pHeading1">
+6.3	Palm-specific system configuration options
+</h2>
+<a name="wp432428"> </a><p class="pBody">
+The following definitions allow you to control certain Palm-specific system configuration options. All these features were originally designed for the Palm OS version of KVM, but they may be useful also for other ports.
+</p>
+<hr class="pHr"/><div class="note">
+<a name="wp436376"> </a>
+<b>Note &#8211;</b>  The CLDC implementation for the Palm OS is no longer available. 
+<hr class="pHr"/></div>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define USESTATIC 0<a name="wp432435"> </a>
+</pre></div>
+<a name="wp432436"> </a><p class="pIndented1">
+Instructs the KVM to use a Palm-specific optimization in which certain immutable runtime data structures are moved from &#8220;dynamic RAM&#8221; to &#8220;storage RAM&#8221; to conserve Java heap space. A fake implementation of this mechanism is available also for the Windows and Solaris versions of KVM (for debugging purposes.)
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define CHUNKY_HEAP 0<a name="wp432446"> </a>
+</pre></div>
+<a name="wp432447"> </a><p class="pIndented1">
+Instructs the KVM to use an optimization which allows the KVM to allocate the Java heap in multiple chunks or segments. This makes it possible for the virtual machine to allocate more heap space on certain platforms such as Palm OS.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define RELOCATABLE_ROM 0<a name="wp434805"> </a>
+</pre></div>
+<a name="wp432466"> </a><p class="pIndented1">
+Instructs the KVM to use an optimization in which the prelinked system classes are stored using a relocatable (movable) representation. This allows romized (JavaCodeCompacted) system classes to be stored in devices such as Palm OS.
+</p>
+<a name="wp432247"> </a><h2 class="pHeading1">
+6.4	Memory allocation settings
+</h2>
+<a name="wp432490"> </a><p class="pBody">
+The following definitions affect the amount of memory KVM allocates.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define DEFAULTHEAPSIZE 256*1024<a name="wp432495"> </a>
+</pre></div>
+<a name="wp432496"> </a><p class="pIndented1">
+The Java heap size that KVM allocates upon virtual machine startup. This value is commonly overridden from makefiles. Note that, starting from KVM 1.0.3, it is possible to override the heap size value from the command line (in those ports that support command line operation.) The heap size value must be a number that is divisible by four. The number must be in the range of 16k to 64 M.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define INLINECACHESIZE 128<a name="wp432505"> </a>
+</pre></div>
+<a name="wp432506"> </a><p class="pIndented1">
+The size of a special inline cache area that KVM reserves upon virtual machine startup if the <code class="cCode">ENABLEFASTBYTECODES</code> option is turned on. The inline caching mechanism speeds up method lookups in the KVM by utilizing a technique popularized by Deutsch &amp; Schiffman in the early 1980s. The size here is expressed as a number of inline cache entries (each entry requires 12-16 bytes depending on your target platform.)
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define STACKCHUNKSIZE 128<a name="wp432516"> </a>
+</pre></div>
+<a name="wp432517"> </a><p class="pIndented1">
+The execution stacks of Java threads inside the KVM grow and shrink automatically as necessary. This value defines the default size of a new stack frame chunk when a new stack chunk needs to be allocated. Reducing the default stack chunk size will make the creation of new Java threads less expensive, but will slow down the execution of the VM when running programs that require a lot of stack space (that is, programs that have a lot of nested method calls.)
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define STRINGBUFFERSIZE 512<a name="wp432812"> </a>
+</pre></div>
+<a name="wp432813"> </a><p class="pIndented1">
+The size (in bytes) of a statically allocated area that the virtual machine uses internally in various string operations.
+</p>
+<hr class="pHr"/><div class="note">
+<a name="wp432576"> </a>
+<b>Note &#8211;</b>  As a general principle, KVM allocates all the memory it needs upon virtual machine startup. At runtime, all the memory is allocated inside the preallocated areas. Of course, the situation may change if the virtual machine calls host-system specific native functions (such as graphics functions) that perform dynamic memory allocation outside the Java heap.
+<hr class="pHr"/></div>
+<a name="wp432514"> </a><h2 class="pHeading1">
+6.5	Garbage collection options
+</h2>
+<a name="wp433482"> </a><p class="pBody">
+The following option turns on compacting garbage collection. Note that currently compaction cannot be used on those platforms that have a segmented (non-contiguous) memory architecture.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;#define ENABLE_HEAP_COMPACTION 1<a name="wp433483"> </a>
+</pre></div>
+<a name="wp432533"> </a><p class="pBody">
+The following option, if set to a non-zero value, causes a garbage collection to occur on every allocation. This makes it easier to find garbage collection problems. Since this option makes the virtual machine run extremely slowly, the option should be turned off in production builds.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;#define EXCESSIVE_GARBAGE_COLLECTION 0<a name="wp432154"> </a>
+</pre></div>
+<a name="wp434016"> </a><h2 class="pHeading1">
+6.6	Class loading options
+</h2>
+<a name="wp434042"> </a><p class="pBody">
+Some KVM ports may want to forbid any new classes from being loaded into any system package. The following macro defines whether a package name is one of these restricted packages. By default, the system prevents dynamic class loading to <code class="cCode">java.*</code> and <code class="cCode">javax.*</code> packages.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;#define IS_RESTRICTED_PACKAGE_NAME(name) \<a name="wp434062"> </a>
+&#160;&#160;&#160;((strncmp(name, &quot;java/&quot;, 5) == 0) || \<a name="wp435910"> </a>
+&#160;&#160;&#160;&#160;(strncmp(name, &quot;javax/&quot;, 6) == 0)) <a name="wp435911"> </a>
+</pre></div>
+<a name="wp431941"> </a><h2 class="pHeading1">
+6.7	Interpreter execution options (since KVM 1.0)
+</h2>
+<a name="wp432045"> </a><p class="pBody">
+The following macros allow you to turn on and off certain features controlling interpreter execution. The default values for a production release are shown below.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define ENABLEFASTBYTECODES 1<a name="wp432586"> </a>
+</pre></div>
+<a name="wp432587"> </a><p class="pIndented1">
+Turns runtime bytecode replacement and method inline caching on or off. This option improves the performance of the virtual machine by about 10-20%, but increases the size of the virtual machine by a few kilobytes. Note that bytecode replacement cannot be performed on those target platforms in which bytecodes are stored in non-volatile memory such as ROM.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define VERIFYCONSTANTPOOLINTEGRITY 1<a name="wp432606"> </a>
+</pre></div>
+<a name="wp432607"> </a><p class="pIndented1">
+Instructs the virtual machine to verify the types of constant pool entries at runtime when performing constant pool lookups. Reduces runtime performance slightly, but is generally recommended to be kept on for safety and security reasons.
+</p>
+<a name="wp432544"> </a><p class="pBody">
+Additional definitions and interpreter macros:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define BASETIMESLICE<a name="wp432632"> </a>
+</pre></div>
+<a name="wp433882"> </a><p class="pIndented1">
+The value of this variable determines the basic frequency (as a number of bytecodes executed) in which the virtual machine performs thread switching, event notification and other periodically needed operations. A smaller number reduces event handling and thread switching latency, but causes the interpreter to run more slowly.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define DOUBLE_REMAINDER(x, y) fmod(x,y)<a name="wp433886"> </a>
+</pre></div>
+<a name="wp432058"> </a><p class="pIndented1">
+A compiler macro, defined in <code class="cCode">interpret.h</code>, that is used to find the modulus of two floating point numbers.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define SLEEP_UNTIL(wakeupTime)<a name="wp432751"> </a>
+</pre></div>
+<a name="wp432752"> </a><p class="pIndented1">
+This macro makes the virtual machine sleep until the current time (as indicated by the return value of the function <code class="cCode">CurrentTime_md()</code>) is greater than or equal to the wakeup time. The default implementation of <code class="cCode">SLEEP_UNTIL</code> is a busy loop. Most ports should usually provide a more efficient implementation for battery conservation reasons. Refer to <a  href="portingEvent.html#wp432886"><span style="color: #3366CC">Section&#160;12.4 &quot;Battery power conservation</span></a>&#8221; for further details.
+</p>
+<a name="wp432957"> </a><h2 class="pHeading1">
+6.8	Interpreter execution techniques (after KVM 1.0.2)
+</h2>
+<a name="wp432992"> </a><p class="pBody">
+Since the release 1.0.2, KVM has an interpreter design that gives up to 15-30% better performance than KVM 1.0 without any loss of ANSI C portability. The actual performance improvement percentage depends on the target platform and the capabilities of the C compiler that is used for compiling the KVM. The performance improvement is the result of the following four techniques that can be used independently of each other:
+</p>
+<ul class="pBullet1"><a name="wp432994"> </a><div class="pBullet1"><li>Restructuring the interpreter code so that virtual machine registers will be placed into local C variables when the interpreter is running.</li></div>
+<a name="wp432996"> </a><div class="pBullet1Plus"><li>Splitting uncommonly used Java bytecodes into a separate interpreter loop subroutine. This allows the C compiler to do a better job in optimizing the code for more frequently used bytecodes.</li></div>
+<a name="wp432998"> </a><div class="pBullet1Plus"><li>Moving the test for Java thread rescheduling from the top of the interpreter loop to branch bytecodes. This reduces the overhead of the timeslice counter that is used for controlling thread switching.</li></div>
+<a name="wp433000"> </a><div class="pBullet1Last"><li>Padding out the bytecode space in order to allow the C compiler to produce better code for the main switch statement of the interpreter.</li></div>
+</ul>
+<a name="wp433383"> </a><p class="pBody">
+These techniques do not depend on any compiler-specific features, and are therefore portable across a wide variety of C compilers. Each of the techniques and the corresponding macros are discussed in more detail below.
+</p>
+<a name="wp433099"> </a><h3 class="pHeading2">
+6.8.1	Copying the virtual machine registers to local variables
+</h3>
+<a name="wp433287"> </a><p class="pBody">
+The virtual machine registers of the KVM (<code class="cCode">ip</code>, <code class="cCode">sp</code>, <code class="cCode">lp</code>, <code class="cCode">fp</code>, <code class="cCode">cp</code>) are accessed very frequently when bytecodes are being executed. In KVM 1.0, all these virtual machine registers are defined as global C variables. Starting from KVM 1.0.2, these registers are still principally defined as global variables, but if the <code class="cCode">LOCALVMREGISTERS</code> option is on, they are copied to local variables when the interpreter is executing. A good C compiler will then optimize the interpreter loop so that these local variables are put into machine registers for substantially faster execution. 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define LOCALVMREGISTERS 1<a name="wp433100"> </a>
+</pre></div>
+<a name="wp433111"> </a><p class="pIndented1">
+Turns the localization of virtual machine registers on or off.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define IPISLOCAL 1<a name="wp434109"> </a>
+#define SPISLOCAL 1<a name="wp435976"> </a>
+#define LPISLOCAL 0<a name="wp435977"> </a>
+#define FPISLOCAL 0<a name="wp435978"> </a>
+#define CPISLOCAL 0<a name="wp435979"> </a>
+</pre></div>
+<a name="wp434110"> </a><p class="pIndented1">
+These macros allow you to control specifically which of the virtual machine registers should be used locally by the interpreter loop. These macros have been added to provide better control over register allocation, as many resource-constrained platforms may not have many physical hardware registers available. 
+</p>
+<a name="wp433183"> </a><p class="pIndented1">
+The optimal selection of these options for a specific platform will require careful examination of the machine code produced by the compiler, along with a good deal of experimentation. By default, <code class="cCode">ip</code> (instruction pointer), and <code class="cCode">sp</code> (stack pointer) are allocated locally, while <code class="cCode">lp</code> (locals pointer), <code class="cCode">fp</code> (frame pointer) and <code class="cCode">cp</code><code class="cCode"> </code>(constant pool pointer) are kept in global variables. 
+</p>
+<hr class="pHr"/><div class="note">
+<a name="wp433014"> </a>
+<b>Note &#8211;</b>  If you use the <code class="cCode">LOCALVMREGISTERS</code> option and you want to make further changes to the code implementing Java bytecodes, the single most important thing to remember is to make sure that the local copies of the virtual machine registers are copied back to their global variables before calling functions in the virtual machine that expects them to be in their global variables. Failure to do so will lead to obscure bugs. The virtual machine registers can be saved to their global variables by using the macro <code class="cCode">VMSAVE</code>. They are restored back to their local variables by using the macro <code class="cCode">VMRESTORE</code>. For instance the <code class="cCode">RETURN</code> bytecodes may need to call <code class="cCode">monitorExit()</code>, and to do this the call must be done as follows:<br /><br /><code class="cCode">VMSAVE<br />result = monitorExit(...);<br />VMRESTORE<br /></code>
+<hr class="pHr"/></div>
+<a name="wp433225"> </a><h3 class="pHeading2">
+6.8.2	Splitting uncommon bytecodes into a separate subroutine
+</h3>
+<a name="wp433226"> </a><p class="pBody">
+The KVM 1.0 interpreter had the code for all the Java bytecodes in a single large switch statement. However, a majority of Java bytecodes are executed very rarely. If the code for the more frequently and less frequently used bytecodes is placed in separate routines, the C compiler can often do a better job optimizing the resulting smaller interpreter loops. This also helps the compiler find hardware registers for the virtual machine registers more easily when the <code class="cCode">LOCALVMREGISTERS</code> option is in use.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define SPLITINFREQUENTBYTECODES 1<a name="wp433245"> </a>
+</pre></div>
+<a name="wp433025"> </a><p class="pIndented1">
+Turning this option on allows the C compiler to generate separate interpreter loops for the frequently and infrequently used bytecodes.
+</p>
+<a name="wp433027"> </a><p class="pBody">
+Note that the code to process the bytecodes is now contained in a file called bytecodes.c. The code for all the bytecodes is kept here and is selectively compiled by utilizing a number of internal macro definitions (<code class="cCode">STANDARDBYTECODES</code>, <code class="cCode">INFREQUENTSTANDARDBYTECODES</code>, <code class="cCode">FLOATBYTECODES</code> and <code class="cCode">FASTBYTECODES</code>).
+</p>
+<a name="wp433045"> </a><p class="pBody">
+The code in <code class="cCode">bytecodes.c</code> is executed from another new file called <code class="cCode">execute.c</code>. If the <code class="cCode">SPLITINFREQUENTBYTECODES</code> option is enabled, the file <code class="cCode">bytecodes.c</code> is included twice into <code class="cCode">execute.c</code>: once for the routine called <code class="cCode">SlowInterpret()</code> and once for the routine <code class="cCode">Interpret()</code>. The four macros mentioned above are used to control the expansion of the appropriate bytecodes into the correct subroutines.
+</p>
+<a name="wp433054"> </a><h3 class="pHeading2">
+6.8.3	Moving the test for thread rescheduling to branchpoints
+</h3>
+<a name="wp433055"> </a><p class="pBody">
+The old KVM 1.0 interpreter tested for the need to reschedule (switch threads) before the execution of each bytecode. The performance of the interpreter was improved by about 5% by changing the location of this test so that the test is performed only after every branch, goto, call and return instruction.
+</p>
+<a name="wp433331"> </a><p class="pBody">
+Thread scheduling in the old interpreter took place when a certain number of bytecodes had been executed. This number was, by default, 100 times the priority of the thread. In the new interpreter, thread rescheduling occurs by default when 1000 times the number of branch, call, or return bytecodes have been executed.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define RESCHEDULEATBRANCH 1<a name="wp433314"> </a>
+</pre></div>
+<a name="wp433315"> </a><p class="pIndented1">
+Turning this option on changes the thread switching mechanism so that tests for thread switching are moved to branchpoints. Note that enabling this option affects the value of the <code class="cCode">BASETIMESLICE</code> macro inherited from KVM 1.0. When this option is off, thread scheduling operates as in KVM 1.0.
+</p>
+<a name="wp433058"> </a><h3 class="pHeading2">
+6.8.4	Padding out the bytecode space
+</h3>
+<a name="wp433059"> </a><p class="pBody">
+The Java Virtual Machine Specification defines 200 standard bytecodes, plus additionally reserves four other bytecodes for other use. However, many C compilers produce better code when the size of the bytecode (switch) table is exactly 256. 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define PADTABLE 0<a name="wp433346"> </a>
+</pre></div>
+<a name="wp433344"> </a><p class="pIndented1">
+Turning this option on will pad the interpreter switch tables so that the number of instructions is 256. This will increase the size of the virtual machine, but allows the interpreter to run faster on some platforms.
+</p>
+<a name="wp432965"> </a><h2 class="pHeading1">
+6.9	Java-level debugging options
+</h2>
+<a name="wp432966"> </a><p class="pBody">
+The KVM 1.0.2 release introduced a new Java-level debugger interface that allows the KVM to be plugged into third party Java debugger environments and integrated development environments (IDEs) that supports the JDWP (Java Debug Wire Protocol) protocol. The macros in this subsection are related to the Java-level debugger options.
+</p>
+<hr class="pHr"/><div class="note">
+<a name="wp433387"> </a>
+<b>Note &#8211;</b>  It is important to notice that there is a fundamental difference between the debugging facilities intended for Java-level debugging and VM-level debugging. <br /><br />Java-level debugging facilities are related to the debugging of the Java programs that the KVM executes. VM-level debugging facilities are used for debugging the KVM itself at the native (C) code level.
+<hr class="pHr"/></div>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define ENABLE_JAVA_DEBUGGER 0<a name="wp433407"> </a>
+</pre></div>
+<a name="wp433408"> </a><p class="pIndented1">
+Includes a large amount of debugger support code that is needed for plugging KVM into a third-party Java debugger or integrated development environment such as Forte or Borland JBuilder.
+</p>
+<a name="wp433420"> </a><p class="pBody">
+More information about the Java-level debugger facilities and the KDWP interface is provided in <a  href="portingJavaDebugger.html#wp431766"><span style="color: #3366CC">Chapter&#160;16, &quot;Java-Level Debugging Support (KDWP)</span></a>.&#8221;
+</p>
+<a name="wp421026"> </a><h2 class="pHeading1">
+6.10	VM-level debugging and tracing options
+</h2>
+<a name="wp431979"> </a><p class="pBody">
+KVM provides a large number of debugging and tracing facilities that can be used for inspecting the behavior of the KVM itself at the native (C) code level. These facilities can be extremely helpful during porting efforts.
+</p>
+<a name="wp433434"> </a><p class="pBody">
+All the VM-level debugging and tracing options should be turned off in a production release.
+</p>
+<a name="wp432652"> </a><h3 class="pHeading2">
+6.10.1	Including and excluding debugging code
+</h3>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define INCLUDEDEBUGCODE 0<a name="wp432672"> </a>
+</pre></div>
+<a name="wp432673"> </a><p class="pIndented1">
+Includes a large amount of debugging and logging code that is useful when porting the virtual machine onto a new platform. This option should be turned off in production builds.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define ENABLEPROFILING 0<a name="wp432681"> </a>
+</pre></div>
+<a name="wp432682"> </a><p class="pIndented1">
+Turns on or off certain profiling features that allow you to monitor virtual machine execution and get execution statistics. Turning this option on slows down the virtual machine execution speed considerably. This option should be turned off in production builds.
+</p>
+<a name="wp432657"> </a><h3 class="pHeading2">
+6.10.2	Tracing options
+</h3>
+<a name="wp434473"> </a><p class="pBody">
+In KVM 1.0, all the tracing options were compilation flags that could be changed only by recompiling the virtual machine. In KVM 1.0.2, all these tracing options were changed into global variables that can be controlled from the command line. This makes it much easier to turn individual tracing options on and off. These global variables (and command line switches) are available only if the virtual machine has been compiled with the <code class="cCode">INCLUDEDEBUGCODE</code> mode turned on.</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq434516">
+  <caption><a name="wp434831"> </a><div class="pTableCaption">
+TABLE&#160;6&#160;&#160;&#8211;&#160;&#160;Command line tracing options
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp436399"> </a><div style="text-align: left" class="pTableHead">
+Option
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp436401"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp434522"> </a><div class="pTableText">
+<code class="cCode">-traceallocation</code>
+</div>
+</td>
+    <td><a name="wp434524"> </a><div class="pTableText">
+trace memory allocation
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434526"> </a><div class="pTableText">
+<code class="cCode">-tracedebugger</code>
+</div>
+</td>
+    <td><a name="wp434528"> </a><div class="pTableText">
+trace the debugging interface (since KVM 1.0.3)
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434530"> </a><div class="pTableText">
+<code class="cCode">-tracegc </code>
+</div>
+</td>
+    <td><a name="wp434532"> </a><div class="pTableText">
+trace garbage collection
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434534"> </a><div class="pTableText">
+<code class="cCode">-tracegcverbose</code>
+</div>
+</td>
+    <td><a name="wp434536"> </a><div class="pTableText">
+trace garbage collection, more verbose
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434538"> </a><div class="pTableText">
+<code class="cCode">-traceclassloading </code>
+</div>
+</td>
+    <td><a name="wp434540"> </a><div class="pTableText">
+trace class loading
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434542"> </a><div class="pTableText">
+<code class="cCode">-traceclassloadingverbose </code>
+</div>
+</td>
+    <td><a name="wp434544"> </a><div class="pTableText">
+trace class loading, more verbose
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434546"> </a><div class="pTableText">
+<code class="cCode">-traceverifier </code>
+</div>
+</td>
+    <td><a name="wp434548"> </a><div class="pTableText">
+trace class file verifier
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434550"> </a><div class="pTableText">
+<code class="cCode">-tracestackmaps </code>
+</div>
+</td>
+    <td><a name="wp434552"> </a><div class="pTableText">
+trace the behavior of stack maps
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434554"> </a><div class="pTableText">
+<code class="cCode">-tracebytecodes </code>
+</div>
+</td>
+    <td><a name="wp434556"> </a><div class="pTableText">
+trace bytecode execution
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434558"> </a><div class="pTableText">
+<code class="cCode">-tracemethods </code>
+</div>
+</td>
+    <td><a name="wp434560"> </a><div class="pTableText">
+trace method calls
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434562"> </a><div class="pTableText">
+<code class="cCode">-tracemethodsverbose</code>
+</div>
+</td>
+    <td><a name="wp434564"> </a><div class="pTableText">
+trace method calls, more verbose
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434566"> </a><div class="pTableText">
+<code class="cCode">-traceframes</code>
+</div>
+</td>
+    <td><a name="wp434568"> </a><div class="pTableText">
+trace stack frames
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434570"> </a><div class="pTableText">
+<code class="cCode">-tracestackchunks</code>
+</div>
+</td>
+    <td><a name="wp434572"> </a><div class="pTableText">
+trace the allocation of new stack chunks
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434574"> </a><div class="pTableText">
+<code class="cCode">-traceexceptions</code>
+</div>
+</td>
+    <td><a name="wp434576"> </a><div class="pTableText">
+trace exception handling
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434578"> </a><div class="pTableText">
+<code class="cCode">-traceevents</code>
+</div>
+</td>
+    <td><a name="wp434580"> </a><div class="pTableText">
+trace the behavior of the event system
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434582"> </a><div class="pTableText">
+<code class="cCode">-tracethreading</code>
+</div>
+</td>
+    <td><a name="wp434584"> </a><div class="pTableText">
+trace the behavior of the multithreading system
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434586"> </a><div class="pTableText">
+<code class="cCode">-tracemonitors</code>
+</div>
+</td>
+    <td><a name="wp434588"> </a><div class="pTableText">
+trace the behavior of monitor objects
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434590"> </a><div class="pTableText">
+<code class="cCode">-tracenetworking</code>
+</div>
+</td>
+    <td><a name="wp434592"> </a><div class="pTableText">
+trace the network access
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434594"> </a><div class="pTableText">
+<code class="cCode">-traceall</code>
+</div>
+</td>
+    <td><a name="wp434596"> </a><div class="pTableText">
+activates all the tracing options above simultaneously
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp434493"> </a><p class="pBody">
+If your target platform does not support command line operation, you can control these options directly by changing their default values in file <code class="cCode">VmCommon/src/global.c</code>, or by defining a graphical user interface that sets and resets these options.
+</p>
+<a name="wp433603"> </a><p class="pBody">
+Additionally, you can control whether the tracing messages printed out are terse or more verbose by modifying the following option:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;<code class="cCode">#define TERSE_MESSAGES 0</code><a name="wp432142"> </a>
+</pre></div>
+<a name="wp436047"> </a><p class="pBody">
+KVM also contains a stack trace printing facility that can be turned on to help debugging of exceptions and errors in more detail (at the cost of some additional memory footprint). By default, this mode is turned on automatically when the <code class="cCode">INCLUDEDEBUGCODE</code> flag is turned on.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;<code class="cCode">#define PRINT_BACKTRACE 0</code><a name="wp436048"> </a>
+</pre></div>
+<a name="wp436049"> </a><h2 class="pHeading1">
+6.11	Error handling macros
+</h2>
+<hr class="pHr"/><div class="note">
+<a name="wp436050"> </a>
+<b>Note &#8211;</b>  The internal error handling macros used by the KVM have been redesigned in KVM 1.1 to support the redesigned class loader.
+<hr class="pHr"/></div>
+<a name="wp435540"> </a><p class="pBody">
+The interpreter uses the internal error handling macros shown in <a  href="portingFlags.html#wp435643">CODE&#160;EXAMPLE&#160;1</a>.
+</p>
+<a name="wp435541"> </a><p class="pBody">
+If there is a call to the macro <code class="cCode">THROW(error)</code>, anywhere inside the &#8220;normal code,&#8221; the VM jumps immediately to error handling code. Uses of this macro can be nested, either lexically or dynamically. The <code class="cCode">THROW</code> jumps to the innermost <code class="cCode">CATCH</code> error handling code. (The various <code class="cCode">TRY</code>, <code class="cCode">THROW</code>, and <code class="cCode">CATCH</code> macros are defined in <code class="cCode">VmCommon/h/global.h</code>.)
+</p>
+<a name="wp435643"> </a><div class="pCodeCaption">
+CODE&#160;EXAMPLE&#160;1 	Error handling macros
+</div>
+<div class="pPreformatted"><pre class="pPreformatted">
+<code class="cCode">TRY {</code><a name="wp435695"> </a>
+&#160;&#160;&#160;<em class="cEmphasis">normal code</em><a name="wp435696"> </a>
+<code class="cCode">} CATCH (error) {</code><a name="wp435697"> </a>
+&#160;&#160;&#160;<em class="cEmphasis">error handling code</em><a name="wp435665"> </a>
+<code class="cCode">} END_CATCH</code><a name="wp435666"> </a>
+&#160;&#160;&#160;<em class="cEmphasis">always continue here</em><a name="wp435654"> </a>
+</pre></div>
+<a name="wp435553"> </a><p class="pBody">
+By default, this behavior is emulated using <code class="cCode">setjmp</code> and <code class="cCode">longjmp</code>. However, platforms (such as PalmOS) that already provide a similar mechanism should use the native mechanism.
+</p>
+<a name="wp435554"> </a><p class="pBody">
+KVM 1.1 also has new macros for controlling the shutdown of the virtual machine. These macros have been illustrated in <a  href="portingFlags.html#wp435736">CODE&#160;EXAMPLE&#160;2</a>
+</p>
+<a name="wp435736"> </a><div class="pCodeCaption">
+CODE&#160;EXAMPLE&#160;2 	VM shutdown macros
+</div>
+<div class="pPreformatted"><pre class="pPreformatted">
+<code class="cCode">VM_START {</code><a name="wp435758"> </a>
+&#160;&#160;&#160;<em class="cEmphasis">normal VM code</em><a name="wp435759"> </a>
+<code class="cCode">} VM_FINISH (value) {</code><a name="wp435760"> </a>
+&#160;&#160;&#160;<em class="cEmphasis">code to execute before VM shuts down</em><a name="wp435761"> </a>
+<code class="cCode">} VM_END_FINISH</code><a name="wp435756"> </a>
+</pre></div>
+<a name="wp435567"> </a><p class="pBody">
+Rather than calling the normal C <code class="cCode">exit</code> function, the proper way to exit from the VM is to call macro <code class="cCode">VM_EXIT(value)</code>. Calling this macro will cause the control of the VM to be immediately transferred to the code that follows the <code class="cCode">VM_FINISH(value)</code> macro. The <em style="font-style: oblique" class="cEmphasis">value</em> to be passed to this code typically represents the exit code that the VM will return when it shuts down.
+</p>
+<a name="wp432772"> </a><h2 class="pHeading1">
+6.12	Miscellaneous macros and options
+</h2>
+<div class="pPreformatted"><pre class="pPreformatted">
+#define UNUSEDPARAMETER(var)<a name="wp432789"> </a>
+</pre></div>
+<a name="wp432773"> </a><p class="pIndented1">
+Some functions in the reference implementation take arguments that they do not use. Some compilers issue warnings; others do not. For those compilers that do issue warnings, they differ in how you indicate that the non-use of the variable is intentional and that you do not wish to get a warning. This macro should do whatever is necessary to get your compiler to remain quiet.
+</p>
+<a name="wp434006"> </a><h2 class="pHeading1">
+6.13	Overriding the compilation flags and other options from makefiles
+</h2>
+<a name="wp434008"> </a><p class="pBody">
+The following parameters are commonly used when using gnumake to build the KVM.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<a name="wp434187"> </a>
+gnumake ROMIZING=false<a name="wp436175"> </a>
+</pre></div>
+<a name="wp436176"> </a><p class="pIndented1">
+Build the KVM with romizing disabled. That is, do not link all the system classes statically into the KVM executable. (The default is to build the KVM with romizing enabled.)
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<a name="wp434162"> </a>
+gnumake DEBUG=true<a name="wp436057"> </a>
+</pre></div>
+<a name="wp434163"> </a><p class="pIndented1">
+Build the KVM with the Java-level debugger and VM-internal debugging code enabled.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<a name="wp436429"> </a>
+gnumake USE_JAM=true<a name="wp436430"> </a>
+</pre></div>
+<a name="wp436431"> </a><p class="pIndented1">
+Build the KVM with the Java Application Manager (JAM) enabled.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<a name="wp436423"> </a>
+gnumake GCC=true<a name="wp436424"> </a>
+</pre></div>
+<a name="wp436425"> </a><p class="pIndented1">
+Use GNU C compiler instead of the standard Sun compiler (on Solaris.)
+</p>
+<a name="wp436201"> </a><p class="pIndented1">
+GCC=true is the default option when developing on Linux, and this is the setting for compiling on Windows using CygWin tools.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<a name="wp434762"> </a>
+gnumake USE_KNI=false<a name="wp436075"> </a>
+</pre></div>
+<a name="wp434763"> </a><p class="pIndented1">
+Build the KVM without the K Native Interface (KNI) functionality. (The default is to build the KVM with KNI enabled.)
+</p>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" class="full-width">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="portingDirStruct.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="portingStartup.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KVM Porting Guide <br /> , CLDC 1.1</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    
+<p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169; 2003 Sun Microsystems, Inc. 
+  All rights reserved.</p>
+  </body>
+</html>

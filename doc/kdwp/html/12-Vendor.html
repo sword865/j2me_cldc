@@ -1,0 +1,392 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="508 Compliant Book Without Index" />
+    <meta name="LASTUPDATED" content="10/18/02 16:56:40" />
+    <title>Vendor Specific Command Set</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="11-Event.html" />
+    <link rel="Next" href="13-Appendix.html" />
+    <link rel="Index" href="13-Appendix.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" width="100%">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="11-Event.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="13-Appendix.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp438105"> </a><h2 class="pChapNum">
+Chapter &#160; 12
+</h2>
+<a name="wp442195"> </a><h2 class="pNewHTMLPage">
+Vendor Specific Command Set
+</h2>
+<hr class="pHr"/>
+<a name="wp439957"> </a><p class="pBody">
+This command set is numbered (128) to match the equivalent JDWP command set.
+</p>
+<a name="wp432898"> </a>
+&#160;Handshake Command (1)
+
+<a name="wp438148"> </a><p class="pBody">
+Used to initialize communication between the Debug Agent (DA) and the KVM. The KVM determines if the DA is the correct one for this particular KVM. If so, then the KVM replies with a 32-bit bitfield that indicates any optional JDWP commands that the KVM is able to parse directly (meaning that the DA can pass these JDWP commands directly to the KVM without parsing/managing them). Whether out data or reply, if the ID string is the <code class="cCode">NULL</code> string (its length is 0) then the receiver of the ID string ignores it.
+</p>
+<a name="wp438168"> </a><h5 class="pHeading4">
+Out Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444472">
+  <caption><a name="wp444475"> </a><div class="pTableCaption">
+TABLE&#160;43&#160;&#160;&#8211;&#160;&#160;Structure of Out Data for Handshake Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp444481"> </a><div class="pCellBody">
+<code class="cCode">String</code>
+</div>
+</td>
+    <td><a name="wp444483"> </a><div style="color: #000000; font-size: 8pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 4pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Identifier
+</div>
+</td>
+    <td><a name="wp444485"> </a><div style="color: #000000; font-size: 8pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 4pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Vendor specific ID string
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444487"> </a><div class="pCellBody">
+<code class="cCode">byte</code>
+</div>
+</td>
+    <td><a name="wp444489"> </a><div style="color: #000000; font-size: 8pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 4pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Major Version
+</div>
+</td>
+    <td><a name="wp444491"> </a><div style="color: #000000; font-size: 8pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 4pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+The major version of the Debug Agent.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444493"> </a><div class="pCellBody">
+<code class="cCode">Byte</code>
+</div>
+</td>
+    <td><a name="wp444495"> </a><div style="color: #000000; font-size: 8pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 4pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Minor Version
+</div>
+</td>
+    <td><a name="wp444497"> </a><div style="color: #000000; font-size: 8pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 4pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+The minor version of the Debug Agent.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp438272"> </a><h5 class="pHeading4">
+Reply Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444516">
+  <caption><a name="wp444519"> </a><div class="pTableCaption">
+TABLE&#160;44&#160;&#160;&#8211;&#160;&#160;Structure of Reply Data for Handshake Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp444525"> </a><div class="pTableText">
+<code class="cCode">String</code>
+</div>
+</td>
+    <td><a name="wp444527"> </a><div class="pTableText">
+<em class="cEmphasis">Identifier</em>
+</div>
+</td>
+    <td><a name="wp444529"> </a><div class="pTableText">
+Vendor specific ID string.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444531"> </a><div class="pTableText">
+int
+</div>
+</td>
+    <td><a name="wp444533"> </a><div class="pTableText">
+<em class="cEmphasis">Optional commands</em>
+</div>
+</td>
+    <td><a name="wp444535"> </a><div class="pTableText">
+32-bit bitfield that describes the optional JDWP commands that the KVM supports. This set of bits is in &#39;Network Order&#39; (Big Endian) format.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444537"> </a><div class="pTableText">
+Bit 0
+</div>
+</td>
+    <td><a name="wp444539"> </a><div class="pTableText">
+<em class="cEmphasis">VM Init event</em>
+</div>
+</td>
+    <td><a name="wp444541"> </a><div class="pTableText">
+KVM supports/sends <code class="cCode">VM_INIT</code> event.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444543"> </a><div class="pTableText">
+Bit 1
+</div>
+</td>
+    <td><a name="wp444545"> </a><div class="pTableText">
+<em class="cEmphasis">VM Death</em>
+</div>
+</td>
+    <td><a name="wp444547"> </a><div class="pTableText">
+KVM supports/sends <code class="cCode">VM_DEATH</code> event
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444549"> </a><div class="pTableText">
+Bit 2
+</div>
+</td>
+    <td><a name="wp444551"> </a><div class="pTableText">
+<em class="cEmphasis">Method Entry Event</em>
+</div>
+</td>
+    <td><a name="wp444553"> </a><div class="pTableText">
+KVM supports/sends <code class="cCode">METHOD_ENTRY</code> event
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444555"> </a><div class="pTableText">
+Bit 3
+</div>
+</td>
+    <td><a name="wp444557"> </a><div class="pTableText">
+<em class="cEmphasis">Method Exit Event</em>
+</div>
+</td>
+    <td><a name="wp444559"> </a><div class="pTableText">
+KVM supports/sends <code class="cCode">METHOD_EXIT</code> event
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444561"> </a><div class="pTableText">
+Bit 4
+</div>
+</td>
+    <td><a name="wp444563"> </a><div class="pTableText">
+<em class="cEmphasis">Exception Event</em>
+</div>
+</td>
+    <td><a name="wp444565"> </a><div class="pTableText">
+KVM supports/sends <code class="cCode">EXCEPTION</code> event
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444567"> </a><div class="pTableText">
+Bit 5
+</div>
+</td>
+    <td><a name="wp444569"> </a><div class="pTableText">
+<em class="cEmphasis">Exception Catch Event</em>
+</div>
+</td>
+    <td><a name="wp444571"> </a><div class="pTableText">
+KVM supports/sends <code class="cCode">EXCEPTION_CATCH</code> event
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444573"> </a><div class="pTableText">
+Bit 6
+</div>
+</td>
+    <td><a name="wp444575"> </a><div class="pTableText">
+<em class="cEmphasis">Class Load Event</em>
+</div>
+</td>
+    <td><a name="wp444577"> </a><div class="pTableText">
+KVM supports/sends <code class="cCode">CLASS_LOAD</code> event
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444579"> </a><div class="pTableText">
+Bit 7
+</div>
+</td>
+    <td><a name="wp444581"> </a><div class="pTableText">
+<em class="cEmphasis">Class unload Event</em>
+</div>
+</td>
+    <td><a name="wp444583"> </a><div class="pTableText">
+KVM supports/sends <code class="cCode">CLASS_UNLOAD</code> event
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444585"> </a><div class="pTableText">
+Bit 8
+</div>
+</td>
+    <td><a name="wp444587"> </a><div class="pTableText">
+<em class="cEmphasis">Single Step Event</em>
+</div>
+</td>
+    <td><a name="wp444589"> </a><div class="pTableText">
+KVM supports/sends <code class="cCode">SINGLE_STEP</code> event
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444591"> </a><div class="pTableText">
+Bit 9
+</div>
+</td>
+    <td><a name="wp444593"> </a><div class="pTableText">
+<em class="cEmphasis">Thread start Event</em>
+</div>
+</td>
+    <td><a name="wp444595"> </a><div class="pTableText">
+KVM supports/sends <code class="cCode">THREAD_START</code> event
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444597"> </a><div class="pTableText">
+Bit 10
+</div>
+</td>
+    <td><a name="wp444599"> </a><div class="pTableText">
+<em class="cEmphasis">Thread death Event</em>
+</div>
+</td>
+    <td><a name="wp444601"> </a><div class="pTableText">
+KVM supports/sends <code class="cCode">THREAD_DEATH</code> event
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444603"> </a><div class="pTableText">
+Bit 11
+</div>
+</td>
+    <td><a name="wp444605"> </a><div class="pTableText">
+<em class="cEmphasis">Frame pop Event</em>
+</div>
+</td>
+    <td><a name="wp444607"> </a><div class="pTableText">
+KVM supports/sends <code class="cCode">FRAME_POP</code> event
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444609"> </a><div class="pTableText">
+Bit 12
+</div>
+</td>
+    <td><a name="wp444611"> </a><div class="pTableText">
+<em class="cEmphasis">Field Access Event</em>
+</div>
+</td>
+    <td><a name="wp444613"> </a><div class="pTableText">
+KVM supports/sends <code class="cCode">FIELD_ACCESS</code> event
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444615"> </a><div class="pTableText">
+Bit 13
+</div>
+</td>
+    <td><a name="wp444617"> </a><div class="pTableText">
+<em class="cEmphasis">Field modification Event</em>
+</div>
+</td>
+    <td><a name="wp444619"> </a><div class="pTableText">
+KVM supports/sends <code class="cCode">FIELD_MODIFICATION</code> event
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444621"> </a><div class="pTableText">
+Bit 14
+</div>
+</td>
+    <td><a name="wp444623"> </a><div class="pTableText">
+<em class="cEmphasis">Event management</em>
+</div>
+</td>
+    <td><a name="wp444625"> </a><div class="pTableText">
+If set then the KVM keeps a list of events that have been set by the debugger and does not need the debug agent to return the breakpoint opcode after a breakpoint event.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp438460"> </a><p class="pBody">
+
+</p>
+<a name="wp434501"> </a><p class="pBody">
+
+</p>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" width="100%">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="11-Event.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="13-Appendix.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KDWP Specification <br /> KVM Debug Wire Protocol, 1.0</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    <p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169;
+       2002 Sun Microsystems, Inc. All rights reserved. Use is
+       subject to license terms. Third-party software, including
+       font  technology,  is copyrighted  and  licensed from  Sun
+       suppliers. Sun, Sun Microsystems, the Sun logo, Java and
+       Solaris are trademarks or registered trademarks of Sun
+       Microsystems, Inc. in the US and other countries.  Federal
+       Acquisitions: Commercial Software - Government Users
+       Subject to Standard License Terms and Conditions.</p>
+
+    <p class="copyright"><a
+       href="copyright.html">Copyright</a> &#169; 2002
+       Sun Microsystems, Inc. Tous droits r&#233;serv&#233;s.
+       Distribu&#233; par des licences qui en restreignent
+       l'utilisation.  Le logiciel d&#233;tenu par des tiers, et
+       qui comprend la technologie relative aux polices de
+       caract&#232;res, est prot&#233;g&#233; par un copyright et
+       licenci&#233; par des fournisseurs de Sun.  Sun, Sun
+       Microsystems, le logo Sun, Java et Solaris sont des
+       marques de fabrique ou des marques d&#233;pos&#233;es de
+       Sun Microsystems, Inc. aux Etats-Unis et dans d'autres
+       pays. </p>	
+  </body>
+</html>

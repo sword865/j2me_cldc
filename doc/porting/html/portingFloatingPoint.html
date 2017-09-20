@@ -1,0 +1,547 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="book-no-index" />
+    <meta name="LASTUPDATED" content="02/20/03 12:37:44" />
+    <title>Floating-Point Support</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="porting64bit.html" />
+    <link rel="Next" href="portingNative.html" />
+    <link rel="Index" href="portingJavaDebugger.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" class="full-width">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="porting64bit.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="portingNative.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp418771"> </a><h2 class="pChapNum">
+Chapter &#160; 10
+</h2>
+<a name="wp431766"> </a><h2 class="pTitle">
+Floating-Point Support
+</h2>
+<hr class="pHr"/>
+<a name="wp436961"> </a><p class="pBody">
+This chapter contains an overview of the IEEE 754 floating-point standard, Java virtual machine floating-point semantics, and the porting effort required for the implementation of floating-point to various processor architectures. Additionally, the implementation of <code class="cCode">strictfp</code> arithmetic operations is detailed.
+</p>
+<a name="wp436965"> </a><p class="pBody">
+Version 1.0 of the <em class="cEmphasis">CLDC Specification</em> did not require floating-point arithmetic in compliant implementations. However, the <em class="cEmphasis">CLDC Specification</em> Version 1.1 does require floating-point, and this chapter describes the implications for porting the floating-point implementation for KVM in CLDC 1.1.
+</p>
+<a name="wp434678"> </a><h2 class="pHeading1">
+10.1	Introduction
+</h2>
+<a name="wp434862"> </a><p class="pBody">
+The Java programming language and the Java virtual machine support two floating-point types, 32-bit <code class="cCode">float</code> and 64-bit <code class="cCode">double</code>. The numerical results for operations performed on values of these types are defined by the IEEE 754 standard for binary floating-point arithmetic (IEEE Std 754-1985). While many processor architectures also support IEEE 754, there can be complications mapping Java virtual machine floating-point operations to C code or to hardware instructions implementing those operations. Before describing those complications and their solutions, more background on IEEE 754 is necessary. 
+</p>
+<a name="wp434866"> </a><h3 class="pHeading2">
+10.1.1	IEEE 754 floating-point
+</h3>
+<a name="wp435068"> </a><p class="pBody">
+Floating-point numbers are a subset of the real numbers; the representable finite floating-point numbers have <em class="cEmphasis">sign</em>, <em class="cEmphasis">exponent</em>, and <em class="cEmphasis">significand</em> fields.<a href="#wp435638"><span class="Footnote">1</span></a>
+</p>
+<a name="wp435178"> </a><p class="pBody">
+The numerical value of a finite floating-point number is 
+</p>
+<a name="wp435098"> </a><p class="pBody">
+(-1)<em style="vertical-align: super" class="cEmphasis">sign</em>·2<em style="vertical-align: super" class="cEmphasis">exponent</em>·<em class="cEmphasis">significand</em>
+</p>
+<a name="wp435369"> </a><p class="pBody">
+The <em class="cEmphasis">sign</em> field is 0 or 1. The <em class="cEmphasis">exponent</em> field is an integer; the <em class="cEmphasis">significand</em> field is a binary number greater than or equal to zero and less than two. The IEEE 754 standard defines the ranges for the <em class="cEmphasis">exponent</em> and <em class="cEmphasis">significand</em> values for the <code class="cCode">float</code> and <code class="cCode">double</code> formats. The <code class="cCode">double</code> format has more than twice the precision of <code class="cCode">float</code> as well as a greater exponent range. To avoid multiple representations for the same numerical value, a floating-point number&#8217;s representation is <em class="cEmphasis">normalized</em>; that is, the <em class="cEmphasis">exponent</em> is adjusted to the least value so that the leading bit of the <em class="cEmphasis">significand</em> is 1 instead of 0. The <em class="cEmphasis">significand</em> is less than 1 only for <em class="cEmphasis">subnormal</em> values, which are values so small that an in-range exponent cannot be made small enough to normalize the value&#8217;s representation. 
+</p>
+<a name="wp434876"> </a><p class="pBody">
+Since floating-point numbers have a fixed amount of precision, there must be a rounding policy to decide which floating-point number to return when storing the exact result requires more bits than the precision of the floating-point format. For example, multiplying two floating-point values can lead to the exact product having twice as many bits as either input. The IEEE 754 default rounding policy used in the Java virtual machine is to return the floating-point value closest to the exact numerical result. However, not all operations have clear finite results. For example, what is 1/0 or 0/0? For such situations, the IEEE 754 standard has the special values <em class="cEmphasis">infinity</em> and <em class="cEmphasis">NaN</em> (not a number). A signed infinity is returned when the exact result is too big to represent (overflow) or when a finite non-zero value is divided by zero. A NaN is returned for invalid operations, such as 0/0 or sqrt(-1). By adding infinities and NaN, IEEE 754 arithmetic forms a closed system. For every set of inputs, an IEEE 754 arithmetic operation returns an IEEE 754 value. 
+</p>
+<a name="wp434883"> </a><p class="pBody">
+For two IEEE 754 numbers to be equivalent, they must either be the same non-finite value (+infinity, -infinity, NaN) or if both values are finite, each field of the floating-point numbers must be the same. 
+</p>
+<a name="wp434886"> </a><h3 class="pHeading2">
+10.1.2	Implementing Java virtual machine floating-point semantics
+</h3>
+<a name="wp434888"> </a><p class="pBody">
+Many processor architectures natively support IEEE 754 arithmetic on <code class="cCode">float</code> and <code class="cCode">double</code> formats. Therefore, there is often a straightforward mapping between Java virtual machine floating-point operations, C code implementing those operations, and floating-point instructions on the underlying processor. However, various complications are possible: 
+</p>
+<ul class="pBullet1"><a name="wp434891"> </a><div class="pBullet1"><li>The floating-point semantics of the Java virtual machine are tightly specified, much more tightly specified than C language floating-point semantics. Therefore, a C compiler could perform an &#8220;optimization&#8221; that was an allowed transformation in C but broke Java virtual machine semantics. For example, in the Java virtual machine and Java:</li></div>
+<a name="wp434893"> </a><p class="pIndented2">
+x + 0.0
+</p>
+<a name="wp434894"> </a><p class="pIndented2">
+cannot be replaced with
+</p>
+<a name="wp435200"> </a><p class="pIndented2">
+x
+</p>
+<a name="wp435201"> </a><p class="pIndented1">
+since different answers can be generated.<a href="#wp435537"><span class="Footnote">2</span></a> 
+</p>
+<a name="wp435202"> </a><p class="pIndented1">
+Therefore, the portions of the KVM that implement Java virtual machine floating-point semantics should be compiled without aggressive optimization to help avoid such (in this case) unhelpful code transformations. Many C compilers also have separate flags affecting floating-point code generation, such as flags to improve floating-point consistency and make the generated code have semantics more closely resembling a literal translation of the source. Regardless of the processor architecture, using such flags might be necessary to implement Java virtual machine semantics in C code. 
+</p>
+<a name="wp434900"> </a><div class="pBullet1Last"><li>Certain architectures provide floating-point instructions other than addition, subtraction, multiplication and division on <code class="cCode">float</code> and <code class="cCode">double</code> values. For example, many architectures provide a <em class="cEmphasis">fused mac</em> (fused multiply-accumulate) operation instead of (or perhaps in addition) to the standard arithmetic operations. <em class="cEmphasis">Fused mac</em> is a ternary operation that produces (<em class="cEmphasis">a</em> * <em class="cEmphasis">b</em> + <em class="cEmphasis">c</em>) with a single rounding error (as opposed to two rounding errors if the multiply and add are performed separately). The IA-32 (that is, x86) line of processors has a set of floating-point registers in the x87 FPU (floating-point unit) with both more range and more precision than <code class="cCode">double</code>. </li></div>
+</ul>
+<a name="wp434905"> </a><p class="pBody">
+Both fused mac and the extra range of the x87 registers necessitate extra care when implementing Java virtual machine semantics. 
+</p>
+<a name="wp434907"> </a><h3 class="pHeading2">
+10.1.3	Java virtual machine floating-point semantics: strictfp
+</h3>
+<a name="wp435240"> </a><p class="pBody">
+There are actually two flavors of floating-point semantics in the Java virtual machine: <em class="cEmphasis">FP-strict</em> semantics and default semantics. <em class="cEmphasis">FP-strict</em> semantics are used if a method or constructor has the <code class="cCode">ACC_STRICT</code> bit set in the <em class="cEmphasis">access_flags</em> field of the <em class="cEmphasis">method_info</em> structure.<a href="#wp435528"><span class="Footnote">3</span></a> In Java, this bit gets set if a class or a method is declared <code class="cCode">strictfp</code>. All the floating-point operands and results in <em class="cEmphasis">FP-strict</em> methods and constructors are exactly 32-bit <code class="cCode">float</code> or 64-bit <code class="cCode">double</code> quantities. 
+</p>
+<a name="wp434913"> </a><p class="pBody">
+In contrast, in default floating-point semantics, while floating-point variables must hold exactly <code class="cCode">float</code> or <code class="cCode">double</code> values, values on the operand stack are allowed, but not required, to have greater exponent range. 
+</p>
+<a name="wp436943"> </a><p class="pBody">
+The Java programming language provides the <code class="cCode">strictfp</code> modifier, to be applied to the declaration of a class, interface or method containing variables that might take a floating-point value. If the <code class="cCode">strictfp</code> modifier is used, any compile-time expression involving the variables of the declared class, interface or method is said to be <em class="cEmphasis">FP-strict</em>. To be <em class="cEmphasis">FP-strict</em> means that all intermediate floating-point values must be elements of a <code class="cCode">float</code> value set or a <code class="cCode">double</code> value set, implying that the results of all <em class="cEmphasis">FP-strict</em> expressions must be those predicted by IEEE 754 arithmetic on operands represented using <code class="cCode">float</code> <code class="cCode">(</code>single-precision) and <code class="cCode">double</code> <code class="cCode">(</code>double-precision) formats. Within an expression that is not <em class="cEmphasis">FP-strict</em>, some leeway is granted for an implementation to use an extended exponent range to represent intermediate results. The net effect, roughly speaking, is that a calculation might produce &#8220;the correct answer&#8221; in situations where exclusive use of the <code class="cCode">float</code> value set or <code class="cCode">double</code> value set might result in overflow or underflow. 
+</p>
+<a name="wp436940"> </a><p class="pBody">
+For more details, see the <em class="cEmphasis">The Java&#8482; Virtual Machine Specification (Java Series), Second Edition</em> by Tim Lindholm and Frank Yellin (Addison-Wesley, 1999) and the <em class="cEmphasis">The Java&#8482; Language Specification</em> by James Gosling, Bill Joy, and Guy L. Steele (Addison-Wesley, 1996). 
+</p>
+<a name="wp434916"> </a><h3 class="pHeading2">
+10.1.4	Floating-point architectures
+</h3>
+<a name="wp434920"> </a><h4 class="pHeading3">
+10.1.4.1	Fused Mac
+</h4>
+<a name="wp436800"> </a><p class="pBody">
+In general, a <em class="cEmphasis">fused</em> <em class="cEmphasis">mac</em> cannot be used to implement chained multiply and add instructions in the Java virtual machine since the rounding behavior will be different. This is true for both default and <em class="cEmphasis">FP-strict </em>semantics. However, even if an architecture only has <em class="cEmphasis">fused mac</em> instructions for floating-point, implementing the semantics of separate add and multiply is fairly direct. The result of <em class="cEmphasis">(a + c)</em> is the same as <em class="cEmphasis">(a </em>*<em class="cEmphasis"> 1.0 + c)</em>. The result of <em class="cEmphasis">(a </em>*<em class="cEmphasis"> b)</em> is <em class="cEmphasis">almost</em> the same as <em class="cEmphasis">(a </em>*<em class="cEmphasis"> b + 0.0)</em>; it will be different if <em class="cEmphasis">(a </em>*<em class="cEmphasis"> b)</em> results in a negative zero. Adding a positive zero would result in a positive zero instead of negative zero being returned for the logical product. This discrepancy is not allowed by Java virtual machine semantics. Assuming the &#8220;round to nearest&#8221; rounding mode is in effect, <em class="cEmphasis">(a </em>*<em class="cEmphasis"> b - 0.0)</em> gives the same result as <br /><em class="cEmphasis">(a </em>*<em class="cEmphasis"> b)</em> even if <em class="cEmphasis">(a </em>*<em class="cEmphasis"> b)</em> is zero. More generally, <em class="cEmphasis">fused mac</em>-based architectures usually have some special instruction idiom to avoid this discrepancy regardless of rounding mode. C compilers for fused mac platforms usually include a switch to disable the collapsing of chained multiplies and adds into fused macs.
+</p>
+<a name="wp434926"> </a><h4 class="pHeading3">
+10.1.4.2	x87 FPU
+</h4>
+<a name="wp434928"> </a><p class="pBody">
+The floating-point load and store instructions on the x87 support three floating-point formats 32-bit <code class="cCode">float</code> (8-bit exponent), 64-bit <code class="cCode">double</code> (11-bit exponent), and 80-bit <code class="cCode">double</code> <code class="cCode">extended</code> (15 bit exponent). However, when values are loaded in the 80-bit registers, they always have 15-bit exponents even when the FPU is set to round to <code class="cCode">float</code> or <code class="cCode">double</code> precision. When implementing Java virtual machine instructions, the x87 FPU should be set to round to <code class="cCode">float</code> or <code class="cCode">double</code> precision. However, especially in <em class="cEmphasis">FP-strict</em> methods, the effect of the additional exponent bits must be compensated for. 
+</p>
+<a name="wp434932"> </a><h4 class="pHeading3">
+10.1.4.2.1	FP-strict
+</h4>
+<a name="wp437287"> </a><p class="pBody">
+<em class="cEmphasis">FP-strict</em> instructions must generate the same results everywhere, including x87 FPUs. The extra exponent range complicates this since the overflow threshold (the point at which infinity is returned) and the underflow threshold (the point at which subnormal results are returned) differ with the larger exponent range. For example, if the extra exponent range were not an issue, the <code class="cCode">double</code> computation <em class="cEmphasis">d = a</em>*<em class="cEmphasis">b + c </em>might get translated into a sequence of x87 instructions like
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+# Sample code <a name="wp437288"> </a>
+fld&#160;a&#160;&#160;# load a onto register stack<a name="wp434938"> </a>
+fmul&#160;b&#160;# multiply a*b and put result on register stack<a name="wp434939"> </a>
+fadd&#160;c&#160;# add c to product of a and b and put result on register stack<a name="wp434940"> </a>
+fst&#160;d&#160;&#160;# store a*b+c from register stack into d<a name="wp434941"> </a>
+</pre></div>
+<a name="wp434942"> </a><p class="pBody">
+The problem with this code sequence is that the intermediate values <em class="cEmphasis">a</em>*<em class="cEmphasis">b </em>and <br /><em class="cEmphasis">(a</em>*<em class="cEmphasis">b) + c</em> will not overflow or underflow the same way as pure <code class="cCode">double</code> code since the intermediate values are kept in registers with larger exponent range. The first attempt at a solution stores each intermediate product to a <code class="cCode">double</code> location in memory:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+# Attempted Fix 1<a name="wp434944"> </a>
+fld&#160;a&#160;&#160;# load a onto register stack<a name="wp434945"> </a>
+fmul&#160;b&#160;# multiply a*b and put result on register stack<a name="wp434946"> </a>
+fst&#160;t1&#160;# store a*b into a temp double location to restrict exponent<a name="wp434947"> </a>
+fld&#160;t1&#160;# reload a*b with restricted exponent<a name="wp434948"> </a>
+fadd&#160;c&#160;# add c to product of a and b and put result on register stack<a name="wp434949"> </a>
+fst&#160;d&#160;&#160;# store a*b+c from register stack into d<a name="wp434950"> </a>
+</pre></div>
+<a name="wp434951"> </a><p class="pBody">
+This first attempted fix does preserve the proper overflow behavior for <em class="cEmphasis">a</em>*<em class="cEmphasis">b</em>. However, the underflow behavior is slightly wrong. Performing the multiply and rounding, storing to restrict the exponent (thus rounding again), and then reloading the stored value can give a different subnormal number than if the product were rounded only once to the final precision and range. The <em class="cEmphasis">compute-store-reload idiom</em> works for addition and subtraction. However, multiplication and division both share this double-rounding-on-underflow hazard. Avoiding the hazard requires a few additional steps; however expressing the needed steps in a C program may be difficult. 
+</p>
+<a name="wp434956"> </a><p class="pBody">
+If the operand values are <code class="cCode">float</code> instead of <code class="cCode">double</code>, and if the FPU&#8217;s rounding precision is set to <code class="cCode">double</code><em class="cEmphasis"> </em>precision, and the loads and stores are of <code class="cCode">float</code> values, the <em class="cEmphasis">store-reload idiom</em> works for the four basic <code class="cCode">float</code> arithmetic operations (<em class="cEmphasis">add</em>, <em class="cEmphasis">subtract</em>, <em class="cEmphasis">multiply</em> and <em class="cEmphasis">divide</em>). In the case of <em class="cEmphasis">multiply</em>, a <code class="cCode">double</code><em class="cEmphasis"> </em>precision product of <code class="cCode">float</code> operands is exact, so double-rounding is avoided. In general, <code class="cCode">double</code> has enough additional precision over <code class="cCode">float</code> that these double-rounding problems are all avoided. 
+</p>
+<a name="wp434960"> </a><p class="pBody">
+To avoid double-rounding on underflow for <code class="cCode">double</code> values, what would be a subnormal result in pure <code class="cCode">double</code> must also be a subnormal in the register format with extended exponent range. This can be arranged by scaling one of the operands by a power of two.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+# Attempted Fix 2<a name="wp434962"> </a>
+fld&#160;a&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;# load a onto register stack<a name="wp434963"> </a>
+fmul&#160;SCALE_DOWN&#160;# scale a down <a name="wp434964"> </a>
+fmul&#160;b&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;# multiply a_scaled*b, put result on register stack<a name="wp434965"> </a>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;#  significand will have the right bits if <em style="font-weight: bold" class="cEmphasis">a</em>*<em style="font-weight: bold" class="cEmphasis">b</em> <a name="wp434966"> </a>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;#  should be subnormal<a name="wp437191"> </a>
+fmul&#160;SCALE_UP&#160;&#160;&#160;# rescale product to restore the proper exponent <a name="wp434967"> </a>
+fst&#160;t1&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;# store a*b into a temporary double location to<a name="wp434968"> </a>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;#  restrict exponent<a name="wp435709"> </a>
+fld&#160;t1&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;# reload a*b with restricted exponent<a name="wp434969"> </a>
+fadd&#160;c&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;# add c to product of a and b <a name="wp434970"> </a>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;#  and put result on register stack<a name="wp435713"> </a>
+fst&#160;d&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;# store a*b+c from register stack into d<a name="wp434971"> </a>
+</pre></div>
+<a name="wp434972"> </a><p class="pBody">
+Multiplying by <code class="cCode">SCALE_DOWN</code> and <code class="cCode">SCALE_UP</code> ensures the right result when the product in pure <code class="cCode">double</code> would be a subnormal. The store and reload to and from <code class="cCode">t1</code> is still needed to ensure an overflow to infinity occurs at the proper value. 
+</p>
+<a name="wp434975"> </a><p class="pBody">
+The magnitude of the exponent of <code class="cCode">SCALE_DOWN</code> and <code class="cCode">SCALE_UP</code> is the difference in the maximum exponent of the <code class="cCode">double</code> format and the maximum exponent of the register format:
+</p>
+<a name="wp434976"> </a><p class="pBody">
+<code class="cCode">SCALE_DOWN</code> = 2<sup style="vertical-align: super" class="cSuperscript">-(E</sup><em style="vertical-align: baseline" class="cEmphasis">max register</em> <sup style="vertical-align: super" class="cSuperscript">- E</sup><em style="vertical-align: baseline" class="cEmphasis">max double</em>) = 2<sup class="cSuperscript">-(16383 - 1023)</sup> = 2<sup class="cSuperscript">-15360</sup>
+</p>
+<a name="wp434977"> </a><p class="pBody">
+<code class="cCode">SCALE_UP</code> = 2<sup style="vertical-align: super" class="cSuperscript">(E</sup><em style="vertical-align: baseline" class="cEmphasis">max register</em> <sup style="vertical-align: super" class="cSuperscript">- E</sup><em style="vertical-align: baseline" class="cEmphasis">max double</em>) = 2<sup class="cSuperscript">(16383 - 1023)</sup> = 2<sup class="cSuperscript">15360</sup>
+</p>
+<a name="wp434978"> </a><p class="pBody">
+Unfortunately, these values are too large to represent as <code class="cCode">double</code> values. However, they can be easily synthesized out of <code class="cCode">double</code> values if the intermediate products are kept on the FPU stack with its large exponent range:
+</p>
+<a name="wp434980"> </a><p class="pBody">
+2<sup class="cSuperscript">-15360</sup>= (2<sup class="cSuperscript">-960</sup>)<sup class="cSuperscript">16</sup>) = ((((2<sup class="cSuperscript">-960</sup>)<sup class="cSuperscript">2</sup>)<sup class="cSuperscript">2</sup>)<sup class="cSuperscript">2</sup>)<sup class="cSuperscript">2</sup>
+</p>
+<a name="wp434981"> </a><p class="pBody">
+2<sup class="cSuperscript">15360</sup> = (2<sup class="cSuperscript">960</sup>)<sup class="cSuperscript">16</sup>) = ((((2<sup class="cSuperscript">960</sup> )<sup class="cSuperscript">2</sup>)<sup class="cSuperscript">2</sup>)<sup class="cSuperscript">2</sup>)<sup class="cSuperscript">2</sup>
+</p>
+<a name="wp434982"> </a><p class="pBody">
+2<sup class="cSuperscript">-960</sup> = 1.0261342003245941E-289 = <code class="cCode">longBitsToDouble</code>(0x3f0000000000000)
+</p>
+<a name="wp434983"> </a><p class="pBody">
+2<sup class="cSuperscript">960</sup> = 9.745314011399999E288 = <code class="cCode">longBitsToDouble</code>(0x7bf0000000000000)
+</p>
+<a name="wp434984"> </a><p class="pBody">
+As 80-bit values, logically the final bit patterns from most to least significant bit, are:
+</p>
+<a name="wp434985"> </a><p class="pBody">
+2<sup class="cSuperscript">15360</sup>  = 0x7bff 8000 0000 0000 0000
+</p>
+<a name="wp435424"> </a><p class="pBody">
+2<sup class="cSuperscript">-15360</sup> = 0x03ff 8000 0000 0000 0000
+</p>
+<a name="wp434995"> </a><p class="pBody">
+Adjusting by the scaling factors is also needed to implement <em class="cEmphasis">divide</em>. The product or quotient must first be scaled down. Scaling up first will not preserve the underflow threshold. 
+</p>
+<a name="wp434997"> </a><h3 class="pHeading2">
+10.1.4.2.2	Generating FP-strict code in C
+</h3>
+<a name="wp434999"> </a><p class="pBody">
+If a Java virtual machine on the x87 is generating assembly or machine code directly, creating the code necessary for <em class="cEmphasis">FP-strict</em> semantics is straightforward. However, coaxing the needed instructions from C source can be challenging due to numerous factors: 
+</p>
+<ul class="pBullet1"><a name="wp435002"> </a><div class="pBullet1"><li>Some C compilers do not support a long double type corresponding to the 80-bit (<code class="cCode">double</code> <code class="cCode">extended</code>) format; they only support <code class="cCode">float</code> and <code class="cCode">double</code>. Therefore, the <code class="cCode">SCALE_DOWN</code> and <code class="cCode">SCALE_UP</code> factors must be created from <code class="cCode">double</code> values. </li></div>
+<a name="wp435004"> </a><div class="pBullet1Plus"><li>Although the scaling factors can be created from <code class="cCode">double</code> values, the computations creating the scaling factors must occur on the x87 stack; any intermediate store to <code class="cCode">double</code> would generate an infinity. </li></div>
+<a name="wp435006"> </a><div class="pBullet1Plus"><li>The above two points imply that the scaling factors (logical constants) might have to be created at runtime. Therefore, the C compiler&#8217;s optimizer must be turned off to avoid unwanted constant folding. </li></div>
+<a name="wp435008"> </a><div class="pBullet1Last"><li>If the scaling factors are generated at runtime from <code class="cCode">double</code> values, there is no guaranteed idiom to keep the intermediate values on the stack and to refer to other stack-only values, making using the successive squaring formula problematic. </li></div>
+</ul>
+<a name="wp435011"> </a><p class="pBody">
+One approach to dealing with these issues is to generate the scaling factors by multiplying together sixteen copies of 2<sup class="cSuperscript">± 960</sup> stored as a volatile variable. Declaring a variable volatile forces it to be reread every time it is used, foiling unwanted optimizations. However, this means that an <em class="cEmphasis">FP-strict</em> multiply or divide would require (32 + 2) multiplies in addition to the operation being implemented. If <code class="cCode">asm</code> cannot be used to implement the <em class="cEmphasis">FP-strict</em> multiply and divide operations, it may be faster to use an integer-based software implementation of those operations. 
+</p>
+<a name="wp435015"> </a><h3 class="pHeading2">
+10.1.4.2.3	Default floating-point
+</h3>
+<a name="wp435017"> </a><p class="pBody">
+Compared to <em class="cEmphasis">FP-strict</em> code, generating code with default floating-point semantics is simple. For default code, the scaling factors are not required and the stores and reloads are only necessary for variables. In other words, the stores and reloads are not necessary for quantities that live on the Java virtual machine operand stack. 
+</p>
+<a name="wp435020"> </a><h3 class="pHeading2">
+10.1.4.3	Other architectures
+</h3>
+<a name="wp435022"> </a><p class="pBody">
+On architectures with only plain <code class="cCode">float</code> and <code class="cCode">double</code> arithmetic operations, mapping to Java virtual machine semantics to equivalent C code is not complicated. 
+</p>
+<a name="wp434780"> </a><h2 class="pHeading1">
+10.2	Floating-point support in the virtual machine
+</h2>
+<a name="wp434781"> </a><p class="pBody">
+For CLDC 1.1 compliant implementations, the floating-point functionality is always enabled by default. It can be disabled by changing the <code class="cCode">IMPLEMENTS_FLOAT</code> flag in <code class="cCode">main.h</code>. The majority of the support needed in the virtual machine for implementing floating-point is done to the Java bytecodes defined in <code class="cCode">bytecodes.c</code>. The specific modifications needed are described in the sections below.
+</p>
+<a name="wp434782"> </a><h3 class="pHeading2">
+10.2.1	Floating-point bytecodes implementation 
+</h3>
+<a name="wp434783"> </a><p class="pBody">
+The file <code class="cCode">bytecodes.c</code> represents one of the major components that must be changed to support floating-point. This file contains Java bytecodes executed by the KVM interpreter. Many of the modifications involve checking for NaNs. Among the bytecodes that require modifications are <em class="cEmphasis">D2I</em>, <em class="cEmphasis">D2L</em>, <em class="cEmphasis">F2I</em>, and <em class="cEmphasis">F2L</em>. The modifications and checks for NaNs are described in <a  href="portingFloatingPoint.html#wp435568"><span style="color: #3366CC">Section&#160;10.4 &#8220;Porting</span></a>.&#8221; The x86 specific changes are implemented in <code class="cCode">fp_bytecodes.c</code> (located in directory <code class="cCode">kvm/VmExtra/src/fp</code>). Specific details of the changes are also documented with comments in that file.
+</p>
+<a name="wp434787"> </a><h2 class="pHeading1">
+10.3	CLDC 1.1 floating-point libraries and trigonometric functions 
+</h2>
+<a name="wp434788"> </a><p class="pBody">
+This section describes the floating-point libraries and the trigonometric and other math functions that are now supported by KVM. The Java classes that are needed for floating-point support are described in the following table:</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq434789">
+  <caption><a name="wp434791"> </a><div class="pTableCaption">
+TABLE&#160;10&#160;&#160;&#8211;&#160;&#160;Java classes needed for floating-point
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp434795"> </a><div style="text-align: left" class="pTableHead">
+File
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp434797"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><div class="pPreformatted"><pre class="pPreformatted">
+Float.java<a name="wp434799"> </a>
+</pre></div>
+</td>
+    <td><a name="wp434801"> </a><div class="pTableText">
+Supports floating-point arithmetic.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><div class="pPreformatted"><pre class="pPreformatted">
+Double.java<a name="wp434803"> </a>
+</pre></div>
+</td>
+    <td><a name="wp434805"> </a><div class="pTableText">
+Supports double-precision floating-point arithmetic.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><div class="pPreformatted"><pre class="pPreformatted">
+Math.java<a name="wp434807"> </a>
+</pre></div>
+</td>
+    <td><a name="wp434809"> </a><div class="pTableText">
+Additional trigonometric and other math functions.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><div class="pPreformatted"><pre class="pPreformatted">
+FloatingDecimal.java<a name="wp434811"> </a>
+</pre></div>
+</td>
+    <td><a name="wp434813"> </a><div class="pTableText">
+Used to convert decimals and doubles to strings
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp434814"> </a><p class="pBody">
+These files are not implementation-specific. 
+</p>
+<a name="wp434815"> </a><p class="pBody">
+The table below lists the trigonometric function that are now implemented in the KVM for floating-point support. Listed with each function are the corresponding file(s) in which the function is implemented.</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq434816">
+  <caption><a name="wp434818"> </a><div class="pTableCaption">
+TABLE&#160;11&#160;&#160;&#8211;&#160;&#160;Files implementing trigonometric and other math functions
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp434822"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp434824"> </a><div style="text-align: left" class="pTableHead">
+File(s)
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><div class="pPreformatted"><pre class="pPreformatted">
+sin<a name="wp434826"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+k_sin.c s_sin.c <a name="wp434828"> </a>
+</pre></div>
+</td>
+</tr>
+  <tr align="left">    <td><div class="pPreformatted"><pre class="pPreformatted">
+cos<a name="wp434830"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+k_cos.c s_cos.c <a name="wp434832"> </a>
+</pre></div>
+</td>
+</tr>
+  <tr align="left">    <td><div class="pPreformatted"><pre class="pPreformatted">
+tan<a name="wp434834"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+k_tan.c s_tan.c <a name="wp434836"> </a>
+</pre></div>
+</td>
+</tr>
+  <tr align="left">    <td><div class="pPreformatted"><pre class="pPreformatted">
+sqrt<a name="wp434838"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+e_sqrt.c w_sqrt.c <a name="wp434840"> </a>
+</pre></div>
+</td>
+</tr>
+  <tr align="left">    <td><div class="pPreformatted"><pre class="pPreformatted">
+ceil<a name="wp434842"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+s_ceil.c <a name="wp434844"> </a>
+</pre></div>
+</td>
+</tr>
+  <tr align="left">    <td><div class="pPreformatted"><pre class="pPreformatted">
+floor<a name="wp434846"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+s_floor.c <a name="wp434848"> </a>
+</pre></div>
+</td>
+</tr>
+  <tr align="left">    <td><div class="pPreformatted"><pre class="pPreformatted">
+abs<a name="wp434850"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+s_fabs.c<a name="wp434852"> </a>
+</pre></div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp434853"> </a><p class="pBody">
+The implementation of the trigonometric functions is taken directly from the JDK1.3.1 sources with no changes except to the function names. The trigonometric files are specified in directory <code class="cCode">kvm/VmExtra/src/fp</code>.
+</p>
+<hr class="pHr"/><div class="note">
+<a name="wp435566"> </a>
+<b>Note &#8211;</b>  You <em class="cEmphasis">cannot</em> use optimization when compiling the floating-point files. Doing so will cause incorrect results in the trigonometric functions. This means you cannot set <code class="cCode">FP_OPTIMIZATION_FLAG</code>. Refer to <a  href="portingFloatingPoint.html#wp434886"><span style="color: #3366CC">Section&#160;10.1.2 &#8220;Implementing Java virtual machine floating-point semantics</span></a>&#8221; for further details.
+<hr class="pHr"/></div>
+<a name="wp435568"> </a><h2 class="pHeading1">
+10.4	Porting
+</h2>
+<a name="wp433524"> </a><p class="pBody">
+The following sections summarize the porting effort required for the implementation of floating-point to various processor architectures. The biggest challenge in the porting effort is in the implementation for handling NaNs and infinity bounds checking. The key changes that are required on all platforms are essentially in the conversion of bytecodes <em class="cEmphasis">D2I, D2L, F2I</em>, and <em class="cEmphasis">F2L</em>. These bytecodes needed additional checks mandated by the <em class="cEmphasis">Java&#8482; Virtual Machine Specification</em> to check for NaNs and infinity bounds, and to return the correct value for each of these cases. 
+</p>
+<a name="wp434255"> </a><p class="pBody">
+<em class="cEmphasis">The Java&#8482; Virtual Machine Specification (Java Series), Second Edition</em> by Tim Lindholm and Frank Yellin (Addison-Wesley, 1999) states that for each of these conversion bytecodes, if a NaN value is being converted, the result of conversion is zero. If a value is of large magnitude or small magnitude (such as positive or negative infinity) the maximum or minimum value of the conversion type is the result. In all other cases, the value is converted from one type to the other using the IEEE 754 conversion rules. The values defined as NaN and infinity are described in the <em class="cEmphasis">Java&#8482; Virtual Machine Specification</em>, §4.4.4 and §4.4.5.
+</p>
+<a name="wp433049"> </a><h3 class="pHeading2">
+10.4.1	SPARC
+</h3>
+<a name="wp433050"> </a><p class="pBody">
+The SPARC architecture is IEEE 754 compliant and has direct support for <code class="cCode">float</code> and <code class="cCode">double</code> operations. Therefore, implementing floating-point on KVM/SPARC only requires additional checks for NaN and infinity in the conversion bytecodes, D2I, D2L, F2I, and F2L.
+</p>
+<a name="wp434277"> </a><h3 class="pHeading2">
+10.4.2	ARM 
+</h3>
+<a name="wp434278"> </a><p class="pBody">
+The ARM CPU uses a IEEE 754 compliant software floating-point library. Similar to SPARC architecture, the only required changes are additional checks to the floating-point conversion bytecodes <em class="cEmphasis">D2I, D2L, F2I</em>, and <em class="cEmphasis">F2L</em>.
+</p>
+<a name="wp433051"> </a><h3 class="pHeading2">
+10.4.3	x86
+</h3>
+<a name="wp433052"> </a><p class="pBody">
+The traditional x87 FPU is fully IEEE 754 compliant. However, the IEEE 754 standard explicitly allows rounding to reduced precision, but greater exponent range, which does not always match the floating-point model used in the Java language and the JVM. Therefore, additional work is needed to implement floating-point. Additionally, the P4 processor contains the SSE2 instruction set extension, which is another IEEE 754 compliant implementation. However, SSE2 is more amenable to Java&#8217;s semantics.
+</p>
+<a name="wp435480"> </a><p class="pBody">
+To implement floating-point for the x86 platform, checks involving NaNs are needed for the following Java bytecodes: <em class="cEmphasis">FCMPL, FCMPG, DCMPL, DCMPG, FREM</em>, and <em class="cEmphasis">DREM</em>. These bytecodes needed additional checks to behave as mentioned in the <em class="cEmphasis">Java&#8482; Virtual Machine Specification</em>. The <em class="cEmphasis">Java&#8482; Virtual Machine Specification</em> describes what each of these bytecodes should do or return when a NaN value is encountered.
+</p>
+<a name="wp433053"> </a><p class="pBody">
+The file <code class="cCode">fp_bytecodes.c</code> under <code class="cCode">kvm/VmExtra/src/fp</code> contains the x86-specific implementation for the floating-point bytecodes. Each function in this file implements an algorithm for a specific floating-point bytecode that needs modification. Each of these bytecodes check the value that is on the stack to see if it is a NaN. If a NaN value is encountered, it is handled as a special case according to the <em class="cEmphasis">Java&#8482; Virtual Machine Specification</em>. These functions are executed only if the variable <code class="cCode">PROCESSOR_ARCHITECTURE_X86</code> is set in the platform-specific header file <code class="cCode">machine_md.h</code>.
+</p>
+<a name="wp433054"> </a><h4 class="pHeading3">
+10.4.3.1	strictfp implementation for x86
+</h4>
+<a name="wp434398"> </a><p class="pBody">
+Due to the reasons mentioned in the above sections, the implementation of <code class="cCode">strictfp</code> is quite a challenge for the x86 platform. The x86 is designed to operate on 80-bit <code class="cCode">double</code> <code class="cCode">extended</code> floating-point values rather than the 64-bit and 32-bit <code class="cCode">double</code> and <code class="cCode">float</code> values used in the Java programming language. The x86 can be made to round to <code class="cCode">float</code> or <code class="cCode">double</code> precision. Unfortunately, this rounding does not exactly emulate the pure <code class="cCode">float</code> and <code class="cCode">double</code> called for by Java, since an extended exponent range is available. The extended exponent range means the overflow and underflow thresholds are different than for pure <code class="cCode">float</code> and <code class="cCode">double</code>.
+</p>
+<a name="wp434621"> </a><p class="pBody">
+To implement <code class="cCode">strictfp</code>, the bytecodes <em class="cEmphasis">DMUL</em> and <em class="cEmphasis">DDIV</em> must be changed. The problem is, while doing these operations on subnormal numbers (very small IEEE 754 values with less precision than normal numbers) rounding occurs, producing an incorrect result. (Refer to 10.1.4.2.1, &#8220;<em class="cEmphasis">FP-strict</em>.&#8221;) In addition, double-rounding can occur if the obvious code generation algorithm is used. The solution is to implement the following algorithms for <em class="cEmphasis">DMUL</em> and <em class="cEmphasis">DDIV</em>.
+</p>
+<a name="wp433056"> </a><h5 class="pHeading4">
+Multiply (DMUL)
+</h5>
+<ul class="pBullet1"><a name="wp433057"> </a><div class="pBullet1"><li>load multiplier</li></div>
+<a name="wp433058"> </a><div class="pBullet1Plus"><li>scale multiplier by multiplying multiplier by 2<sup class="cSuperscript">-15360</sup></li></div>
+<a name="wp433059"> </a><div class="pBullet1Plus"><li>load multiplicand</li></div>
+<a name="wp435615"> </a><div class="pBullet1Plus"><li>multiply scaled multiplier by multiplicand</li></div>
+<a name="wp435616"> </a><div class="pBullet1Plus"><li>rescale product by 2<sup class="cSuperscript">15360</sup></li></div>
+<a name="wp435617"> </a><div class="pBullet1Plus"><li>store rescaled product</li></div>
+<a name="wp433063"> </a><div class="pBullet1Last"><li>reload stored rescaled product</li></div>
+</ul>
+<a name="wp433064"> </a><h5 class="pHeading4">
+Divide (DDIV)
+</h5>
+<a name="wp437502"> </a><p class="pBody">
+For strictfp floating-point on x86, the initial scaled quotient must be smaller than the actual quotient for the rounding to work properly. Thus, the algorithm is:
+</p>
+<ul class="pBullet1"><a name="wp433065"> </a><div class="pBullet1"><li>load dividend</li></div>
+<a name="wp433067"> </a><div class="pBullet1Plus"><li>load divisor</li></div>
+<a name="wp437517"> </a><div class="pBullet1Plus"><li>compute initial_quotient by either:</li></div>
+<ul class="pBullet2"><a name="wp437518"> </a><div class="pBullet2"><li>initial_quotient = (2<sup class="cSuperscript">-15360</sup> * dividend)/divisor</li></div>
+<a name="wp437519"> </a><div class="pBullet2Last"><li>initial_quotient = dividend/(divisor * 2<sup class="cSuperscript">15360</sup>)</li></div>
+</ul>
+<a name="wp433069"> </a><div class="pBullet1Plus"><li>rescale initial_quotient to get the right significand bits. Compute:</li></div>
+<a name="wp437534"> </a><p class="pIndented2">
+quotient =  initial_quotient * 2<sup class="cSuperscript">15360</sup>
+</p>
+<a name="wp433070"> </a><div class="pBullet1Plus"><li>store rescaled quotient</li></div>
+<a name="wp433071"> </a><div class="pBullet1Last"><li>reload stored rescaled quotient</li></div>
+</ul>
+<a name="wp433072"> </a><p class="pBody">
+The bytecodes for <em class="cEmphasis">FADD</em> and <em class="cEmphasis">FSUB</em> did not need to be changed since if those operations have subnormal results, the results are exact (that is, no rounding occurs).
+</p>
+<a name="wp432989"> </a><p class="pBody">
+
+</p>
+
+  <a name="wp435638"> </a><div class="pFootNote">
+<a href="#wp435068"><span class="Footnote">1</span></a>In other floating-point systems, the significand is called the mantissa.
+
+</div>
+<a name="wp435537"> </a><div class="pFootNote">
+<a href="#wp435201"><span class="Footnote">2</span></a>In IEEE 754 floating-point, there is both -0.0 and +0.0. These values can be distinguished by division; <br />
+1.0/-0.0 is negative infinity while 1.0/+ 0.0 is positive infinity. If x is -0.0, x + 0.0 is +0.0; adding + 0.0 to a 
+number changes negative zero into positive zero while leaving other values unchanged. 
+
+</div>
+<a name="wp435528"> </a><div class="pFootNote">
+<a href="#wp435240"><span class="Footnote">3</span></a>The strictfp Java modifier and the ACC_STRICT modifier were added in Java 2. Java classes generated 
+before that time will not have FP-strict semantics. 
+
+</div>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" class="full-width">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="porting64bit.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="portingNative.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KVM Porting Guide <br /> , CLDC 1.1</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    
+<p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169; 2003 Sun Microsystems, Inc. 
+  All rights reserved.</p>
+  </body>
+</html>

@@ -1,0 +1,374 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="508 Compliant Book Without Index" />
+    <meta name="LASTUPDATED" content="10/18/02 16:56:39" />
+    <title>Event Command Set</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="10-StackFrame.html" />
+    <link rel="Next" href="12-Vendor.html" />
+    <link rel="Index" href="13-Appendix.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" width="100%">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="10-StackFrame.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="12-Vendor.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp432858"> </a><h2 class="pChapNum">
+Chapter &#160; 11
+</h2>
+<a name="wp442187"> </a><h2 class="pNewHTMLPage">
+Event Command Set
+</h2>
+<hr class="pHr"/>
+<a name="wp442545"> </a><p class="pBody">
+This command set is numbered (64) to match the equivalent JDWP command set. Note that by default, KDWP supports only <code class="cCode">Breakpoint</code>, <code class="cCode">Class_Prepare</code> and <code class="cCode">Midlet_Death</code> events. 
+</p>
+<a name="wp432862"> </a>
+&#160;Composite Command (100)
+
+<a name="wp432864"> </a><p class="pBody">
+Several events may occur at a given time in the target VM. For example, there might be more than one breakpoint request for a given location, or you might single step to the same location as a breakpoint request. These events are delivered together as a composite event. For uniformity, a composite event is always used to deliver events, even if there is only one event to report.
+</p>
+<a name="wp432866"> </a><p class="pBody">
+The events that are grouped in a composite event are restricted in the following ways:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp432868"> </a><div class="pSmartList1"><li>Only with other <code class="cCode">class</code> <code class="cCode">prepare</code> events for the same class: </li></div>
+</ul></div>
+<a name="wp432870"> </a><p class="pIndented2">
+<code class="cCode">Class Prepare</code> Event
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp432872"> </a><div class="pSmartList1"><li>Only with other members of this group, at the same location and in the same thread: </li></div>
+</ul></div>
+<a name="wp432874"> </a><p class="pIndented2">
+<code class="cCode">Breakpoint</code> Event
+</p>
+<a name="wp434489"> </a><h5 class="pHeading4">
+Event Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444643">
+  <caption><a name="wp444646"> </a><div class="pTableCaption">
+TABLE&#160;41&#160;&#160;&#8211;&#160;&#160;Structure of Composite Event Data
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp444652"> </a><div class="pTableText">
+<code class="cCode">byte</code>
+</div>
+</td>
+    <td><a name="wp444654"> </a><div class="pTableText">
+<em class="cEmphasis">suspendPolicy</em>
+</div>
+</td>
+    <td><a name="wp444656"> </a><div class="pTableText">
+Which threads were suspended by this composite event?&#160;
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444658"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp444660"> </a><div class="pTableText">
+<em class="cEmphasis">events</em>
+</div>
+</td>
+    <td><a name="wp444662"> </a><div class="pTableText">
+Events in set.&#160; 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="3" rowspan="1"><a name="wp444664"> </a><div class="pTableText">
+Repeated <em class="cEmphasis">events</em> times: 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444670"> </a><div class="pTableText">
+<code class="cCode">byte</code>
+</div>
+</td>
+    <td><a name="wp444672"> </a><div class="pTableText">
+<em class="cEmphasis">eventKind</em>
+</div>
+</td>
+    <td><a name="wp444674"> </a><div class="pTableText">
+Event kind selector&#160; 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="2" rowspan="1"><a name="wp444676"> </a><div class="pTableText">
+Case <code class="cCode">Breakpoint</code> - if <em class="cEmphasis">eventKind</em> is <code class="cCode">KDWP.EventKind.BREAKPOINT</code>: 
+</div>
+</td>
+    <td><a name="wp444680"> </a><div class="pTableText">
+Notification of a breakpoint in the target VM. The breakpoint event is generated before the code at its location is executed. &#160; 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444682"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp444684"> </a><div class="pTableText">
+<em class="cEmphasis">requestID</em>
+</div>
+</td>
+    <td><a name="wp444686"> </a><div class="pTableText">
+Request that generated event&#160; 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444688"> </a><div class="pTableText">
+<code class="cCode">threadID</code>
+</div>
+</td>
+    <td><a name="wp444690"> </a><div class="pTableText">
+<em class="cEmphasis">thread</em>
+</div>
+</td>
+    <td><a name="wp444692"> </a><div class="pTableText">
+Thread that hit breakpoint&#160; 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444694"> </a><div class="pTableText">
+<code class="cCode">location</code>
+</div>
+</td>
+    <td><a name="wp444696"> </a><div class="pTableText">
+<em class="cEmphasis">location</em>
+</div>
+</td>
+    <td><a name="wp444698"> </a><div class="pTableText">
+Location hit&#160;
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="2" rowspan="1"><a name="wp444700"> </a><div class="pTableText">
+Case <code class="cCode">ClassPrepare</code> - if <em class="cEmphasis">eventKind</em> is <code class="cCode">KDWP.EventKind.CLASS_PREPARE</code>: 
+</div>
+</td>
+    <td><a name="wp444704"> </a><div class="pTableText">
+Notification of a class prepare in the target VM. See the <em class="cEmphasis">Java&#8482; Virtual Machine Specification</em> for a definition of class preparation. Class prepare events are not generated for primitive classes (for example, <code class="cCode">java.lang.Integer.TYPE</code>). &#160; 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444709"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp444711"> </a><div class="pTableText">
+<em class="cEmphasis">requestID</em>
+</div>
+</td>
+    <td><a name="wp444713"> </a><div class="pTableText">
+Request that generated event&#160;
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444715"> </a><div class="pTableText">
+<code class="cCode">threadID</code>
+</div>
+</td>
+    <td><a name="wp444717"> </a><div class="pTableText">
+<em class="cEmphasis">thread</em>
+</div>
+</td>
+    <td><a name="wp444719"> </a><div class="pTableText">
+Preparing thread. In rare cases, this event might occur in a debugger system thread within the target VM. Debugger threads take precautions to prevent these events, but they cannot be avoided under some conditions, especially for some subclasses of <code class="cCode">java.lang.Error</code>. If the event was generated by a debugger system thread, the value returned by this method is <code class="cCode">NULL</code>, and if the requested suspend policy for the event was <code class="cCode">EVENT_THREAD</code> all threads are suspended instead, and the composite event&#39;s suspend policy reflects this change. Note that this does not apply to system threads created by the target VM during its normal (non-debug) operation. &#160; 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444721"> </a><div class="pTableText">
+<code class="cCode">byte</code>
+</div>
+</td>
+    <td><a name="wp444723"> </a><div class="pTableText">
+<em class="cEmphasis">refTypeTag</em>
+</div>
+</td>
+    <td><a name="wp444725"> </a><div class="pTableText">
+Kind of reference type. See <code class="cCode">KDWP.TypeTag</code>&#160; 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444727"> </a><div class="pTableText">
+<code class="cCode">referenceTypeID</code>
+</div>
+</td>
+    <td><a name="wp444729"> </a><div class="pTableText">
+<em class="cEmphasis">typeID</em>
+</div>
+</td>
+    <td><a name="wp444731"> </a><div class="pTableText">
+Type being prepared&#160; 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444733"> </a><div class="pTableText">
+<code class="cCode">string</code>
+</div>
+</td>
+    <td><a name="wp444735"> </a><div class="pTableText">
+<em class="cEmphasis">signature</em>
+</div>
+</td>
+    <td><a name="wp444737"> </a><div class="pTableText">
+Type signature&#160; 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444739"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp444741"> </a><div class="pTableText">
+<em class="cEmphasis">status</em>
+</div>
+</td>
+    <td><a name="wp444743"> </a><div class="pTableText">
+Status of type. See <code class="cCode">KDWP.ClassStatus</code>&#160; 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="2" rowspan="1"><a name="wp444745"> </a><div class="pTableText">
+Case <code class="cCode">Midlet</code> Death &#8211; if <em style="font-style: oblique" class="cEmphasis">eventKind</em> is <code class="cCode">KDWP.EventKind.MIDLET_DEATH</code>
+</div>
+</td>
+    <td><a name="wp444749"> </a><div class="pTableText">
+Notification of a completed midlet in the target VM. The notification is generated by the dying midlet before it terminates.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444751"> </a><div class="pTableText">
+<code class="cCode">Int</code>
+</div>
+</td>
+    <td><a name="wp444753"> </a><div class="pTableText">
+<em class="cEmphasis">RequestID</em>
+</div>
+</td>
+    <td><a name="wp444755"> </a><div class="pTableText">
+Request that generated event.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444757"> </a><div class="pTableText">
+<code class="cCode">String</code>
+</div>
+</td>
+    <td><a name="wp444759"> </a><div class="pTableText">
+<em class="cEmphasis">MidletName</em>
+</div>
+</td>
+    <td><a name="wp444761"> </a><div class="pTableText">
+JNI signature of the dying Midlet.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp432885"> </a><h5 class="pHeading4">
+Reply Data 
+</h5>
+<a name="wp444797"> </a><p class="pBody">
+For <code class="cCode">Breakpoint</code> type events, returns the byte opcode that was originally in the location that currently has the breakpoint.</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444798">
+  <caption><a name="wp444801"> </a><div class="pTableCaption">
+TABLE&#160;42&#160;&#160;&#8211;&#160;&#160;Structure of Reply Data for Composite Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp444807"> </a><div class="pCellBody">
+<code class="cCode">Byte</code>
+</div>
+</td>
+    <td><a name="wp444809"> </a><div style="color: #000000; font-size: 8pt; font-style: italic; font-variant: normal; font-weight: normal; margin-bottom: 4pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+<em class="cEmphasis">Opcode</em>
+</div>
+</td>
+    <td><a name="wp444811"> </a><div style="color: #000000; font-size: 8pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 4pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Original opcode that was at the breakpoint.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp434501"> </a><p class="pBody">
+
+</p>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" width="100%">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="10-StackFrame.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="12-Vendor.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KDWP Specification <br /> KVM Debug Wire Protocol, 1.0</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    <p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169;
+       2002 Sun Microsystems, Inc. All rights reserved. Use is
+       subject to license terms. Third-party software, including
+       font  technology,  is copyrighted  and  licensed from  Sun
+       suppliers. Sun, Sun Microsystems, the Sun logo, Java and
+       Solaris are trademarks or registered trademarks of Sun
+       Microsystems, Inc. in the US and other countries.  Federal
+       Acquisitions: Commercial Software - Government Users
+       Subject to Standard License Terms and Conditions.</p>
+
+    <p class="copyright"><a
+       href="copyright.html">Copyright</a> &#169; 2002
+       Sun Microsystems, Inc. Tous droits r&#233;serv&#233;s.
+       Distribu&#233; par des licences qui en restreignent
+       l'utilisation.  Le logiciel d&#233;tenu par des tiers, et
+       qui comprend la technologie relative aux polices de
+       caract&#232;res, est prot&#233;g&#233; par un copyright et
+       licenci&#233; par des fournisseurs de Sun.  Sun, Sun
+       Microsystems, le logo Sun, Java et Solaris sont des
+       marques de fabrique ou des marques d&#233;pos&#233;es de
+       Sun Microsystems, Inc. aux Etats-Unis et dans d'autres
+       pays. </p>	
+  </body>
+</html>

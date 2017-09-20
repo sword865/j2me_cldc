@@ -1,0 +1,631 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="508 Compliant Book Without Index" />
+    <meta name="LASTUPDATED" content="10/18/02 16:56:30" />
+    <title>Introduction</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="KDWPpreface.html" />
+    <link rel="Next" href="02-VM.html" />
+    <link rel="Index" href="13-Appendix.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" width="100%">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="KDWPpreface.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="02-VM.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp434413"> </a><h2 class="pChapNum">
+Chapter &#160; 1
+</h2>
+<a name="wp442099"> </a><h2 class="pNewHTMLPage">
+Introduction
+</h2>
+<hr class="pHr"/>
+<a name="wp442319"> </a><p class="pBody">
+This document, <em class="cEmphasis">KVM Debug Wire Protocol (KDWP) Specification</em>, defines the debugger interface for<em class="cEmphasis"> </em>Java Virtual Machine implementations that are intended to be compatible with Sun&#8217;s K Virtual Machine (KVM). KVM is commonly used as the underlying execution engine for the J2ME CLDC (Java&#8482; 2 Micro Edition, Connected Limited Device Configuration) standard.
+</p>
+<a name="wp442471"> </a><p class="pBody">
+The KVM Debug Wire Protocol (KDWP) is the protocol that is used for communication between a Debug Agent (DA) and a CLDC-compliant J2ME Java Virtual Machine (usually KVM).
+</p>
+<a name="wp442472"> </a><p class="pBody">
+The high-level goal of the KDWP interface is to make it possible to plug a CLDC-compliant Java Virtual Machine flexibly into a Java development and debugging environment such as Forte.
+</p>
+<a name="wp442594"> </a><p class="pBody">
+The debugging interface specified in this document is intended to be compliant with the JPDA (Java Platform Debug Architecture) specification supported by Java 2 Standard Edition (J2SE&#8482;). Further information on the JPDA architecture is available at <a href="http://java.sun.com/products/jpda/" target="_blank">
+<span class="cWebJump">http://java.sun.com/products/jpda/</span></a>. However, due to strict memory constraints, KVM does not implement support for the JVMDI (Java Virtual Machine Debug Interface) or the full JDWP (Java Debug Wire Protocol) specifications required by JPDA. Instead, KVM implements a subset of the JDWP known as KDWP.
+</p>
+<a name="wp442498"> </a><p class="pBody">
+The KDWP interface is derived directly from the <em class="cEmphasis">JDWP Specification</em> (see <br /><a href="http://java.sun.com/products/jpda/doc/jdwp-spec.html" target="_blank">
+<span class="cWebJump">http://java.sun.com/products/jpda/doc/jdwp-spec.html</span></a>). Note that the command sets are numbered the same as the JDWP command sets and the commands in each set are numbered as per the JDWP. This allows an implementer to support more JDWP commands directly in the KVM if deemed necessary. Like JDWP, KDWP differs from many protocol specifications in that it only details format and layout, not transport.
+</p>
+<a name="wp442397"> </a><h2 class="pHeading1">
+1.1	Architectural Overview
+</h2>
+<a name="wp442421"> </a><p class="pBody">
+KDWP was designed to be a strict subset of the JDWP, primarily based on the resource constraints imposed on the small devices. In order to make KVM run with a JPDA-compatible debugger IDEs without a huge memory overhead, a Debug Agent (also known as debug proxy) program is interposed between the KVM and the JPDA-compatible debugger. The Debug Agent allows many of the memory-consuming components of a JPDA-compliant debugging environment to be processed on the development workstation instead of the KVM, therefore reducing the memory overhead that the debugging interfaces have on the KVM and target devices. As obvious, the debugging interfaces can be turned off completely (at compile time) on those platforms/ports that do not need Java-level debugging support.
+</p>
+<a name="wp442422"> </a><p class="pBody">
+At the high level, the implementation of the Java-level debugging support consists of two parts: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp442423"> </a><div class="pSmartList1"><li>the actual code in the Java Virtual Machine (usually KVM) to support a subset of the JDWP, and </li></div>
+<a name="wp442424"> </a><div class="pSmartList1"><li>the Debug Agent that performs some of the debug commands on behalf of the Java Virtual Machine.</li></div>
+</ul></div>
+<a name="wp442425"> </a><p class="pBody">
+The overall architecture for the Java-level debugging interface is illustrated in <a  href="01-Overview.html#wp442442">Figure&#160;1</a>. In that figure, the topmost box represents the JPDA-compliant debugging environment (&#8220;JPDA Debugger&#8221;) running on a development workstation. The debugger is connected to the Debug Agent that talks to the KVM.
+</p>
+<a name="wp446285"> </a><p class="pBody">
+<img src="images/01-Overviewa.gif" height="224" width="273" alt="Block diagram showing Debug Agent between KVM and JPDA Debugger, with socket connections to each." border="0" hspace="0" vspace="0"/>
+</p>
+<a name="wp442442"> </a><div class="pFigureCaption">
+FIGURE&#160;1&#160;&#160;&#8211;&#160;&#160;Java-level debugging interface architecture
+<br /><br />
+</div><a name="wp442443"> </a><p class="pBody">
+The Debug Agent (DA) typically connects to the KVM via a socket connection. Similarly, the debugger connects to the Debug Agent over a socket. The debugger is unaware that it is connected to the Debug Agent. The debugger appears to be communicating directly with a JDWP-compliant Java Virtual Machine.
+</p>
+<a name="wp442547"> </a><p class="pBody">
+The KDWP protocol is designed to facilitate efficient use by a Debug Agent. Many of its abilities are tailored to that end. For instance, in some situations the Debug Agent may process the commands and issue a response directly back to the debugger without querying the Java Virtual Machine. If the command from the debugger needs data from the Java Virtual Machine, the Debug Agent communicates with the JVM via the KDWP to obtain the data. The completeness of the JDWP API that the Debug Agent provides depends on which debugger the implementer needs to support. Different debuggers may need different levels of support. The reference implementation from Sun supports a minimum set of commands that are needed by the Forte debugger.
+</p>
+<a name="wp442417"> </a><h2 class="pHeading1">
+1.2	KDWP Packets
+</h2>
+<a name="wp434418"> </a><p class="pBody">
+The KDWP is packet based and is not stateful. There are two basic packet types: <em class="cEmphasis">command packets</em> and <em class="cEmphasis">reply packets</em>.
+</p>
+<a name="wp434419"> </a><p class="pBody">
+Command packets may be sent by either the DA or the target VM. They are used by the DA to request information from the target VM, or to control program execution. Command packets are sent by the target VM to notify the DA of some event in the target VM such as a breakpoint or exception.
+</p>
+<a name="wp434420"> </a><p class="pBody">
+A reply packet is sent only in response to a command packet and always provides information about the success or failure of the command. Reply packets may also carry data requested in the command (for example, the value of a field or variable). Events sent from the target VM do not require a response packet from the DA.
+</p>
+<a name="wp434421"> </a><p class="pBody">
+The KDWP is asynchronous. Multiple command packets may be sent before the first reply packet is received.
+</p>
+<a name="wp434422"> </a><p class="pBody">
+Command and reply packet headers are equal in size. This is to make transports easier to implement and abstract. The layout of each packet looks like this:
+</p>
+<a name="wp434423"> </a><h5 class="pHeading4">
+Command Packet
+</h5>
+<a name="wp432168"> </a><p class="pIndented1">
+Header
+</p>
+<a name="wp432170"> </a><p class="pIndented2">
+length (4 bytes)
+</p>
+<a name="wp432172"> </a><p class="pIndented2">
+id (4 bytes)
+</p>
+<a name="wp432174"> </a><p class="pIndented2">
+flags (1 byte)
+</p>
+<a name="wp432176"> </a><p class="pIndented2">
+command set (1 byte)
+</p>
+<a name="wp432178"> </a><p class="pIndented2">
+command (1 byte)
+</p>
+<a name="wp434630"> </a><p class="pIndented3">
+data (Variable)
+</p>
+<a name="wp434631"> </a><h5 class="pHeading4">
+Reply Packet
+</h5>
+<a name="wp434700"> </a><p class="pIndented1">
+Header
+</p>
+<a name="wp434701"> </a><p class="pIndented2">
+length (4 bytes)
+</p>
+<a name="wp434702"> </a><p class="pIndented2">
+id (4 bytes)
+</p>
+<a name="wp434703"> </a><p class="pIndented2">
+flags (1 byte)
+</p>
+<a name="wp434704"> </a><p class="pIndented2">
+error code (2 bytes)
+</p>
+<a name="wp442619"> </a><p class="pIndented3">
+data (Variable)
+</p>
+<a name="wp442622"> </a><p class="pBody">
+All fields and data sent via KDWP should be in big-endian format. (See the <em class="cEmphasis">Java&#8482; Virtual Machine Specification</em> for the definition of big-endian.) The first three fields are identical in both packet types.
+</p>
+<a name="wp434425"> </a><h2 class="pHeading1">
+1.3	Command and Reply Packet Fields
+</h2>
+<a name="wp434645"> </a><h5 class="pHeading4">
+Shared Header Fields
+</h5>
+<a name="wp434646"> </a><p class="pIndented2">
+<em class="cEmphasis">length</em>
+</p>
+<a name="wp434647"> </a><p class="pIndented3">
+The <em class="cEmphasis">length</em> field is the size, in bytes, of the entire packet, including the length field. The header size is 11 bytes, so a packet with no data would set this field to 11.
+</p>
+<a name="wp432214"> </a><p class="pIndented2">
+<em class="cEmphasis">id</em>
+</p>
+<a name="wp432216"> </a><p class="pIndented3">
+The <em class="cEmphasis">id</em> field is used to uniquely identify each packet command/reply pair. A reply packet has the same id as the command packet to which it replies. This allows asynchronous commands and replies to be matched. The <em class="cEmphasis">id</em> field must be unique among all outstanding commands sent from one source. (Outstanding commands originating from the debugger may use the same id as outstanding commands originating from the target VM.) Other than that, there are no requirements on the allocation of ids.
+</p>
+<a name="wp434428"> </a><p class="pIndented3">
+ A simple monotonic counter is adequate for most implementations. It allows 2^32 unique outstanding packets and is the simplest implementation.
+</p>
+<a name="wp432222"> </a><p class="pIndented2">
+flags
+</p>
+<a name="wp434772"> </a><p class="pIndented3">
+Flags are used to alter how any command is queued and processed and to tag command packets that originate from the target VM. There is currently one flag bit defined. Future versions of the protocol may define additional flags.
+</p>
+<a name="wp434773"> </a><p class="pIndented2">
+   0x80
+</p>
+<a name="wp434774"> </a><p class="pIndented3">
+    Reply packet
+</p>
+<a name="wp434430"> </a><p class="pIndented3">
+The reply bit, when set, indicates that this packet is a reply.
+</p>
+<a name="wp434431"> </a><h5 class="pHeading4">
+Command Packet Header Fields
+</h5>
+<a name="wp434432"> </a><p class="pIndented2">
+command set
+</p>
+<a name="wp432244"> </a><p class="pIndented3">
+This field is useful as a means for grouping commands in a meaningful way. 
+</p>
+<a name="wp434433"> </a><p class="pIndented3">
+The command set space is roughly divided as follows:
+</p>
+<a name="wp434434"> </a><p class="pIndented3">
+0 - 63
+</p>
+<a name="wp432254"> </a><p class="pIndented3">
+    Sets of commands sent to the target VM.
+</p>
+<a name="wp432256"> </a><p class="pIndented3">
+64 - 127
+</p>
+<a name="wp432258"> </a><p class="pIndented3">
+    Sets of commands sent to the debugger/Debug Agent.
+</p>
+<a name="wp432260"> </a><p class="pIndented3">
+128 - 256
+</p>
+<a name="wp432262"> </a><p class="pIndented3">
+    Vendor-defined commands and extensions.
+</p>
+<a name="wp432264"> </a><p class="pIndented2">
+command
+</p>
+<a name="wp432266"> </a><p class="pIndented3">
+This field identifies a particular command in a command set. This field, together with the command set field, is used to indicate how the command packet should be processed. Together, these fields tell the receiver what to do. Specific commands are presented later in this document.
+</p>
+<a name="wp434435"> </a><h5 class="pHeading4">
+Reply Packet Header Fields
+</h5>
+<a name="wp434436"> </a><p class="pIndented2">
+error code
+</p>
+<a name="wp432276"> </a><p class="pIndented3">
+This field is used to indicate whether the command packet that is being replied to was successfully processed. A value of zero indicates success. A non-zero value indicates an error. The error code returned may be specific to each command set/command.
+</p>
+<a name="wp434437"> </a><p class="pIndented2">
+Data
+</p>
+<a name="wp437017"> </a><p class="pIndented3">
+The data field is unique to each command set/command. It is also different between command and reply packet pairs. For example, a command packet that requests a field value contains references to the object and field ids for the desired value in its data field. The reply packet&#39;s data field contains the value of the field.
+</p>
+<a name="wp434439"> </a><p class="pIndented2">
+Detailed Command Information
+</p>
+<a name="wp434440"> </a><p class="pIndented3">
+In general, the data field of a command or reply packet is an abstraction of a group of multiple fields that define the command or reply data. Each subfield of a data field is encoded in big endian format (See the <em class="cEmphasis">Java&#8482; Virtual Machine Specification</em> for the definition of big-endian.) The detailed composition of data fields for each command and its reply are described in this section.
+</p>
+<a name="wp446676"> </a><p class="pBody">
+There is a small set of common data types that are common to many of the different KDWP commands and replies. They are described in the following table.</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq446677">
+  <caption><a name="wp446679"> </a><div class="pTableCaption">
+TABLE&#160;1&#160;&#160;&#8211;&#160;&#160;KDWP Data Types
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp446898"> </a><div style="text-align: left" class="pTableHead">
+Name
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp446900"> </a><div style="text-align: left" class="pTableHead">
+Size
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp446902"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp446904"> </a><div class="pTableText">
+<code class="cCode">Byte</code>
+</div>
+</td>
+    <td><a name="wp446906"> </a><div class="pTableText">
+1 byte
+</div>
+</td>
+    <td><a name="wp446908"> </a><div class="pTableText">
+A byte value.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446910"> </a><div class="pTableText">
+<code class="cCode">Boolean</code>
+</div>
+</td>
+    <td><a name="wp446912"> </a><div class="pTableText">
+1 byte
+</div>
+</td>
+    <td><a name="wp446914"> </a><div class="pTableText">
+A boolean value. <code class="cCode">TRUE</code> is encoded as a non-zero value.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446916"> </a><div class="pTableText">
+<code class="cCode">Int</code>
+</div>
+</td>
+    <td><a name="wp446918"> </a><div class="pTableText">
+4 bytes
+</div>
+</td>
+    <td><a name="wp446920"> </a><div class="pTableText">
+A four-byte signed integer value.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446922"> </a><div class="pTableText">
+<code class="cCode">Long</code>
+</div>
+</td>
+    <td><a name="wp446924"> </a><div class="pTableText">
+8 bytes
+</div>
+</td>
+    <td><a name="wp446926"> </a><div class="pTableText">
+An eight-byte signed integer value.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446928"> </a><div class="pTableText">
+<code class="cCode">ObjectID</code>
+</div>
+</td>
+    <td><a name="wp446930"> </a><div class="pTableText">
+4 bytes
+</div>
+</td>
+    <td><a name="wp446932"> </a><div class="pTableText">
+Uniquely identifies an object in the target VM. A particular object is identified by exactly one objectID in KDWP commands and replies throughout its lifetime. An objectID of 0 represents a null object.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446934"> </a><div class="pTableText">
+<code class="cCode">ThreadID</code>
+</div>
+</td>
+    <td><a name="wp446936"> </a><div class="pTableText">
+4 bytes
+</div>
+</td>
+    <td><a name="wp446938"> </a><div class="pTableText">
+Uniquely identifies thread objects in the KVM
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446940"> </a><div class="pTableText">
+<code class="cCode">ReferenceTypeID</code>
+</div>
+</td>
+    <td><a name="wp446942"> </a><div class="pTableText">
+4 bytes
+</div>
+</td>
+    <td><a name="wp446944"> </a><div class="pTableText">
+Uniquely identifies a reference type in the target VM. It should not be assumed that for a particular class, the <code class="cCode">class ObjectID</code> and the <code class="cCode">referenceTypeID</code> are the same. Class, interfaces, and primitive data types are identified by <code class="cCode">referenceTypeID</code>s. Each reference type has exactly one <code class="cCode">referenceTypeID</code> during its lifetime.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446946"> </a><div class="pTableText">
+<code class="cCode">ArrayID</code>
+</div>
+</td>
+    <td><a name="wp446948"> </a><div class="pTableText">
+4 bytes
+</div>
+</td>
+    <td><a name="wp446950"> </a><div class="pTableText">
+Uniquely identifies references to arrays
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446952"> </a><div class="pTableText">
+<code class="cCode">MethodID</code>
+</div>
+</td>
+    <td><a name="wp446954"> </a><div class="pTableText">
+4 bytes
+</div>
+</td>
+    <td><a name="wp446956"> </a><div class="pTableText">
+Uniquely identifies a method in some class in the KVM. The <code class="cCode">methodID</code>s for each method in a class must be unique. Since each <code class="cCode">methodID</code> is paired with a <code class="cCode">referenceTypeID</code> (which identifies the class or interface), <code class="cCode">methodID</code>s do not need to be globally unique.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446959"> </a><div class="pTableText">
+<code class="cCode">FieldID</code>
+</div>
+</td>
+    <td><a name="wp446961"> </a><div class="pTableText">
+8 bytes
+</div>
+</td>
+    <td><a name="wp446963"> </a><div class="pTableText">
+Uniquely identifies a field in some class in the KVM. The <code class="cCode">fieldID</code>s must be globally unique, since referencing a field in an object may require the KVM to access field offsets in superclasses of the current object. The upper 4 bytes are the <code class="cCode">classID </code>of the class that defines this field. The lower 4 bytes identify the field in the class.
+</div>
+<a name="wp446964"> </a><div class="pTableText">
+NOTE: The description of this field was incorrect in the earlier versions of the KDWP Specification.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446966"> </a><div class="pTableText">
+<code class="cCode">FrameID</code>
+</div>
+</td>
+    <td><a name="wp446968"> </a><div class="pTableText">
+4 bytes
+</div>
+</td>
+    <td><a name="wp446970"> </a><div class="pTableText">
+Uniquely identifies a frame in the KVM. The <code class="cCode">frameID</code> must uniquely identify the frame within the entire KVM; it must be unique across all threads.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446972"> </a><div class="pTableText">
+<code class="cCode">Location</code>
+</div>
+</td>
+    <td><a name="wp446974"> </a><div class="pTableText">
+13 bytes
+</div>
+</td>
+    <td><a name="wp446976"> </a><div class="pTableText">
+An executable location. The location is identified by one byte type tag followed by a a <code class="cCode">referenceTypeID</code> followed by a <code class="cCode">methodID</code> followed by an unsigned eight-byte index, which identifies the location within the method. Index values are restricted as follows: 
+</div>
+<a name="wp446977"> </a><div class="pTableText">
+The index of the start location for the method is less than all other locations in the method. The index of the end location for the method is greater than all other locations in the method. Index values within a method are monotonically increasing from the first executable point in the method to the last. For many implementations, each byte-code instruction in the method has its own index, but this is not required. 
+</div>
+<a name="wp446978"> </a><div class="pTableText">
+The <code class="cCode">type</code> tag is necessary to identify whether location&#39;s <code class="cCode">referenceTypeID</code> identifies a class or an interface. Almost all locations are within classes, but it is possible to have executable code in the static initializer of an interface. 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446980"> </a><div class="pTableText">
+<code class="cCode">Value</code>
+</div>
+</td>
+    <td><a name="wp446982"> </a><div class="pTableText">
+Variable
+</div>
+</td>
+    <td><a name="wp446984"> </a><div class="pTableText">
+A value retrieved from the target VM. The first byte is a signature byte which is used to identify the type. See <code class="cCode">KDWP.Tag</code> for the possible values of this byte.Value&#39;s length is variable
+</div>
+<a name="wp446985"> </a><div class="pTableText">
+  <code class="cCode">byte</code>: 1-byte
+</div>
+<a name="wp446986"> </a><div class="pTableText">
+  <code class="cCode">short</code> or <code class="cCode">char</code>: 2-bytes
+</div>
+<a name="wp446987"> </a><div class="pTableText">
+  <code class="cCode">int</code>: 4-bytes
+</div>
+<a name="wp446988"> </a><div class="pTableText">
+  <code class="cCode">long</code>: 8-bytes
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446990"> </a><div class="pTableText">
+<code class="cCode">Untagged value</code>
+</div>
+</td>
+    <td><a name="wp446992"> </a><div class="pTableText">
+Variable
+</div>
+</td>
+    <td><a name="wp446994"> </a><div class="pTableText">
+A value as described above without the signature byte. This form is used when the signature information can be determined from context. 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446996"> </a><div class="pTableText">
+<code class="cCode">String</code>
+</div>
+</td>
+    <td><a name="wp446998"> </a><div class="pTableText">
+Variable
+</div>
+</td>
+    <td><a name="wp447000"> </a><div class="pTableText">
+A UTF-8 encoded string, not zero terminated, preceded by a four-byte integer length.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp446894"> </a><h2 class="pHeading1">
+1.4	Protocol details
+</h2>
+<hr width="100%" class="pHr"/><a name="wp432309"> </a><p class="pNote">
+<b>Note &#8211;</b>  The commands in each command set are numbered to match the equivalent JDWP (Java Debug Wire Protocol) commands. Commands that are missing from the following list are presumed to be handled via the Debug Agent or are not necessary for minimal debugger functionality. Implementers could extend the KVM command set to handle more of the JDWP commands. 
+</p><hr width="100%" class="pHr"/><a name="wp432311"> </a>
+&#160;VirtualMachine command set (1)
+
+<a name="wp432313"> </a><p class="pIndented2">
+<code class="cCode">AllClasses</code> (3)<br /><code class="cCode">AllThreads</code> (4)<br /><code class="cCode">Suspend</code> (8)<br /><code class="cCode">Resume</code> (9)<br /><code class="cCode">Exit</code> (10)
+</p>
+<a name="wp434541"> </a>
+&#160;ReferenceType command set (2)
+
+<a name="wp434542"> </a><p class="pIndented2">
+<code class="cCode">GetValues</code> (6)
+</p>
+<a name="wp432329"> </a>
+&#160;ClassType command set (3)
+
+<a name="wp432331"> </a><p class="pIndented2">
+<code class="cCode">Superclass</code> (1)<br /><code class="cCode">SetValues</code> (2)
+</p>
+<a name="wp432333"> </a>
+&#160;ObjectReference command set (9)
+
+<a name="wp432335"> </a><p class="pIndented2">
+<code class="cCode">ReferenceType</code> (1)<br /><code class="cCode">GetValues</code> (2)<br /><code class="cCode">SetValues</code> (3)
+</p>
+<a name="wp432337"> </a>
+&#160;StringReference command set (10)
+
+<a name="wp437152"> </a><p class="pBody">
+<code class="cCode">  Value</code> (1)
+</p>
+<a name="wp437153"> </a>
+&#160;ThreadReference command set (11)
+
+<a name="wp439531"> </a><p class="pBody">
+    <code class="cCode">Name</code> (1)<br />    <code class="cCode">Suspend</code> (2)<br />    <code class="cCode">Resume</code> (3)<br />    <code class="cCode">Status</code> (4)<br />    <code class="cCode">Frames</code> (6)<br />    <code class="cCode">FrameCount</code> (7)<br />    <code class="cCode">Stop</code> (10)<br />    <code class="cCode">SuspendCount</code> (12)
+</p>
+<a name="wp432347"> </a>
+&#160;ArrayReference command set (13)
+
+<a name="wp432349"> </a><p class="pIndented2">
+<code class="cCode">Length</code> (1)<br /><code class="cCode">GetValues</code> (2)<br /><code class="cCode">SetValues</code> (3)
+</p>
+<a name="wp432351"> </a>
+&#160;EventRequest command set (15)
+
+<a name="wp432353"> </a><p class="pIndented2">
+<code class="cCode">Set</code> (1)
+</p>
+<a name="wp432355"> </a><p class="pIndented3">
+Event types:
+</p>
+<a name="wp432357"> </a><p class="pIndented3">
+   <code class="cCode">Class prepare<br /></code>   <code class="cCode">Breakpoint<br /></code>   <code class="cCode">Midlet death</code>
+</p>
+<a name="wp435100"> </a><p class="pIndented2">
+<code class="cCode">Clear</code> (2)
+</p>
+<a name="wp442356"> </a><p class="pIndented2">
+<code class="cCode">ClearAllBreakpoints</code> (3)
+</p>
+<a name="wp432363"> </a>
+&#160;StackFrame command set (16)
+
+<a name="wp432365"> </a><p class="pIndented2">
+<code class="cCode">GetValues</code> (1)<br /><code class="cCode">SetValues</code> (2)
+</p>
+<a name="wp434446"> </a>
+&#160;Event Command Set (64)
+
+<a name="wp432371"> </a><p class="pIndented2">
+<code class="cCode">Composite</code> (100)
+</p>
+<a name="wp432373"> </a>
+&#160;KVM Vendor Specific Command set (128)
+
+<a name="wp435121"> </a><p class="pIndented2">
+<code class="cCode">Handshake</code> (1)
+</p>
+<a name="wp432375"> </a><p class="pIndented3">
+Sends handshake string to KVM.<br />returns a 32 bit value that describes the capabilities of the KVM.
+</p>
+<a name="wp434501"> </a><p class="pBody">
+
+</p>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" width="100%">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="KDWPpreface.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="02-VM.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KDWP Specification <br /> KVM Debug Wire Protocol, 1.0</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    <p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169;
+       2002 Sun Microsystems, Inc. All rights reserved. Use is
+       subject to license terms. Third-party software, including
+       font  technology,  is copyrighted  and  licensed from  Sun
+       suppliers. Sun, Sun Microsystems, the Sun logo, Java and
+       Solaris are trademarks or registered trademarks of Sun
+       Microsystems, Inc. in the US and other countries.  Federal
+       Acquisitions: Commercial Software - Government Users
+       Subject to Standard License Terms and Conditions.</p>
+
+    <p class="copyright"><a
+       href="copyright.html">Copyright</a> &#169; 2002
+       Sun Microsystems, Inc. Tous droits r&#233;serv&#233;s.
+       Distribu&#233; par des licences qui en restreignent
+       l'utilisation.  Le logiciel d&#233;tenu par des tiers, et
+       qui comprend la technologie relative aux polices de
+       caract&#232;res, est prot&#233;g&#233; par un copyright et
+       licenci&#233; par des fournisseurs de Sun.  Sun, Sun
+       Microsystems, le logo Sun, Java et Solaris sont des
+       marques de fabrique ou des marques d&#233;pos&#233;es de
+       Sun Microsystems, Inc. aux Etats-Unis et dans d'autres
+       pays. </p>	
+  </body>
+</html>

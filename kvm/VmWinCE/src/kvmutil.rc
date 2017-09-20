@@ -1,0 +1,190 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_TRACE DIALOG DISCARDABLE  0, 0, 135, 200
+STYLE WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "Garbage Collection",IDC_GC,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,13,84,76,10
+    CONTROL         "Garbage Collection Verbose",IDC_GCVERBOSE,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,13,94,104,10
+    CONTROL         "Class Loading",IDC_CLASSLOADING,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,13,24,60,10
+    CONTROL         "Class Loading Verbose",IDC_CLASSLOADINGVERBOSE,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,13,34,88,10
+    CONTROL         "Byte Codes",IDC_BYTECODES,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,13,14,52,10
+    CONTROL         "Frames",IDC_FRAMES,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,13,74,39,10
+    CONTROL         "Exceptions",IDC_EXCEPTIONS,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,13,64,51,10
+    CONTROL         "Events",IDC_EVENTS,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,13,54,38,10
+    CONTROL         "Debugger",IDC_DEBUGGERTRACE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,13,44,47,10
+END
+
+IDD_DEBUGGER DIALOG DISCARDABLE  0, 0, 135, 200
+STYLE WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "Connect to Debugger",IDC_DEBUGGER,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,18,45,84,10
+    EDITTEXT        IDC_DEBUGPORT,41,79,40,14
+    LTEXT           "Port",IDC_DEBUGPORTLABEL,21,83,14,8
+    CONTROL         "Suspend (Default: true)",IDC_DEBUGGERSUSPEND,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,18,58,89,10
+END
+
+IDD_GENERAL DIALOG DISCARDABLE  0, 0, 135, 200
+STYLE WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Heap Size",IDC_MEMORY,10,91,34,8
+    CONTROL         "Slider1",IDC_HEAPSIZE,"msctls_trackbar32",TBS_BOTH | 
+                    WS_TABSTOP,48,85,80,28
+    EDITTEXT        IDC_HEAPDISPLAY,61,118,16,12,ES_RIGHT | ES_READONLY | 
+                    NOT WS_BORDER | NOT WS_TABSTOP
+    LTEXT           "Kb",IDC_KB,78,117,10,8
+    CONTROL         "Enable Output",IDC_OUTPUT,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,7,55,61,10
+    LTEXT           "Stdout and Stderror are stored in \\KVM directory",
+                    IDC_STATIC,10,20,90,20,NOT WS_GROUP
+    CONTROL         "Display stdout",IDC_STDOUT,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,7,68,60,10
+END
+
+IDD_TRACE2 DIALOG DISCARDABLE  0, 0, 135, 200
+STYLE WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "Memory Allocation",IDC_MEMALLOC,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,10,15,73,10
+    CONTROL         "Verifier",IDC_VERIFIER,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,10,95,37,10
+    CONTROL         "Stackmaps",IDC_STACKMAPS,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,10,75,51,10
+    CONTROL         "Method Calls",IDC_METHODCALLS,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,10,25,57,10
+    CONTROL         "Method Calls Verbose",IDC_METHODCALLSVERBOSE,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,10,35,85,10
+    CONTROL         "Stack Chunks",IDC_STACKCHUNKS,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,10,65,61,10
+    CONTROL         "Monitors",IDC_MONITORS,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,10,45,43,10
+    CONTROL         "Threading",IDC_THREADING,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,10,85,48,10
+    CONTROL         "Networking",IDC_NETWORKING,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,10,55,52,10
+END
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_TRACE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 128
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 173
+    END
+
+    IDD_DEBUGGER, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 128
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 193
+    END
+
+    IDD_GENERAL, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 128
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 193
+    END
+
+    IDD_TRACE2, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 128
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 193
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

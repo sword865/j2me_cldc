@@ -1,0 +1,148 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="book-no-index" />
+    <meta name="LASTUPDATED" content="10/19/02 17:07:30" />
+    <title>Preface</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="copyright.html" />
+    <link rel="Next" href="01-Introduction.html" />
+    <link rel="Index" href="07-Examples.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" width="100%">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="copyright.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="01-Introduction.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp146"> </a><h2 class="pNewHTMLPage">
+Preface
+</h2>
+<hr class="pHr"/>
+<a name="wp2367"> </a><p class="pBody">
+This document, <em class="cEmphasis">K Native Interface Specification</em>, defines a new native function interface, called the K Native Interface (KNI), for the Java&#8482; 2 Platform, Micro Edition (J2ME&#8482;). The K Native Interface is designed to improve the portability and compatibility of the native functions that are written for the K Virtual Machine (KVM), the CLDC HotSpot&#8482; Implementation JVM, or other Java virtual machine implementations that support the J2ME Connected, Limited Device Configuration (CLDC) standard. KNI is designed as a logical subset of the Java Native Interface (JNI). However, KNI is significantly more lightweight and more efficient in small devices than a full JNI implementation.
+</p>
+<a name="wp2374"> </a><h2 class="pHeading1">
+Who Should Use This Specification
+</h2>
+<a name="wp2375"> </a><p class="pBody">
+The audience for this document includes:
+</p>
+<ol class="pList1"><a name="wp2376"> </a><div class="pList1"><li>Device manufacturers and other companies and individuals who want to port the K Virtual Machine (KVM) or another J2ME CLDC compliant virtual machine onto a new platform, and who want to link their own native functions or other native libraries into the virtual machine.</li></div>
+<a name="wp2377"> </a><div class="pList1Last"><li>Third party (&#8220;clone&#8221;) virtual machine vendors and other companies and individuals who want to write their own Java virtual machine implementation, and who want to ensure that the native code linked into the virtual machine is as portable across different J2ME virtual machines as possible.</li></div>
+</ol>
+<a name="wp2378"> </a><p class="pBody">
+Note that KNI is an implementation-level interface. A virtual machine conforming to the CLDC Specification or another J2ME configuration specification is not required to support the K Native Interface, but may do so at the implementation level.
+</p>
+<a name="wp2408"> </a><h2 class="pHeading1">
+Related Documents
+</h2>
+<a name="wp2409"> </a><p class="pBody">
+The Java<em style="font-style: italic" class="cEmphasis">&#8482;</em> Language Specification (Java Series), Second Edition by James Gosling, Bill Joy, Guy Steele and Gilad Bracha. Addison-Wesley, 2000, ISBN 0-201-31008-2
+</p>
+<a name="wp2412"> </a><p class="pBody">
+<em class="cEmphasis">The Java&#8482; Virtual Machine Specification (Java Series), Second Edition</em> by Tim Lindholm and Frank Yellin (Addison-Wesley, 1999)
+</p>
+<a name="wp2385"> </a><p class="pBody">
+Programming Wireless Devices with the Java<em style="font-style: italic" class="cEmphasis">&#8482;</em> 2 Platform, Micro Edition (Java Series) by Roger Riggs, Antero Taivalsaari, and Mark VandenBrink. Addison-Wesley, 2001, ISBN 0-201-74627-1.
+</p>
+<a name="wp2386"> </a><p class="pBody">
+The Java<em style="font-style: italic" class="cEmphasis">&#8482;</em> Native Interface: Programmer&#8217;s Guide and Specification (Java Series) by Sheng Liang. Addison-Wesley, 1999, ISBN 0-201-32577-2.
+</p>
+<a name="wp2387"> </a><p class="pBody">
+Connected, Limited Device Configuration Specification, version 1.0, Java Community Process, Sun Microsystems, Inc. <br /><a href="http://java.sun.com/aboutJava/communityprocess/final/jsr030/" target="_blank">
+<span class="cWebJump">http://java.sun.com/aboutJava/communityprocess/final/jsr030/</span></a>
+</p>
+<a name="wp2388"> </a><p class="pBody">
+Java 2 Platform Micro Edition (J2ME<em style="font-style: italic" class="cEmphasis">&#8482;</em>) Technology for Creating Mobile Devices, A White Paper, Sun Microsystems, Inc. <br /><a href="http://java.sun.com/products/cldc/wp/KVMwp.pdf" target="_blank">
+<span class="cWebJump">http://java.sun.com/products/cldc/wp/KVMwp.pdf</span></a>
+</p>
+<a name="wp2389"> </a><h2 class="pHeading1">
+Version History
+</h2>
+<a name="wp2390"> </a><p class="pBody">
+September 7, 2001:			 The first 0.1 version based on an earlier draft prepared by Efren Serra.
+</p>
+<a name="wp2391"> </a><p class="pBody">
+September 30, 2001:			 Version 0.2 with significant changes to the goals and high-level structure of the document.
+</p>
+<a name="wp2392"> </a><p class="pBody">
+October 8, 2001:			 Version 0.3 with updated programming overview and significant changes to the data type and function chapters.
+</p>
+<a name="wp2393"> </a><p class="pBody">
+October 10, 2001: Version 0.4 prepared after detailed review meeting.
+</p>
+<a name="wp2394"> </a><p class="pBody">
+November 6, 2001: Version 0.9 with minor revisions to function descriptions. Removed <code class="cCode">KNI_GetStringChars</code>. Changed <code class="cCode">KNI_Throw</code> to <code class="cCode">KNI_ThrowNew</code>. Added a small sample program to illustrate string access.
+</p>
+<a name="wp2395"> </a><p class="pBody">
+January 3, 2002: Version 0.99 -- Small polishing, revised examples.
+</p>
+<a name="wp2396"> </a><p class="pBody">
+January 15, 2002: Version 1.0: Two additional functions, KNI_NewString and KNI_IsSameObject, added. Final polishing.
+</p>
+<a name="wp2397"> </a><p class="pBody">
+January 18, 2002: Version 1.0: Replaced the KNI_SetResultAs* functions with more portable KNI_Return* functions. Some changes to the handle operations as well.
+</p>
+<a name="wp2398"> </a><p class="pBody">
+February 11, 2002: Version 1.0: Minor clarifications to the description of the KNI_ThrowNew function. Updated the parameter types of KNI_Get/SetRawArrayRegion functions.
+</p>
+<a name="wp2418"> </a><p class="pBody">
+<em class="cEmphasis">October 18, 2002</em>: Version 1.0: Reformatted the KDWP Specification version 1.0 for Section 508 Accessibility. No changes in technical content of the specification.
+</p>
+<a name="wp2418x"> </a><p class="pBody">
+<em class="cEmphasis">December 5, 2002</em>: Version 1.0: Corrected minor typos in Section 4.3.1.
+</p>
+<a name="wp2418y"> </a><p class="pBody">
+<em class="cEmphasis">December 16, 2002</em>: Version 1.0: Documented restriction (no interface support) for function KNI_GetStaticFieldID in Section 5.6.1.
+</p>
+<a name="wp470"> </a><p class="pBody">
+
+</p>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" width="100%">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="copyright.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="01-Introduction.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KNI Specification <br /> K Native Interface (KNI), 1.0</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    <p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169;
+       2002 Sun Microsystems, Inc. All rights reserved.</p>
+  </body>
+</html>

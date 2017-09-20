@@ -1,0 +1,838 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="book-no-index" />
+    <meta name="LASTUPDATED" content="10/19/02 17:07:31" />
+    <title>KNI Data Types</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="03-Scope.html" />
+    <link rel="Next" href="05-Functions.html" />
+    <link rel="Index" href="07-Examples.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" width="100%">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="03-Scope.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="05-Functions.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp442605"> </a><h2 class="pChapNum">
+Chapter &#160; 4
+</h2>
+<a name="wp442606"> </a><h2 class="pNewHTMLPage">
+KNI Data Types
+</h2>
+<hr class="pHr"/>
+<a name="wp442611"> </a><p class="pBody">
+This chapter specifies the native data types supported by KNI. The data types are defined in the <code class="cCode">kni.h</code> header file.
+</p>
+<a name="wp442612"> </a><h2 class="pHeading1">
+4.1	Primitive and Reference Types
+</h2>
+<a name="wp442613"> </a><p class="pBody">
+KNI defines a set of C/C++ types that correspond to the primitive and reference types in the Java programming language. These primitive and reference types are used for referring to data structures inside KNI functions.
+</p>
+<a name="wp443915"> </a><p class="pBody">
+In addition, KNI defines special return types that must be used for specifying the return type of each native function that uses the KNI API.
+</p>
+<a name="wp442907"> </a><p class="pBody">
+To ensure maximum portability of native code, you shall not use any VM-specific data types in your native code that uses the KNI API.
+</p>
+<a name="wp442614"> </a><h3 class="pHeading2">
+4.1.1	Primitive Types
+</h3>
+<a name="wp442618"> </a><p class="pBody">
+<a  href="04-DataTypes.html#wp444812">TABLE&#160;2</a> describes the primitive types in the Java programming language and the corresponding types in the KNI. Just like their counterparts in the Java programming language, all the primitive types in the KNI have well-defined sizes.</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444809">
+  <caption><a name="wp444812"> </a><div class="pTableCaption">
+TABLE&#160;2&#160;&#160;&#8211;&#160;&#160;The KNI primitive types
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp444818"> </a><div style="text-align: left" class="pTableHead">
+Java language type
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp444820"> </a><div style="text-align: left" class="pTableHead">
+KNI primitive type
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp444822"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp444824"> </a><div class="pTableText">
+<code class="cCode">boolean</code>
+</div>
+</td>
+    <td><a name="wp444826"> </a><div class="pTableText">
+<code class="cCode">jboolean</code>
+</div>
+</td>
+    <td><a name="wp444828"> </a><div class="pTableText">
+unsigned 8 bits
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444830"> </a><div class="pTableText">
+<code class="cCode">byte</code>
+</div>
+</td>
+    <td><a name="wp444832"> </a><div class="pTableText">
+<code class="cCode">jbyte</code>
+</div>
+</td>
+    <td><a name="wp444834"> </a><div class="pTableText">
+signed 8 bits
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444836"> </a><div class="pTableText">
+<code class="cCode">char</code>
+</div>
+</td>
+    <td><a name="wp444838"> </a><div class="pTableText">
+<code class="cCode">jchar</code>
+</div>
+</td>
+    <td><a name="wp444840"> </a><div class="pTableText">
+unsigned 16 bits
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444842"> </a><div class="pTableText">
+<code class="cCode">short</code>
+</div>
+</td>
+    <td><a name="wp444844"> </a><div class="pTableText">
+<code class="cCode">jshort</code>
+</div>
+</td>
+    <td><a name="wp444846"> </a><div class="pTableText">
+signed 16 bits
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444848"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp444850"> </a><div class="pTableText">
+<code class="cCode">jint</code>
+</div>
+</td>
+    <td><a name="wp444852"> </a><div class="pTableText">
+signed 32 bits
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444854"> </a><div class="pTableText">
+<code class="cCode">long</code>
+</div>
+</td>
+    <td><a name="wp444856"> </a><div class="pTableText">
+<code class="cCode">jlong</code>
+</div>
+</td>
+    <td><a name="wp444858"> </a><div class="pTableText">
+signed 64 bits
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444860"> </a><div class="pTableText">
+<code class="cCode">float</code>
+</div>
+</td>
+    <td><a name="wp444862"> </a><div class="pTableText">
+<code class="cCode">jfloat</code>
+</div>
+</td>
+    <td><a name="wp444864"> </a><div class="pTableText">
+32 bits
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444866"> </a><div class="pTableText">
+<code class="cCode">double</code>
+</div>
+</td>
+    <td><a name="wp444868"> </a><div class="pTableText">
+<code class="cCode">jdouble</code>
+</div>
+</td>
+    <td><a name="wp444870"> </a><div class="pTableText">
+64 bits
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp442682"> </a><p class="pBody">
+The <code class="cCode">jsize</code> integer type is used to describe cardinal indices and sizes; this is accomplished via the C/C++ typedef mechanism:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<a name="wp442683"> </a>
+    typedef jint jsize;<a name="wp442908"> </a>
+</pre></div>
+<a name="wp442684"> </a><h3 class="pHeading2">
+4.1.2	Reference Types
+</h3>
+<a name="wp442685"> </a><p class="pBody">
+KNI includes a number of reference types that correspond to the different kinds of reference types in the Java programming language. The KNI reference types are organized in the type hierarchy shown below.</p><div align="center"><img src="images/04-DataTypesa.gif" height="360" width="471" alt="Graph showing hierarchy of KNI reference types." border="0" hspace="0" vspace="0"/></div><p class="pBody">
+</p>
+<a name="wp443069"> </a><div class="pFigureCaption">
+FIGURE&#160;1&#160;&#160;&#8211;&#160;&#160;KNI reference types
+<br /><br />
+</div><a name="wp446593"> </a><p class="pBody">
+When used in conjunction with The C Programming Language, all other KNI reference types are defined to be the same as type <code class="cCode">jobject</code> by the use of the C typedef mechanism. For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    typedef struct _jobject* jobject;<a name="wp443051"> </a>
+    typedef jobject jclass;<a name="wp442702"> </a>
+</pre></div>
+<a name="wp443852"> </a><p class="pBody">
+Note that <code class="cCode">jobject</code> is intended to be an opaque type. That is, the KNI programmer may not rely on the internal structure of this type, as its definition may vary from one virtual machine implementation to another.
+</p>
+<a name="wp443900"> </a><h3 class="pHeading2">
+4.1.3	Return Types
+</h3>
+<a name="wp443901"> </a><p class="pBody">
+KNI defines special return types that must be used when defining the return type for each native function that uses the KNI. The following return types are supported.</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444991">
+  <caption><a name="wp444993"> </a><div class="pTableCaption">
+TABLE&#160;3&#160;&#160;&#8211;&#160;&#160;Native function return types
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp444999"> </a><div style="text-align: left" class="pTableHead">
+Java language type
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp445001"> </a><div style="text-align: left" class="pTableHead">
+KNI type
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp445003"> </a><div style="text-align: left" class="pTableHead">
+Corresponding KNI return type
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp445005"> </a><div class="pTableText">
+<code class="cCode">void</code>
+</div>
+</td>
+    <td><a name="wp445007"> </a><div class="pTableText">
+<code class="cCode">&lt;n/a&gt;</code>
+</div>
+</td>
+    <td><a name="wp445009"> </a><div class="pTableText">
+<code class="cCode">KNI_RETURNTYPE_VOID</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445011"> </a><div class="pTableText">
+<code class="cCode">boolean</code>
+</div>
+</td>
+    <td><a name="wp445013"> </a><div class="pTableText">
+<code class="cCode">jboolean</code>
+</div>
+</td>
+    <td><a name="wp445015"> </a><div class="pTableText">
+<code class="cCode">KNI_RETURNTYPE_BOOLEAN</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445017"> </a><div class="pTableText">
+<code class="cCode">byte</code>
+</div>
+</td>
+    <td><a name="wp445019"> </a><div class="pTableText">
+<code class="cCode">jbyte</code>
+</div>
+</td>
+    <td><a name="wp445021"> </a><div class="pTableText">
+<code class="cCode">KNI_RETURNTYPE_BYTE</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445023"> </a><div class="pTableText">
+<code class="cCode">char</code>
+</div>
+</td>
+    <td><a name="wp445025"> </a><div class="pTableText">
+<code class="cCode">jchar</code>
+</div>
+</td>
+    <td><a name="wp445027"> </a><div class="pTableText">
+<code class="cCode">KNI_RETURNTYPE_CHAR</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445029"> </a><div class="pTableText">
+<code class="cCode">short</code>
+</div>
+</td>
+    <td><a name="wp445031"> </a><div class="pTableText">
+<code class="cCode">jshort</code>
+</div>
+</td>
+    <td><a name="wp445033"> </a><div class="pTableText">
+<code class="cCode">KNI_RETURNTYPE_SHORT</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445035"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp445037"> </a><div class="pTableText">
+<code class="cCode">jint</code>
+</div>
+</td>
+    <td><a name="wp445039"> </a><div class="pTableText">
+<code class="cCode">KNI_RETURNTYPE_INT</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445041"> </a><div class="pTableText">
+<code class="cCode">long</code>
+</div>
+</td>
+    <td><a name="wp445043"> </a><div class="pTableText">
+<code class="cCode">jlong</code>
+</div>
+</td>
+    <td><a name="wp445045"> </a><div class="pTableText">
+<code class="cCode">KNI_RETURNTYPE_LONG</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445047"> </a><div class="pTableText">
+<code class="cCode">float</code>
+</div>
+</td>
+    <td><a name="wp445049"> </a><div class="pTableText">
+<code class="cCode">jfloat</code>
+</div>
+</td>
+    <td><a name="wp445051"> </a><div class="pTableText">
+<code class="cCode">KNI_RETURNTYPE_FLOAT</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445053"> </a><div class="pTableText">
+<code class="cCode">double</code>
+</div>
+</td>
+    <td><a name="wp445055"> </a><div class="pTableText">
+<code class="cCode">jdouble</code>
+</div>
+</td>
+    <td><a name="wp445057"> </a><div class="pTableText">
+<code class="cCode">KNI_RETURNTYPE_DOUBLE</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445059"> </a><div class="pTableText">
+&lt;object ref&gt;
+</div>
+</td>
+    <td><a name="wp445061"> </a><div class="pTableText">
+<code class="cCode">jobject</code>
+</div>
+</td>
+    <td><a name="wp445063"> </a><div class="pTableText">
+<code class="cCode">KNI_RETURNTYPE_OBJECT</code>
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp443922"> </a><p class="pBody">
+The presence of the return types allows the virtual machine implementing the K Native Interface to use different implementation techniques for returning values back from native functions. For example, in the KVM implementation of the KNI, the actual C data type of the KNI return types is &#8216;<code class="cCode">void</code>&#8217;, whereas other virtual machines may need to map the return types to applicable VM-specific data types.
+</p>
+<a name="wp442745"> </a><h2 class="pHeading1">
+4.2	Field IDs
+</h2>
+<a name="wp443084"> </a><p class="pBody">
+Field IDs are regular C pointer types:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    struct _jfieldID; /* opaque C structure */<a name="wp443085"> </a>
+    typedef struct _jfieldID* jfieldID; /* field ID */<a name="wp443086"> </a>
+</pre></div>
+<a name="wp443175"> </a><p class="pBody">
+Note that <code class="cCode">fieldID</code> is intended to be an opaque type. That is, the KNI programmer may not rely on the internal structure of this type, as its definition may vary from one virtual machine implementation to another.
+</p>
+<a name="wp443083"> </a><h2 class="pHeading1">
+4.3	String Formats
+</h2>
+<a name="wp442746"> </a><p class="pBody">
+The KNI uses UTF-8  strings in the <code class="cCode">const char*</code> format for reading class names and field names that are provided as parameters to certain KNI functions. These UTF-8 strings are converted to Unicode strings inside the KNI implementation as necessary. Some KNI operations read and return data in buffers that are assumed to be large enough for Unicode strings (each Unicode character is 16 bits wide.)
+</p>
+<a name="wp442747"> </a><h3 class="pHeading2">
+4.3.1	UTF-8 Strings
+</h3>
+<a name="wp443332"> </a><p class="pBody">
+UTF-8 strings are encoded so that character sequences that contain only non-null ASCII characters can be represented using only one byte per character, but characters of up to 16 bits can be represented. All characters in the range <code class="cCode">&#8216;\u0001&#8217;</code> to <code class="cCode">&#8216;\u007f&#8217;</code> are represented by a single byte, as follows:</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq446151">
+  <caption><a name="wp446154"> </a><div class="pTableCaption">
+
+</div>
+</caption>
+  <tr align="left">    <td><div class="pPreformatted"><pre class="pPreformatted">
+0<a name="wp446158"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+bits 6&#8211;0<a name="wp446160"> </a>
+</pre></div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp442755"> </a><p class="pBody">
+The seven bits of data in the byte give the value of the character that is represented. The null character (<code class="cCode">&#8216;\u0000&#8217;</code>) and characters in the range <code class="cCode">&#8216;\u0080&#8217;</code> to <code class="cCode">&#8216;\u07ff&#8217;</code> are represented by a pair of bytes, <code class="cCode">x</code> and <code class="cCode">y</code>, as follows:
+</p>
+<a name="wp442765"> </a><p class="pBody">
+<code class="cCode">x</code>: </p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq442756">
+  <caption><a name="wp445078"> </a><div class="pTableCaption">
+
+</div>
+</caption>
+  <tr align="left">    <td><div class="pPreformatted"><pre class="pPreformatted">
+1<a name="wp442758"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+1<a name="wp442760"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+0<a name="wp442762"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+bits 10-6<a name="wp442764"> </a>
+</pre></div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp442773"> </a><p class="pBody">
+<code class="cCode">y</code>: </p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq442766">
+  <caption><a name="wp445086"> </a><div class="pTableCaption">
+
+</div>
+</caption>
+  <tr align="left">    <td><div class="pPreformatted"><pre class="pPreformatted">
+1<a name="wp442768"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+0<a name="wp442770"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+bits 5-0<a name="wp442772"> </a>
+</pre></div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp442774"> </a><p class="pBody">
+The bytes represent the character with the value <code class="cCode">((x &amp; 0x1f) &lt;&lt; 6) + (y &amp; 0x3f)</code>.
+</p>
+<a name="wp442775"> </a><p class="pBody">
+Characters in the range &#8216;<code class="cCode">\u0800</code>&#8217; to &#8216;<code class="cCode">\uffff</code>&#8217; are represented by three bytes, <code class="cCode">x</code>, <code class="cCode">y</code>, and <code class="cCode">z</code>, as follows:
+</p>
+<a name="wp442787"> </a><p class="pBody">
+x:</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq442776">
+  <caption><a name="wp445092"> </a><div class="pTableCaption">
+
+</div>
+</caption>
+  <tr align="left">    <td><div class="pPreformatted"><pre class="pPreformatted">
+1<a name="wp442778"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+1<a name="wp442780"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+1<a name="wp442782"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+0<a name="wp442784"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+bits 15-12<a name="wp442786"> </a>
+</pre></div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp442795"> </a><p class="pBody">
+<code class="cCode">y</code>:</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq442788">
+  <caption><a name="wp445102"> </a><div class="pTableCaption">
+
+</div>
+</caption>
+  <tr align="left">    <td><div class="pPreformatted"><pre class="pPreformatted">
+1<a name="wp442790"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+0<a name="wp442792"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+bits 11-6<a name="wp442794"> </a>
+</pre></div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp442803"> </a><p class="pBody">
+<code class="cCode">z</code>:</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq442796">
+  <caption><a name="wp445108"> </a><div class="pTableCaption">
+
+</div>
+</caption>
+  <tr align="left">    <td><div class="pPreformatted"><pre class="pPreformatted">
+1<a name="wp442798"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+0&#160;<a name="wp442800"> </a>
+</pre></div>
+</td>
+    <td><div class="pPreformatted"><pre class="pPreformatted">
+bits 5-0<a name="wp442802"> </a>
+</pre></div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp442804"> </a><p class="pBody">
+The character with the value <code class="cCode">((x &amp; 0xf) &lt;&lt; 12) + ((y &amp; 0x3f) &lt;&lt; 6) + (z &amp; 0x3f)</code> is represented by the three bytes.
+</p>
+<a name="wp442805"> </a><p class="pBody">
+There are two differences between this format and the standard UTF-8 format. First, the null byte <code class="cCode">(byte)0</code> is encoded using the two-byte format rather than the one-byte format. This means that KNI UTF-8 strings never have embedded nulls. Second, only the one-byte, two-byte, and three-byte formats are used. KNI does not recognize the longer UTF-8 formats.
+</p>
+<a name="wp442806"> </a><h3 class="pHeading2">
+4.3.2	Class Descriptors
+</h3>
+<a name="wp442807"> </a><p class="pBody">
+A class descriptor represents the name of a class or an interface. It can be derived from a fully qualified class or interface name as defined in The Java Language Specification by substituting the &#8220;.&#8221; character with the &#8220;/&#8221; character. For instance, the class descriptor for <code class="cCode">java.lang.String</code> is:
+</p>
+<a name="wp442808"> </a><p class="pBody">
+    &#8220;<code class="cCode">java/lang/String</code>&#8221;
+</p>
+<a name="wp442809"> </a><p class="pBody">
+Array classes are formed using the &#8220;[&#8221; character followed by the field descriptor of the element type. The class descriptor for &#8220;<code class="cCode">int[]</code>&#8221; is:
+</p>
+<a name="wp442810"> </a><p class="pBody">
+    &#8220;<code class="cCode">[I</code>&#8221;
+</p>
+<a name="wp442811"> </a><p class="pBody">
+and the class descriptor for &#8220;<code class="cCode">double[][][]</code>&#8221; is:
+</p>
+<a name="wp442812"> </a><p class="pBody">
+    &#8220;<code class="cCode">[[[D</code>&#8221;
+</p>
+<a name="wp442813"> </a><h3 class="pHeading2">
+4.3.3	Field Descriptors
+</h3>
+<a name="wp442817"> </a><p class="pBody">
+Table <a  href="04-DataTypes.html#wp446098">TABLE&#160;4</a> shows the field descriptors for the primitive types exported by the KNI.</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq446095">
+  <caption><a name="wp446098"> </a><div class="pTableCaption">
+TABLE&#160;4&#160;&#160;&#8211;&#160;&#160;The field descriptors for the KNI primitive types
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp446102"> </a><div style="text-align: left" class="pTableHead">
+Field Descriptor
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp446104"> </a><div style="text-align: left" class="pTableHead">
+The Java language type
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp446106"> </a><div class="pTableText">
+<code class="cCode">Z</code>
+</div>
+</td>
+    <td><a name="wp446108"> </a><div class="pTableText">
+<code class="cCode">boolean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446110"> </a><div class="pTableText">
+<code class="cCode">B</code>
+</div>
+</td>
+    <td><a name="wp446112"> </a><div class="pTableText">
+<code class="cCode">byte</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446114"> </a><div class="pTableText">
+<code class="cCode">C</code>
+</div>
+</td>
+    <td><a name="wp446116"> </a><div class="pTableText">
+<code class="cCode">char</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446118"> </a><div class="pTableText">
+<code class="cCode">S</code>
+</div>
+</td>
+    <td><a name="wp446120"> </a><div class="pTableText">
+<code class="cCode">short</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446122"> </a><div class="pTableText">
+<code class="cCode">I</code>
+</div>
+</td>
+    <td><a name="wp446124"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446126"> </a><div class="pTableText">
+<code class="cCode">J</code>
+</div>
+</td>
+    <td><a name="wp446128"> </a><div class="pTableText">
+<code class="cCode">long</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446130"> </a><div class="pTableText">
+<code class="cCode">F</code>
+</div>
+</td>
+    <td><a name="wp446132"> </a><div class="pTableText">
+<code class="cCode">float</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446134"> </a><div class="pTableText">
+<code class="cCode">D</code>
+</div>
+</td>
+    <td><a name="wp446136"> </a><div class="pTableText">
+<code class="cCode">double</code>
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp442861"> </a><p class="pBody">
+The field descriptors of reference types begin with the &#8220;L&#8221; character, followed by the class descriptor, and terminated by the &#8220;;&#8221; character. Field descriptors of array types are formed following the same rule as class descriptors of array classes. <a  href="04-DataTypes.html#wp442868">TABLE&#160;5</a> contains examples of field descriptors for reference types and their Java programming language counterparts.</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq442865">
+  <caption><a name="wp442868"> </a><div class="pTableCaption">
+TABLE&#160;5&#160;&#160;&#8211;&#160;&#160;Examples of field descriptors for reference types
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp442872"> </a><div style="text-align: left" class="pTableHead">
+Field Descriptor
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp442874"> </a><div style="text-align: left" class="pTableHead">
+The Java language type
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp442876"> </a><div class="pTableText">
+&#8220;<code class="cCode">Ljava/lang/String;&#8221;</code>
+</div>
+</td>
+    <td><a name="wp442878"> </a><div class="pTableText">
+<code class="cCode">String</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp442880"> </a><div class="pTableText">
+<code class="cCode">&#8220;[I&#8221;</code>
+</div>
+</td>
+    <td><a name="wp442882"> </a><div class="pTableText">
+<code class="cCode">int[]</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp442884"> </a><div class="pTableText">
+<code class="cCode">&#8220;[Ljava/lang/Object;&#8221;</code>
+</div>
+</td>
+    <td><a name="wp442886"> </a><div class="pTableText">
+<code class="cCode">java.lang.Object[]</code>
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp442888"> </a><h2 class="pHeading1">
+4.4	Constants
+</h2>
+<a name="wp443103"> </a><p class="pBody">
+File &#8216;<code class="cCode">kni.h</code>&#8217; defines certain constants and macros that are commonly used in native functions. These include the following:
+</p>
+<ul class="pBullet1"><a name="wp443342"> </a><div class="pBullet1"><li><code class="cCode">KNIEXPORT</code></li></div>
+<a name="wp443344"> </a><div class="pBullet1Plus"><li><code class="cCode">KNI_FALSE</code></li></div>
+<a name="wp443345"> </a><div class="pBullet1Plus"><li><code class="cCode">KNI_TRUE</code></li></div>
+<a name="wp443346"> </a><div class="pBullet1Plus"><li><code class="cCode">KNI_OK</code></li></div>
+<a name="wp443347"> </a><div class="pBullet1Plus"><li><code class="cCode">KNI_ERROR</code></li></div>
+<a name="wp443348"> </a><div class="pBullet1Last"><li><code class="cCode">KNI_VERSION</code></li></div>
+</ul>
+<a name="wp443337"> </a><p class="pBody">
+<code class="cCode">KNIEXPORT</code> is a macro used to specify the calling and linkage conventions of both KNI functions and native method implementations.  The programmer is recommended to place the <code class="cCode">KNIEXPORT</code> macro before the function return type. For example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    KNIEXPORT void Java_mypackage_Cls_f();<a name="wp443104"> </a>
+</pre></div>
+<a name="wp443108"> </a><p class="pBody">
+is the prototype for a C function that implements method <code class="cCode">f</code> of class <code class="cCode">Cls</code> in package <code class="cCode">mypackage.</code>
+</p>
+<a name="wp443118"> </a><p class="pBody">
+<code class="cCode">KNI_FALSE</code> and <code class="cCode">KNI_TRUE</code> are constants defined for the <code class="cCode">jboolean</code> type:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    #define KNI_FALSE 0<a name="wp443130"> </a>
+    #define KNI_TRUE 1<a name="wp443131"> </a>
+</pre></div>
+<a name="wp443135"> </a><p class="pBody">
+<code class="cCode">KNI_OK</code> represents the successful return value of a few KNI functions, and <code class="cCode">KNI_ERR</code> is sometimes used to represent error conditions.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    #define KNI_OK 0<a name="wp443139"> </a>
+    #define KNI_ERR -1<a name="wp443140"> </a>
+</pre></div>
+<a name="wp443141"> </a><p class="pBody">
+<code class="cCode">KNI_VERSION</code> represents the KNI version number.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    #define KNI_VERSION 0x00010000 /* KNI version 1.0 */<a name="wp443145"> </a>
+</pre></div>
+<a name="wp443146"> </a><p class="pBody">
+
+</p>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" width="100%">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="03-Scope.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="05-Functions.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KNI Specification <br /> K Native Interface (KNI), 1.0</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    <p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169;
+       2002 Sun Microsystems, Inc. All rights reserved.</p>
+  </body>
+</html>

@@ -1,0 +1,345 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="508 Compliant Book Without Index" />
+    <meta name="LASTUPDATED" content="10/18/02 16:56:38" />
+    <title>EventRequest Command Set</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="08-ArrayRef.html" />
+    <link rel="Next" href="10-StackFrame.html" />
+    <link rel="Index" href="13-Appendix.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" width="100%">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="08-ArrayRef.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="10-StackFrame.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp432786"> </a><h2 class="pChapNum">
+Chapter &#160; 9
+</h2>
+<a name="wp442171"> </a><h2 class="pNewHTMLPage">
+EventRequest Command Set
+</h2>
+<hr class="pHr"/>
+<a name="wp439925"> </a><p class="pBody">
+This command set is numbered (15) to match the equivalent JDWP command set.
+</p>
+<a name="wp432790"> </a>
+&#160;Set Command (1)
+
+<a name="wp442413"> </a><p class="pBody">
+Set an event request. When the event described by this request occurs, an <code class="cCode">event</code> is sent from the target VM. 
+</p>
+<a name="wp442471"> </a><h5 class="pHeading4">
+Out Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444769">
+  <caption><a name="wp444772"> </a><div class="pTableCaption">
+TABLE&#160;35&#160;&#160;&#8211;&#160;&#160;Structure of Out Data for Set Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp444778"> </a><div class="pTableText">
+<code class="cCode">byte</code>
+</div>
+</td>
+    <td><a name="wp444780"> </a><div class="pTableText">
+<em class="cEmphasis">eventKind</em>
+</div>
+</td>
+    <td><a name="wp444782"> </a><div class="pTableText">
+Event kind to request. See <code class="cCode">KDWP.EventKind</code> for a complete list of events that can be requested. The default is to support only <code class="cCode">Breakpoint</code>, <code class="cCode">Class_Prepare</code> and <code class="cCode">Midlet_Death</code> events. 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444784"> </a><div class="pTableText">
+<code class="cCode">byte</code>
+</div>
+</td>
+    <td><a name="wp444786"> </a><div class="pTableText">
+<em class="cEmphasis">suspendPolicy</em>
+</div>
+</td>
+    <td><a name="wp444788"> </a><div class="pTableText">
+What threads are suspended when this event occurs? Note that the order of events and command replies accurately reflects the order in which threads are suspended and resumed. For example, if a <code class="cCode">VM-wide resume</code> is processed before an event occurs which suspends the VM, the reply to the <code class="cCode">resume</code> command is written to the transport before the suspending event.&#160; Refer to SuspendPolicy Constants in the Appendix.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444790"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp444792"> </a><div class="pTableText">
+<em class="cEmphasis">modifiers</em>
+</div>
+</td>
+    <td><a name="wp444794"> </a><div class="pTableText">
+Constraints used to control the number of generated events. <em class="cEmphasis">Modifiers</em> specify additional tests that an event must satisfy before it is placed in the event queue. Events are filtered by applying each modifier to an event in the order they are specified in this collection Only events that satisfy all modifiers are reported. 
+</div>
+<a name="wp444795"> </a><div class="pTableText">
+Filtering can improve debugger performance dramatically by reducing the amount of event traffic sent from the target VM to the debugger VM. &#160; 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="3" rowspan="1"><a name="wp444797"> </a><div class="pTableText">
+Repeated <em class="cEmphasis">modifiers</em> times:
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444803"> </a><div class="pTableText">
+<code class="cCode">byte</code>
+</div>
+</td>
+    <td><a name="wp444805"> </a><div class="pTableText">
+<em class="cEmphasis">modKind</em>
+</div>
+</td>
+    <td><a name="wp444807"> </a><div class="pTableText">
+Modifier kind&#160;
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="2" rowspan="1"><a name="wp444809"> </a><div class="pTableText">
+Case <code class="cCode">ClassOnly</code> - if <em class="cEmphasis">modKind</em> is 4: 
+</div>
+</td>
+    <td><a name="wp444813"> </a><div class="pTableText">
+For <code class="cCode">class prepare</code> events, restricts the events generated by this request to be the preparation of the given reference type and any subtypes. For other events, restricts the events generated by this request to those whose location is in the given reference type or any of its subtypes. An event is generated for any location in a reference type that can be safely cast to the given reference type. This modifier can be used with any event kind except <code class="cCode">class unload</code>, <code class="cCode">thread start</code>, and <code class="cCode">thread end</code>. 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444815"> </a><div class="pTableText">
+<code class="cCode">referenceTypeID</code>
+</div>
+</td>
+    <td><a name="wp444817"> </a><div class="pTableText">
+<em class="cEmphasis">clazz</em>
+</div>
+</td>
+    <td><a name="wp444819"> </a><div class="pTableText">
+Required class&#160; 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="2" rowspan="1"><a name="wp444809"> </a><div class="pTableText">
+Case <code class="cCode">ClassMatch</code> - if <em class="cEmphasis">modKind</em> is 5: 
+</div>
+</td>
+    <td><a name="wp444813"> </a><div class="pTableText">
+Restricts reported events to those for classes whose name matches the given restricted regular expression. 
+For <code class="cCode">class prepare</code> events, the prepared class name is matched. 
+For <code class="cCode">class unload</code> events, the unloaded class name is matched. 
+For other events, the class name of the event's location is matched. 
+This modifier can be used with any event kind except thread start and thread end. 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444815"> </a><div class="pTableText">
+<code class="cCode">string</code>
+</div>
+</td>
+    <td><a name="wp444817"> </a><div class="pTableText">
+<em class="cEmphasis">classPattern</em>
+</div>
+</td>
+    <td><a name="wp444819"> </a><div class="pTableText">
+Matches are limited to exact matches of the given class pattern and matches of patterns that begin or 
+end with "*"; for example, "*.Foo"or "java.*".&#160; 
+</div>
+</td>
+</tr>
+<tr align="left">    <td colspan="2" rowspan="1"><a name="wp444821"> </a><div class="pTableText">
+Case <code class="cCode">LocationOnly</code> - if <em class="cEmphasis">modKind</em> is 7: 
+</div>
+</td>
+    <td><a name="wp444825"> </a><div class="pTableText">
+Restricts reported events to those that occur at the given location. This modifier can be used with <code class="cCode">breakpoint</code>, <code class="cCode">field access</code>, <code class="cCode">field modification</code>, <code class="cCode">step</code>, and <code class="cCode">exception</code> event kinds. &#160; 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444827"> </a><div class="pTableText">
+<code class="cCode">location</code>
+</div>
+</td>
+    <td><a name="wp444829"> </a><div class="pTableText">
+<em class="cEmphasis">loc</em>
+</div>
+</td>
+    <td><a name="wp444831"> </a><div class="pTableText">
+Required location&#160;
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp444677"> </a><h5 class="pHeading4">
+Reply Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444847">
+  <caption><a name="wp444850"> </a><div class="pTableCaption">
+TABLE&#160;36&#160;&#160;&#8211;&#160;&#160;Structure of Reply Data for Set Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp444856"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp444858"> </a><div class="pTableText">
+<em class="cEmphasis">requestID</em>
+</div>
+</td>
+    <td><a name="wp444860"> </a><div class="pTableText">
+ID of created request&#160; 
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp444686"> </a>
+&#160;Clear Command (2)
+
+<a name="wp432808"> </a><p class="pBody">
+Clear an event request. 
+</p>
+<a name="wp432810"> </a><h5 class="pHeading4">
+Out Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444877">
+  <caption><a name="wp444880"> </a><div class="pTableCaption">
+TABLE&#160;37&#160;&#160;&#8211;&#160;&#160;Structure of Out Data for Clear Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp444886"> </a><div class="pCellBody">
+<code class="cCode">byte</code>
+</div>
+</td>
+    <td><a name="wp444888"> </a><div style="color: #000000; font-size: 8pt; font-style: italic; font-variant: normal; font-weight: normal; margin-bottom: 4pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+<em class="cEmphasis">event</em>
+</div>
+</td>
+    <td><a name="wp444890"> </a><div style="color: #000000; font-size: 8pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 4pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Event type to clear&#160;
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444892"> </a><div class="pCellBody">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp444894"> </a><div style="color: #000000; font-size: 8pt; font-style: italic; font-variant: normal; font-weight: normal; margin-bottom: 4pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+<em class="cEmphasis">requestID</em>
+</div>
+</td>
+    <td><a name="wp444896"> </a><div style="color: #000000; font-size: 8pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 4pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+ID of request to clear&#160; 
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp434485"> </a><h5 class="pHeading4">
+Reply Data 
+</h5>
+<a name="wp432817"> </a><p class="pBody">
+(None) 
+</p>
+<a name="wp442480"> </a>
+&#160; ClearAllBreakpoints Command (3)
+
+<a name="wp442481"> </a><p class="pBody">
+Remove all set breakpoints. 
+</p>
+<a name="wp442511"> </a><p class="pBody">
+If bit 14 in the handshake is set, which means that the KVM stores event information, then the <code class="cCode">ClearAllBreakpoints</code> command should be supported. Otherwise it is not supported.
+</p>
+<a name="wp442495"> </a><h5 class="pHeading4">
+Out Data
+</h5>
+<a name="wp442508"> </a><p class="pBody">
+(None) 
+</p>
+<a name="wp442496"> </a><h5 class="pHeading4">
+Reply Data 
+</h5>
+<a name="wp442497"> </a><p class="pBody">
+(None) 
+</p>
+<a name="wp434501"> </a><p class="pBody">
+
+</p>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" width="100%">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="08-ArrayRef.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="10-StackFrame.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KDWP Specification <br /> KVM Debug Wire Protocol, 1.0</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    <p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169;
+       2002 Sun Microsystems, Inc. All rights reserved. Use is
+       subject to license terms. Third-party software, including
+       font  technology,  is copyrighted  and  licensed from  Sun
+       suppliers. Sun, Sun Microsystems, the Sun logo, Java and
+       Solaris are trademarks or registered trademarks of Sun
+       Microsystems, Inc. in the US and other countries.  Federal
+       Acquisitions: Commercial Software - Government Users
+       Subject to Standard License Terms and Conditions.</p>
+
+    <p class="copyright"><a
+       href="copyright.html">Copyright</a> &#169; 2002
+       Sun Microsystems, Inc. Tous droits r&#233;serv&#233;s.
+       Distribu&#233; par des licences qui en restreignent
+       l'utilisation.  Le logiciel d&#233;tenu par des tiers, et
+       qui comprend la technologie relative aux polices de
+       caract&#232;res, est prot&#233;g&#233; par un copyright et
+       licenci&#233; par des fournisseurs de Sun.  Sun, Sun
+       Microsystems, le logo Sun, Java et Solaris sont des
+       marques de fabrique ou des marques d&#233;pos&#233;es de
+       Sun Microsystems, Inc. aux Etats-Unis et dans d'autres
+       pays. </p>	
+  </body>
+</html>

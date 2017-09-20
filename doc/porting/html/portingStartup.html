@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="book-no-index" />
+    <meta name="LASTUPDATED" content="02/20/03 12:37:41" />
+    <title>Virtual Machine Startup</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="portingFlags.html" />
+    <link rel="Next" href="portingClassLoad.html" />
+    <link rel="Index" href="portingJavaDebugger.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" class="full-width">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="portingFlags.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="portingClassLoad.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp419538"> </a><h2 class="pChapNum">
+Chapter &#160; 7
+</h2>
+<a name="wp431761"> </a><h2 class="pTitle">
+Virtual Machine Startup
+</h2>
+<hr class="pHr"/>
+<a name="wp432204"> </a><p class="pBody">
+Virtual machine startup practices can vary significantly in different KVM ports. By default, KVM supports regular command line based Java virtual machine startup, but the virtual machine can easily be modified for those environments in which command line based startup is not desired.
+</p>
+<a name="wp432222"> </a><h2 class="pHeading1">
+7.1	Command line startup
+</h2>
+<a name="wp432221"> </a><p class="pBody">
+This subsection describes the virtual machine startup conventions when launching KVM from a command line.
+</p>
+<a name="wp432464"> </a><p class="pBody">
+The file <code class="cCode">VmExtra/src/main.c</code> provides a default implementation of <code class="cCode">main()</code>. The virtual machine is called from the command line as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;<code class="cCode">kvm [option]* className [arg]*</code><a name="wp433516"> </a>
+</pre></div>
+<a name="wp433517"> </a><p class="pBody">
+where each <code class="cCode">option</code> is one of
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;<code class="cCode">-version</code><a name="wp433518"> </a>
+&#160;&#160;&#160;&#160;<code class="cCode">-classpath</code> &lt;list of directories&gt;<a name="wp433519"> </a>
+&#160;&#160;&#160;&#160;<code class="cCode">-</code>heapsize &lt;heap size parameter&gt;<a name="wp433520"> </a>
+</pre></div>
+<a name="wp432465"> </a><p class="pBody">
+The required <code class="cCode">className</code> argument specifies the class whose method <code class="cCode">static&#160;main(String&#160;argv[])</code> is to be called. All arguments beyond the class name are uninterpreted strings that are made into a single <code class="cCode">String[]</code> object and passed as the single argument to the <code class="cCode">main</code> method.
+</p>
+<a name="wp432503"> </a><p class="pBody">
+The <code class="cCode">-</code>classpath option allows the user to define the directories from which the KVM reads the class files. The parameter <code class="cCode">&lt;list</code> <code class="cCode">of</code> <code class="cCode">directories&gt;</code> is a single string in which the directories are separated by the <code class="cCode">PATH_SEPARATOR</code> character. The value of the <code class="cCode">PATH_SEPARATOR</code> character is typically &#8216;;&#8217; on Windows platforms, and &#8216;:&#8217; on Unix platforms.
+</p>
+<a name="wp432206"> </a><p class="pBody">
+The <code class="cCode">-heapsize</code> option (introduced in KVM 1.0.3) allows the user to manually set the Java heap size that KVM allocates upon virtual machine startup. The heap size can range from 16 kilobytes to 64 megabytes. The heap size can be specified either in bytes (such as 32768), kilobytes (such as 32k or 32K), or megabytes (such as 1m or 1M). Note that when the heap size is defined in bytes, the KVM automatically rounds up the heap size number to the next number that is divisible by four.
+</p>
+<a name="wp432696"> </a><p class="pBody">
+Additionally, if the virtual machine has been compiled with the <code class="cCode">INCLUDEDEBUGCODE</code> mode turned on, the tracing options given in <a  href="portingFlags.html#wp434831"><span style="color: #3366CC">TABLE&#160;6</span></a> are available.
+</p>
+<a name="wp432774"> </a><p class="pBody">
+When the Java-level debugging interface is in use, additional command line options are available to control the debugger. Refer to <a  href="portingJavaDebugger.html#wp418771"><span style="color: #3366CC">Chapter&#160;16</span></a> for details.
+</p>
+<a name="wp432421"> </a><p class="pBody">
+The default implementation of <code class="cCode">main(int argc,</code> <code class="cCode">char</code> <code class="cCode">**argv)</code> calls the function <code class="cCode">StartJVM()</code> with an <code class="cCode">argv</code> in which all of the options have been removed and an <code class="cCode">argc</code> that has been decremented appropriately.
+</p>
+<a name="wp432227"> </a><h2 class="pHeading1">
+7.2	Alternative VM startup strategies
+</h2>
+<a name="wp432225"> </a><p class="pBody">
+If your implementation does not start the virtual machine from a command line (for example, if you use a graphical environment for application launching), you must arrange your code to call <code class="cCode">StartJVM()</code> with the appropriate arguments.
+</p>
+<a name="wp432241"> </a><h2 class="pHeading1">
+7.3	Using a JAM (Java Application Manager)
+</h2>
+<a name="wp423347"> </a><p class="pBody">
+Many KVM ports run on resource-constrained devices which lack many features commonly available in desktop operating systems, such as a command line language, graphical file manager, or even a file system. To facilitate the porting of KVM to such platforms, KVM provides a sample implementation of a facility called JAM (Java Application Manager).
+</p>
+<a name="wp432254"> </a><p class="pBody">
+At the compilation level, JAM can be turned on or off by using the flag
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;<code class="cCode">#define USE_JAM 1</code><a name="wp432255"> </a>
+</pre></div>
+<a name="wp432516"> </a><p class="pBody">
+When building the KVM using gnumake, the following command automatically builds the system with the JAM enabled:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;<code class="cCode">gnumake USE_JAM=true</code><a name="wp432517"> </a>
+</pre></div>
+<a name="wp432242"> </a><p class="pBody">
+If JAM is compiled into the KVM, it must be activated with the <code class="cCode">-jam</code> command line flag.
+</p>
+<a name="wp432527"> </a><p class="pBody">
+The JAM implementation assumes that applications are available for downloading as JAR files by using the HTTP protocol. The JAM reads the contents of the JAR file and an associated descriptor file via HTTP, and launches KVM with the main class as a parameter.
+</p>
+<a name="wp432285"> </a><p class="pBody">
+Since the JAM serves as an interface between the host operating system and the virtual machine, it can be used, e.g., as a starting point for a device-specific graphical Java application management and launching environment (&#8220;microbrowser&#8221;), or as a test harness for virtual machine testing. The JAM reference implementation provides a special &#8220;-repeat&#8221; mode that allows the JAM to run a large number of Java applications (e.g., test cases) without having to restart the virtual machine every time.
+</p>
+<a name="wp432310"> </a><p class="pBody">
+Refer to <a  href="portingJAM.html#wp431766"><span style="color: #3366CC">Chapter&#160;15, &quot;Java Application Manager (JAM)</span></a>,&#8221; for further information on the JAM.
+</p>
+<a name="wp432243"> </a><p class="pBody">
+
+</p>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" class="full-width">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="portingFlags.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="portingClassLoad.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KVM Porting Guide <br /> , CLDC 1.1</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    
+<p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169; 2003 Sun Microsystems, Inc. 
+  All rights reserved.</p>
+  </body>
+</html>

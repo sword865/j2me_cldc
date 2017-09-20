@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="book-no-index" />
+    <meta name="LASTUPDATED" content="02/20/03 12:37:36" />
+    <title>Introduction to KVM</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="portingIntro.html" />
+    <link rel="Next" href="portingCompiler.html" />
+    <link rel="Index" href="portingJavaDebugger.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" class="full-width">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="portingIntro.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="portingCompiler.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp418622"> </a><h2 class="pChapNum">
+Chapter &#160; 2
+</h2>
+<a name="wp431762"> </a><h2 class="pTitle">
+Introduction to KVM
+</h2>
+<hr class="pHr"/>
+<a name="wp431794"> </a><h2 class="pHeading1">
+2.1	K Virtual Machine (KVM)
+</h2>
+<a name="wp431984"> </a><p class="pBody">
+KVM (also known as the K Virtual Machine or the KJava Virtual Machine) is a compact, portable Java<em class="cEmphasis">&#8482;</em> virtual machine that has been designed specifically for small, resource-constrained devices such as cellular phones, pagers, personal organizers, mobile Internet devices, point-of-sale terminals, home appliances, and so forth.
+</p>
+<a name="wp431864"> </a><p class="pBody">
+The high-level design goal for the KVM team was to create the smallest possible &#8220;complete&#8221; Java virtual machine that would maintain all the central aspects of the Java programming language, and that would nevertheless run in a resource-constrained device with only a few tens or hundreds of kilobytes of available memory (hence the name K, for kilobytes). More specifically, KVM is designed to be
+</p>
+<ul class="pBullet2"><a name="wp431857"> </a><div class="pBullet2"><li>small, with a static memory footprint of the virtual machine core starting from about 50-70 kilobytes (depending on the target platform and compilation options),</li></div>
+<a name="wp431858"> </a><div class="pBullet2Plus"><li>clean and highly portable,</li></div>
+<a name="wp431859"> </a><div class="pBullet2Plus"><li>modular and customizable,</li></div>
+<a name="wp431860"> </a><div class="pBullet2Last"><li>as &#8220;complete&#8221; and &#8220;fast&#8221; as possible without sacrificing the other design goals.</li></div>
+</ul>
+<a name="wp431853"> </a><p class="pBody">
+KVM is implemented in the C programming language, so it can easily be ported onto various platforms for which an ANSI C compiler is available. The virtual machine has been built around a straightforward bytecode interpreter with various compile-time flags and options for helping porting efforts and space optimization.
+</p>
+<a name="wp431800"> </a><p class="pBody">
+KVM has been developed as part of a larger effort to provide a modular, scalable architecture for the development and deployment of portable, dynamically downloadable and secure applications in consumer and embedded devices. This larger effort is called the Java 2 Micro Edition (also known as Java 2 ME or J2ME).
+</p>
+<a name="wp431884"> </a><p class="pBody">
+The K Virtual Machine is typically used as the implementation-level foundation for the following J2ME technology standards: Connected, Limited Device Configuration (CLDC) and Mobile Information Device Profile (MIDP). Further information on KVM, CLDC, MIDP and Java 2 Micro Edition in general is available in separate documents listed in <a  href="portingIntro.html#wp431869"><span style="color: #3366CC">Section&#160;1.2 &#8220;Related documentation</span></a>.&#8221;
+</p>
+<a name="wp431897"> </a><p class="pBody">
+KVM is derived from a research system called Spotless developed originally at Sun Microsystems Laboratories in early 1998. More information on the Spotless system is available in the Sun Labs technical report The Spotless system: implementing a Java system for the Palm connected organizer.
+</p>
+<a name="wp423347"> </a><h2 class="pHeading1">
+2.2	Differences between KVM 1.1 and KVM 1.0.3/4
+</h2>
+<a name="wp432224"> </a><p class="pBody">
+KVM 1.1 is the first KVM implementation that supports the CLDC Specification version 1.1. This release implements all the new features that have been added in CLDC 1.1, including:
+</p>
+<ul class="pBullet2"><a name="wp433041"> </a><div class="pBullet2"><li>Floating point support has been added.</li></div>
+<ul class="pBullet3"><a name="wp433042"> </a><div class="pBullet3"><li>All floating point byte codes are supported by CLDC 1.1.</li></div>
+<a name="wp433043"> </a><div class="pBullet3Plus"><li>Classes Float and Double have been added.</li></div>
+<a name="wp433044"> </a><div class="pBullet3Last"><li>Various methods have been added to the other library classes to handle floating point values.</li></div>
+</ul>
+<a name="wp433045"> </a><div class="pBullet2Plus"><li>Weak reference support (small subset of the J2SE weak reference classes) has been added.</li></div>
+<a name="wp433046"> </a><div class="pBullet2Plus"><li>Classes Calendar, Date and TimeZone have been redesigned to be more J2SE-compliant.</li></div>
+<a name="wp433047"> </a><div class="pBullet2Plus"><li>Error handling requirements have been clarified, and one new error class, NoClassDefFoundError, has been added.</li></div>
+<a name="wp433048"> </a><div class="pBullet2Plus"><li>In CLDC 1.1, Thread objects have names, like threads in J2SE do. The method Thread.getName() has been introduced, and the Thread class has a few new constructors that have been inherited from J2SE.</li></div>
+<a name="wp433049"> </a><div class="pBullet2Plus"><li>Various minor library changes and bug fixes, such as the addition of the following fields and methods:</li></div>
+<ul class="pBullet3"><a name="wp433050"> </a><div class="pBullet3"><li>Boolean.TRUE and Boolean.FALSE</li></div>
+<a name="wp433051"> </a><div class="pBullet3Plus"><li>Date.toString()</li></div>
+<a name="wp433052"> </a><div class="pBullet3Plus"><li>Random.nextInt(int n)</li></div>
+<a name="wp433053"> </a><div class="pBullet3Plus"><li>String.intern()</li></div>
+<a name="wp433054"> </a><div class="pBullet3Plus"><li>String.equalsIgnoreCase()</li></div>
+<a name="wp433055"> </a><div class="pBullet3Last"><li>Thread.interrupt()</li></div>
+</ul>
+<a name="wp433056"> </a><div class="pBullet2Plus"><li>Minimum total memory budget for CLDC has been raised from 160 to 192 kilobytes, mainly because of the added floating point functionality.</li></div>
+<a name="wp433057"> </a><div class="pBullet2Plus"><li>Specification text tightened and obsolete subsections removed.</li></div>
+<a name="wp433058"> </a><div class="pBullet2Last"><li>Much more detailed verifier specification (&#8220;CLDC Byte Code Typechecker Specification&#8221;) is provided as an appendix to the CLDC Specification version 1.1.</li></div>
+</ul>
+<a name="wp432228"> </a><p class="pBody">
+For a more detailed summary of the differences between CLDC 1.0 and 1.1, refer to the CLDC Specification version 1.1.
+</p>
+<a name="wp431982"> </a><p class="pBody">
+The KVM 1.1 release includes all the functionality and fixes of the previous KVM 1.0.4 release. In addition to the new features that are specific to CLDC Specification version 1.1, the main features of KVM 1.1 compared to KVM 1.0.3 include:
+</p>
+<ul class="pBullet2"><a name="wp432279"> </a><div class="pBullet2"><li>Support for the K Native Interface (KNI).</li></div>
+<a name="wp431990"> </a><div class="pBullet2Plus"><li>Rewritten class loader that can support error handling in a J2SE-compliant fashion.</li></div>
+<a name="wp432282"> </a><div class="pBullet2Plus"><li>More portable runtime verifier implementation that is easier to port to other virtual machines.</li></div>
+<a name="wp432145"> </a><div class="pBullet2Last"><li>Various minor bug fixes and enhancements.</li></div>
+</ul>
+<a name="wp432082"> </a><p class="pBody">
+For most up-to-date information, refer to the release notes and KVM product website (<a href="http://java.sun.com/products/kvm" target="_blank">
+<span class="cWebJump">http://java.sun.com/products/kvm</span></a>).
+</p>
+<a name="wp432254"> </a><p class="pBody">
+Important. Unlike the earlier KVM/CLDC releases, the KVM 1.1 implementation no longer includes network protocol implementations, graphical user interface code, or other components that are outside the scope of CLDC Specification. The networking code as well as user interface components are provided in additional J2ME software releases such as the MIDP reference implementation.
+</p>
+<a name="wp431981"> </a><p class="pBody">
+
+</p>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" class="full-width">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="portingIntro.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="portingCompiler.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KVM Porting Guide <br /> , CLDC 1.1</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    
+<p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169; 2003 Sun Microsystems, Inc. 
+  All rights reserved.</p>
+  </body>
+</html>

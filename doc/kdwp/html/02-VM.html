@@ -1,0 +1,325 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="508 Compliant Book Without Index" />
+    <meta name="LASTUPDATED" content="10/18/02 16:56:32" />
+    <title>VirtualMachine Command Set</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="01-Overview.html" />
+    <link rel="Next" href="03-RefType.html" />
+    <link rel="Index" href="13-Appendix.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" width="100%">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="01-Overview.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="03-RefType.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp434448"> </a><h2 class="pChapNum">
+Chapter &#160; 2
+</h2>
+<a name="wp442113"> </a><h2 class="pNewHTMLPage">
+VirtualMachine Command Set
+</h2>
+<hr class="pHr"/>
+<a name="wp439627"> </a><p class="pBody">
+This command set is numbered (1) to match the equivalent JDWP command set.
+</p>
+<a name="wp434449"> </a>
+&#160;AllClasses Command (3)
+
+<a name="wp432397"> </a><p class="pBody">
+Returns reference types for all classes currently loaded by the target VM. 
+</p>
+<a name="wp432399"> </a><h5 class="pHeading4">
+Out Data 
+</h5>
+<a name="wp432401"> </a><p class="pBody">
+(None) 
+</p>
+<a name="wp432403"> </a><h5 class="pHeading4">
+Reply Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444497">
+  <caption><a name="wp444500"> </a><div class="pTableCaption">
+TABLE&#160;2&#160;&#160;&#8211;&#160;&#160;Structure of Reply Data for AllClasses Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp444506"> </a><div class="pTableText">
+int
+</div>
+</td>
+    <td><a name="wp444508"> </a><div class="pTableText">
+<em class="cEmphasis">classes</em>
+</div>
+</td>
+    <td><a name="wp444510"> </a><div class="pTableText">
+Number of reference types that follow.&#160;
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="3" rowspan="1"><a name="wp444512"> </a><div class="pTableText">
+Repeated <em class="cEmphasis">classes</em> times: 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444518"> </a><div class="pTableText">
+<code class="cCode">byte</code>
+</div>
+</td>
+    <td><a name="wp444520"> </a><div class="pTableText">
+<em class="cEmphasis">refTypeTag</em>
+</div>
+</td>
+    <td><a name="wp444522"> </a><div class="pTableText">
+Kind of following reference type. &#160;
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444524"> </a><div class="pTableText">
+<code class="cCode">referenceTypeID</code>
+</div>
+</td>
+    <td><a name="wp444526"> </a><div class="pTableText">
+<em class="cEmphasis">typeID</em>
+</div>
+</td>
+    <td><a name="wp444528"> </a><div class="pTableText">
+Loaded reference type&#160;
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444530"> </a><div class="pTableText">
+<code class="cCode">string</code>
+</div>
+</td>
+    <td><a name="wp444532"> </a><div class="pTableText">
+<em class="cEmphasis">signature</em>
+</div>
+</td>
+    <td><a name="wp444534"> </a><div class="pTableText">
+The JNI signature of the loaded reference type&#160;
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444536"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp444538"> </a><div class="pTableText">
+<em class="cEmphasis">status</em>
+</div>
+</td>
+    <td><a name="wp444540"> </a><div class="pTableText">
+The current class status. &#160;
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp434450"> </a>
+&#160;AllThreads Command (4)
+
+<a name="wp432412"> </a><p class="pBody">
+Returns all threads currently running in the target VM. The returned list contains threads created through <code class="cCode">java.lang.Thread</code>. Threads that have not yet been started and threads that have completed their execution are not included in the returned list. 
+</p>
+<a name="wp432414"> </a><h5 class="pHeading4">
+Out Data 
+</h5>
+<a name="wp432416"> </a><p class="pBody">
+(None) 
+</p>
+<a name="wp432418"> </a><h5 class="pHeading4">
+Reply Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444566">
+  <caption><a name="wp444569"> </a><div class="pTableCaption">
+TABLE&#160;3&#160;&#160;&#8211;&#160;&#160;Structure of Reply Data for AllThreads Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp444575"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp444577"> </a><div class="pTableText">
+<em class="cEmphasis">threads</em>
+</div>
+</td>
+    <td><a name="wp444579"> </a><div class="pTableText">
+Number of threads that follow.&#160;
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="3" rowspan="1"><a name="wp444581"> </a><div class="pTableText">
+Repeated <em class="cEmphasis">threads</em> times: 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444587"> </a><div class="pTableText">
+<code class="cCode">threadID</code>
+</div>
+</td>
+    <td><a name="wp444589"> </a><div class="pTableText">
+<em class="cEmphasis">thread</em>
+</div>
+</td>
+    <td><a name="wp444591"> </a><div class="pTableText">
+A running thread&#160;
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp434451"> </a>
+&#160;Suspend Command (8)
+
+<a name="wp432427"> </a><p class="pBody">
+Suspends the execution of the application running in the target VM. All Java threads currently running are suspended. 
+</p>
+<a name="wp432429"> </a><p class="pBody">
+Unlike <code class="cCode">java.lang.Thread.suspend</code>, suspends of both the virtual machine and individual threads are counted. Before a thread can run again, it must be resumed through the VM-level suspend command or the thread-level suspend command the same number of times it has been suspended. 
+</p>
+<a name="wp432431"> </a><h5 class="pHeading4">
+Out Data 
+</h5>
+<a name="wp432433"> </a><p class="pBody">
+(None) 
+</p>
+<a name="wp432435"> </a><h5 class="pHeading4">
+Reply Data 
+</h5>
+<a name="wp432437"> </a><p class="pBody">
+(None) 
+</p>
+<a name="wp432441"> </a>
+&#160;Resume Command (9)
+
+<a name="wp432443"> </a><p class="pBody">
+Resumes execution of the application after the suspend command or an event has stopped it. Suspensions of the Virtual Machine and individual threads are counted. If a particular thread is suspended n times, it must be resumed n times before it can continue. 
+</p>
+<a name="wp432445"> </a><h5 class="pHeading4">
+Out Data 
+</h5>
+<a name="wp432447"> </a><p class="pBody">
+(None) 
+</p>
+<a name="wp432449"> </a><h5 class="pHeading4">
+Reply Data 
+</h5>
+<a name="wp432451"> </a><p class="pBody">
+(None) 
+</p>
+<a name="wp432455"> </a>
+&#160;Exit Command (10)
+
+<a name="wp432457"> </a><p class="pBody">
+Terminates the target VM with the given exit code. All ids previously returned from the target VM become invalid. Threads running in the VM are abruptly terminated. A thread death exception is not thrown and finally blocks are not run. 
+</p>
+<a name="wp432459"> </a><h5 class="pHeading4">
+Out Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444612">
+  <caption><a name="wp444615"> </a><div class="pTableCaption">
+TABLE&#160;4&#160;&#160;&#8211;&#160;&#160;Structure of Out Data for Exit Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp444621"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp444623"> </a><div class="pTableText">
+<em class="cEmphasis">exitCode</em>
+</div>
+</td>
+    <td><a name="wp444625"> </a><div class="pTableText">
+The exit code&#160; 
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp434452"> </a><h5 class="pHeading4">
+Reply Data 
+</h5>
+<a name="wp432466"> </a><p class="pBody">
+(None) 
+</p>
+<a name="wp434501"> </a><p class="pBody">
+
+</p>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" width="100%">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="01-Overview.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="03-RefType.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KDWP Specification <br /> KVM Debug Wire Protocol, 1.0</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    <p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169;
+       2002 Sun Microsystems, Inc. All rights reserved. Use is
+       subject to license terms. Third-party software, including
+       font  technology,  is copyrighted  and  licensed from  Sun
+       suppliers. Sun, Sun Microsystems, the Sun logo, Java and
+       Solaris are trademarks or registered trademarks of Sun
+       Microsystems, Inc. in the US and other countries.  Federal
+       Acquisitions: Commercial Software - Government Users
+       Subject to Standard License Terms and Conditions.</p>
+
+    <p class="copyright"><a
+       href="copyright.html">Copyright</a> &#169; 2002
+       Sun Microsystems, Inc. Tous droits r&#233;serv&#233;s.
+       Distribu&#233; par des licences qui en restreignent
+       l'utilisation.  Le logiciel d&#233;tenu par des tiers, et
+       qui comprend la technologie relative aux polices de
+       caract&#232;res, est prot&#233;g&#233; par un copyright et
+       licenci&#233; par des fournisseurs de Sun.  Sun, Sun
+       Microsystems, le logo Sun, Java et Solaris sont des
+       marques de fabrique ou des marques d&#233;pos&#233;es de
+       Sun Microsystems, Inc. aux Etats-Unis et dans d'autres
+       pays. </p>	
+  </body>
+</html>

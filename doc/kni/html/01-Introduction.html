@@ -1,0 +1,107 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="book-no-index" />
+    <meta name="LASTUPDATED" content="10/19/02 17:07:30" />
+    <title>Background</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="KNI-Preface.html" />
+    <link rel="Next" href="02-Goals.html" />
+    <link rel="Index" href="07-Examples.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" width="100%">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="KNI-Preface.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="02-Goals.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp434413"> </a><h2 class="pChapNum">
+Chapter &#160; 1
+</h2>
+<a name="wp442099"> </a><h2 class="pNewHTMLPage">
+Background
+</h2>
+<hr class="pHr"/>
+<a name="wp442802"> </a><h2 class="pHeading1">
+1.1	Some History
+</h2>
+<a name="wp443803"> </a><p class="pBody">
+The Java<em class="cEmphasis">&#8482;</em> 2 Platform, Micro Edition (J2ME<em class="cEmphasis">&#8482;</em>) has recently become very popular in the consumer device space. The roots of the J2ME platform can be traced back to the Spotless research project that was started at Sun Labs in January 1998. The Spotless project designed a new, compact, highly portable Java<em class="cEmphasis">&#8482;</em> virtual machine that was aimed specifically for small, resource-constrained devices such as cellular phones, pagers, personal organizers, home appliances, and the likes. The product version of the Spotless virtual machine became known as the K Virtual Machine (KVM).
+</p>
+<a name="wp442761"> </a><p class="pBody">
+The research goal of the Spotless project was to build a Java execution environment that would have a total memory footprint of only one tenth of the size of the full Java execution environment in 1998. Consequently, the designers of the Spotless system left out several features that were considered overly expensive or unnecessary for embedded systems use.
+</p>
+<a name="wp442629"> </a><p class="pBody">
+One of the features that was intentionally left out of the Spotless system was support for the Java Native Interface (JNI).  The Java Native Interface is an API that is intended to provide binary compatibility for the native functions that are linked into a Java virtual machine, so that the virtual machine can perform operating system specific operations such as file system calls, graphics operations, and so on. By using the Java Native Interface, multiple Java virtual machine implementations can utilize the same native function implementations, and dynamically load the necessary native libraries in binary form. Unfortunately, JNI is rather expensive in terms of memory footprint and performance overhead. Furthermore, some of the JNI APIs pose potential security threats in the absence of the full Java security model.
+</p>
+<a name="wp442630"> </a><p class="pBody">
+The official standardization efforts for the Java 2 Platform, Micro Edition were started in October 1999. The Connected, Limited Device Configuration (CLDC) standardization effort (Java Specification Request JSR-30) decided to ratify the decision to leave out the Java Native Interface support. The way native functions are linked into a virtual machine conforming to the CLDC Specification is strictly an implementation issue. Consequently, the product version of the Spotless system, the K Virtual Machine, does not support any of the JNI APIs.
+</p>
+<a name="wp442808"> </a><h2 class="pHeading1">
+1.2	Why KNI?
+</h2>
+<a name="wp442791"> </a><p class="pBody">
+Currently, the K Virtual Machine has a very low-level VM-specific interface for native function support. When implementing new native functions for the K Virtual Machine, the programmer uses exactly the same API calls as the KVM would use internally for the equivalent operations. For example, to push and pop parameters to and from the execution stack in native functions, the native function programmer would use exactly the same &#8216;<code class="cCode">pushStack</code>&#8217; and &#8216;<code class="cCode">popStack</code>&#8217; operations that the KVM uses internally for various operations. Similarly, to read or change data stored in the fields of objects, the native function programmer would use exactly the same low-level constant pool resolution operations that the KVM uses internally.
+</p>
+<a name="wp442829"> </a><p class="pBody">
+While this approach is highly efficient and well-suited for experienced programmers who understand how the K Virtual Machine works, this approach has some drawbacks. For instance, since this approach exposes the internal data structures and operations of the KVM to the native function programmer, any changes to those internal structures and operations in future versions of the KVM could render the existing native function implementations invalid. Due to the dependency on KVM-specific data structures and operations, this also means that native functions written for the KVM would not work with any other Java virtual machine without considerable modifications.
+</p>
+<a name="wp442848"> </a><p class="pBody">
+When used by less experienced programmers, the current native function interface of the KVM can also be rather error-prone because of garbage collection issues. Starting from version 1.0.2, the KVM has a compacting garbage collector. This means that any time the programmer (directly or indirectly) calls functions that allocate memory from the Java heap, therefore potentially causing the VM to collect garbage, the existing objects in the Java heap may move to a new location in memory. As a result, any native pointers that the native function programmer holds to objects in the Java heap may become invalid. Unless the native function programmer is very careful, this can lead to spurious errors that are extremely difficult to trace without special tools.
+</p>
+<a name="wp442883"> </a><p class="pBody">
+Even though the majority of the programmers who need to add new native functions to the KVM are usually experienced embedded systems developers (e.g., software engineers working for major device manufacturers), it seems unnecessary to require all the native function programmers to be intimately familiar with the internal data structures and garbage collection details of the KVM. Also, as the number of library standardization efforts for the Java 2 Micro Edition grows, more and more programmers will need to add new native functionality to the KVM or any new virtual machine conforming to the CLDC Specification.
+</p>
+<a name="wp442984"> </a><p class="pBody">
+To facilitate the integration of native functionality across a wide variety of CLDC target devices, there is a need for a native function interface that provides high performance and low memory overhead without the pitfalls of low-level interfaces discussed above. For this purpose, a new interface called the K Native Interface (KNI) has been developed.
+</p>
+<a name="wp434501"> </a><p class="pBody">
+
+</p>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" width="100%">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="KNI-Preface.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="02-Goals.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KNI Specification <br /> K Native Interface (KNI), 1.0</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    <p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169;
+       2002 Sun Microsystems, Inc. All rights reserved.</p>
+  </body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="book-no-index" />
+    <meta name="LASTUPDATED" content="02/21/03 15:57:09" />
+    <title>Required Port-Specific Files and Functions</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="portingCompiler.html" />
+    <link rel="Next" href="portingDirStruct.html" />
+    <link rel="Index" href="portingJavaDebugger.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" class="full-width">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="portingCompiler.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="portingDirStruct.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp419326"> </a><h2 class="pChapNum">
+Chapter &#160; 4
+</h2>
+<a name="wp431769"> </a><h2 class="pTitle">
+Required Port-Specific Files and Functions
+</h2>
+<hr class="pHr"/>
+<a name="wp423871"> </a><p class="pBody">
+This section describes those files and functions that must be defined for each port.
+</p>
+<a name="wp423895"> </a><h2 class="pHeading1">
+4.1	File machine_md.h
+</h2>
+<a name="wp432166"> </a><p class="pBody">
+Every KVM port must provide a file named <code class="cCode">Vm</code><em class="cEmphasis">Port</em><code class="cCode">/h/machine_md.h</code>. The purpose of this file is to override the default compile time definitions and declarations provided in <code class="cCode">VmCommon/h/main.h</code>, and supply any additional definitions and declarations that your specific platform might need. See <a  href="portingFlags.html#wp431761"><span style="color: #3366CC">Chapter&#160;6, &#8220;Compilation Flags, Definitions and Macros</span></a>&#8221; for a list of the definitions and declarations that your port will often need to override.
+</p>
+<a name="wp423908"> </a><p class="pBody">
+All port-specific declarations, function prototypes, <code class="cCode">typedef</code> statements, <code class="cCode">#include</code> statements, and <code class="cCode">#define</code> statements must appear either in this <code class="cCode">machine_md.h</code>, in a file included directly or indirectly by <code class="cCode">machine_md.h</code>, in some file automatically included by your development environment,<a href="#wp423901"><span class="Footnote">1</span></a> or via compiler switches.<a href="#wp426005"><span class="Footnote">2</span></a>
+</p>
+<a name="wp419525"> </a><p class="pBody">
+Port-specific functions can appear in any machine-specific file. Unless otherwise stated, any required port-specific function can also be defined as a macro, provided that its implementation is careful to ensure that each argument is evaluated exactly once.
+</p>
+<a name="wp432245"> </a><h2 class="pHeading1">
+4.2	File main.c
+</h2>
+<a name="wp432246"> </a><p class="pBody">
+You will generally need to provide a new version of <code class="cCode">main.c</code> that is suitable for your target platform. The default implementation provided in directory <code class="cCode">VmExtra/src/main.c</code> can be used as a starting point for platform-specific implementations. Refer to <a  href="portingStartup.html#wp431761"><span style="color: #3366CC">Chapter&#160;7, &#8220;Virtual Machine Startup</span></a>,&#8221; for further information.
+</p>
+<a name="wp419578"> </a><h2 class="pHeading1">
+4.3	Runtime functions that require porting efforts
+</h2>
+<a name="wp419579"> </a><p class="pBody">
+Each port must define the functions given below (see <code class="cCode">VmCommon/h/runtime.h</code>). They may be defined as either macros or as C code. Traditionally, the C code is placed in a file named <code class="cCode">VmPort/src/runtime_md.c</code>
+</p>
+<ul class="pBullet1"><a name="wp419638"> </a><div class="pBullet1"><li><code class="cCode">void AlertUser(const char* message)<br /></code>Alert the user that something serious has happened. This function call usually precedes a fatal error.</li></div>
+<a name="wp419677"> </a><div class="pBullet1Plus"><li><code class="cCode">cell *allocateHeap(long *sizeptr, void **realresultptr)<br /></code>Create a heap whose size (in bytes) is approximately the long value <code class="cCode">*sizeptr</code>. The heap must begin at an address that is a multiple of 4. The address of the heap is returned as the value of this function. The actual size of the heap (in bytes) is returned in <code class="cCode">*sizeptr</code>. The value placed into <code class="cCode">*realresultptr</code> is used as the argument to <code class="cCode">freeHeap</code> when freeing the heap.</li></div>
+<a name="wp426089"> </a><p class="pIndented1">
+For most ports, <code class="cCode">*realresultptr</code> will be set to the actual value returned by the native space allocation function. If this value is not a multiple of 4, it is rounded up to the next multiple of 4, and <code class="cCode">*sizeptr</code> is decreased by 4.
+</p>
+<a name="wp432185"> </a><div class="pBullet1Plus"><li><code class="cCode">void freeHeap(void *heapPtr)<br /></code>Free the heap space that was allocated using <code class="cCode">allocateHeap</code>. See above for the meaning of the <code class="cCode">heapPtr</code> argument.</li></div>
+<a name="wp432186"> </a><div class="pBullet1Plus"><li><code class="cCode">void GetAndStoreNextKVMEvent(bool_t forever, <br /></code>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<code class="cCode">ulong64 waitUntil)<br /></code>This function serves as an interface between the event handling capabilities of the virtual machine and the host operating system. (Defined in <code class="cCode">VmCommon/h/events.h</code>.) See <a  href="portingEvent.html#wp424501"><span style="color: #3366CC">Chapter&#160;12</span></a><code class="cCode"> </code>for details.</li></div>
+<a name="wp432187"> </a><div class="pBullet1Plus"><li><code class="cCode">void InitializeVM()<br /></code>Initialize the virtual machine in whatever way is necessary. On many of the current ports, this is a macro that does nothing.</li></div>
+<a name="wp420567"> </a><div class="pBullet1Plus"><li><code class="cCode">void InitializeNativeCode()<br /></code>Initialize the native code in whatever way is necessary. Ports can use this function (for example) to initialize the window system and to perform other native-code specific initialization.</li></div>
+<a name="wp432343"> </a><div class="pBullet1Plus"><li><code class="cCode">void InitializeClassLoading()<br /></code>Initialize the class loader in whatever way is necessary. Ports can use this function (for example) to perform certain file/storage system initialization operations.</li></div>
+<a name="wp433250"> </a><div class="pBullet1Plus"><li><code class="cCode">void InitalizeAsynchronousIO(void)<br /></code>Initialize the system to handle asynchronous native methods. </li></div>
+<a name="wp419693"> </a><div class="pBullet1Plus"><li><code class="cCode">void FinalizeVM()<br /></code>Perform any cleanup necessary before shutting down the virtual machine.</li></div>
+<a name="wp419721"> </a><div class="pBullet1Plus"><li><code class="cCode">void FinalizeNativeCode()<br /></code>Perform any clean up necessary to clean up after the native functions. Many ports use this function to shut down the window system.</li></div>
+<a name="wp420512"> </a><div class="pBullet1Plus"><li><code class="cCode">long RandomNumber_md()<br /></code>Return a random number.</li></div>
+<a name="wp433315"> </a><div class="pBullet1Plus"><li><code class="cCode">void FinalizeClassLoading()<br /></code>Perform any cleanup necessary before shutting the class loader. Ports can use this function (for example) to perform certain file/storage system finalization operations.</li></div>
+<a name="wp432356"> </a><div class="pBullet1Plus"><li><code class="cCode">ulong64 CurrentTime_md(void)<br /></code>Return the time, in milliseconds, since January 1, 1970 UTC. On devices that do not support the concept of time zone, it is acceptable to return the time, in milliseconds, since January 1, 1970 of the current time zone. </li></div>
+<a name="wp433229"> </a><div class="pBullet1Last"><li><code class="cCode">unsigned long *Calendar_md(void)<br /></code>Initializes the calendar fields, which represent the Calendar related attributes of a date. </li></div>
+</ul>
+<a name="wp420588"> </a><p class="pBody">
+The functions <code class="cCode">InitializeNativeCode()</code> and <code class="cCode">InitializeVM()</code> are called, in that order, before any global variables have been set and before the memory-management system has been initialized.
+</p>
+<a name="wp428377"> </a><p class="pBody">
+The function <code class="cCode">FinalizeVM()</code> is called just before <code class="cCode">FinalizeNativeCode()</code>. On those ports that have enabled profiling, the profiling information is printed out between the calls to these two functions. This allows the profiler to find out information about the window system, if necessary, and to use the window system for creating its output.
+</p>
+<hr class="pHr"/><div class="note">
+<a name="wp432319"> </a>
+<b>Note &#8211;</b>  If you want to use the KVM for running additional libraries such as those defined by the Mobile Information Device Profile (MIDP) or PDA Profile, additional porting work will be necessary to port the native functions required by those libraries.
+<hr class="pHr"/></div>
+<a name="wp432131"> </a><p class="pBody">
+Asynchronous native functions. If your port supports the use of asynchronous native methods, there are additional, port-specific functions that you must define :
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<code class="cCode">yield_md()</code><a name="wp433096"> </a>
+<code class="cCode">CallAsyncNativeFunction_md()</code><a name="wp433102"> </a>
+<code class="cCode">enterSystemCriticalSection()</code><a name="wp433103"> </a>
+<code class="cCode">exitSystemCriticalSection()</code><a name="wp433104"> </a>
+</pre></div>
+<hr class="pHr"/><div class="note">
+<a name="wp433105"> </a>
+<b>Note &#8211;</b>  The interfaces for functions <code class="cCode">enterSystemCriticalSection()</code> and <code class="cCode">exitSystemCriticalSection()</code> are defined in <code class="cCode">VmCommon/h/thread.h</code>.
+<hr class="pHr"/></div>
+<a name="wp433174"> </a><p class="pBody">
+These functions are further described in <a  href="portingNative.html#wp433595">§11.4</a>.
+</p>
+<a name="wp427856"> </a><h2 class="pHeading1">
+4.4	Required C library functions
+</h2>
+<a name="wp427857"> </a><p class="pBody">
+The KVM uses the following C library functions:
+</p>
+<ul class="pBullet1"><a name="wp432058"> </a><div class="pBullet1"><li>String manipulation: <code class="cCode">strcat</code>, <code class="cCode">strchr</code>, <code class="cCode">strcmp</code>, <code class="cCode">strcpy</code>, <code class="cCode">strncpy</code>, <code class="cCode">strlen</code></li></div>
+<a name="wp432059"> </a><div class="pBullet1Plus"><li>Moving memory: <code class="cCode">memcpy</code>, <code class="cCode">memove</code>, <code class="cCode">memset</code>, <code class="cCode">memcmp</code></li></div>
+<a name="wp432060"> </a><div class="pBullet1Plus"><li>Printing: <code class="cCode">atoi</code>, <code class="cCode">sprintf</code>, <code class="cCode">fprintf, putchar</code></li></div>
+<a name="wp433288"> </a><div class="pBullet1Plus"><li>Random number generation: <code class="cCode">rand</code></li></div>
+<a name="wp432258"> </a><div class="pBullet1Last"><li>Exception handling: <code class="cCode">setjmp</code>, <code class="cCode">longjmp </code>(not absolutely necessary)</li></div>
+</ul>
+<a name="wp428213"> </a><p class="pBody">
+If your development environment does not supply definitions for these functions, you must either define them yourself, or use macros to map these names onto equivalent functions recognized by your development environment.<a href="#wp432006"><span class="Footnote">3</span></a>
+</p>
+<a name="wp428229"> </a><p class="pBody">
+The function <code class="cCode">memmove</code> must be able to handle situations in which the source and destination overlap. The function <code class="cCode">memcpy</code> is used only in those cases in which the source and destination are known not to overlap.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+The functions <code class="cCode">fprintf</code> and <code class="cCode">sprintf</code> use the following formats:<a name="wp433138"> </a>
+&#160;&#160;&#160;%s, %d, %o, %x, %ld, %lo, %lx, %%<a name="wp433139"> </a>
+</pre></div>
+<a name="wp433140"> </a><p class="pBody">
+These formats never have options or flags.
+</p>
+<a name="wp432027"> </a><p class="pBody">
+There are no calls directly to <code class="cCode">printf</code>.
+</p>
+<hr class="pHr"/><div class="note">
+<a name="wp432264"> </a>
+<b>Note &#8211;</b>  The components included in directory <code class="cCode">VmExtra</code> and the machine-specific ports provided with this release may need additional native functions not listed above.
+<hr class="pHr"/></div>
+<a name="wp432234"> </a><p class="pBody">
+
+</p>
+
+  <a name="wp423901"> </a><div class="pFootNote">
+<a href="#wp423908"><span class="Footnote">1</span></a>Metrowerks CodeWarrior, for example, allows the user to create a prefix file.
+
+</div>
+<a name="wp426005"> </a><div class="pFootNote">
+<a href="#wp423908"><span class="Footnote">2</span></a>Some compilers allow you to add the switch -Dname=value, which is equivalent to putting<br />
+		#define name value<br />
+at the start of the file.
+
+</div>
+<a name="wp432006"> </a><div class="pFootNote">
+<a href="#wp428213"><span class="Footnote">3</span></a>Be aware that the order of arguments may be different on different platforms. For example, the function 
+memset takes arguments memset(location, value, count). The corresponding Palm OS function is 
+MemSet(location, count, value). 
+
+</div>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" class="full-width">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="portingCompiler.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="portingDirStruct.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KVM Porting Guide <br /> , CLDC 1.1</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    
+<p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169; 2003 Sun Microsystems, Inc. 
+  All rights reserved.</p>
+  </body>
+</html>

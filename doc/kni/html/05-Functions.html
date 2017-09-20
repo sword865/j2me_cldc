@@ -1,0 +1,4281 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="book-no-index" />
+    <meta name="LASTUPDATED" content="10/19/02 17:07:36" />
+    <title>KNI Functions</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="04-DataTypes.html" />
+    <link rel="Next" href="06-ProgOverview.html" />
+    <link rel="Index" href="07-Examples.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" width="100%">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="04-DataTypes.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="06-ProgOverview.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp434413"> </a><h2 class="pChapNum">
+Chapter &#160; 5
+</h2>
+<a name="wp442099"> </a><h2 class="pNewHTMLPage">
+KNI Functions
+</h2>
+<hr class="pHr"/>
+<a name="wp444386"> </a><p class="pBody">
+This chapter specifies the KNI functions. For each KNI function, we provide the following information:
+</p>
+<ul class="pBullet1"><a name="wp444387"> </a><div class="pBullet1"><li>function prototype,</li></div>
+<a name="wp444388"> </a><div class="pBullet1Last"><li>a detailed description, including parameters, return values, and potential exceptions.</li></div>
+</ul>
+<a name="wp442606"> </a><p class="pBody">
+Note that since KNI is an implementation-level interface, the interface places some important restrictions and expectations on the programmer.
+</p>
+<a name="wp449783"> </a><p class="pBody">
+We use the adverb must to describe restrictions and conventions that the KNI programmer is expected to adhere to. For instance, when some KNI function must receive a non-null object as a parameter, it is the programmer&#8217;s responsibility not to pass a null value to that function. Programmer-level restrictions like this allow the KNI implementation to be more efficient, as the KNI implementation does not check for null pointers or other similar conditions. In general, KNI is a &#8220;shoot yourself in the foot&#8221; interface that performs only a minimum number of checks at runtime to ensure the validity of the parameters.
+</p>
+<a name="wp444413"> </a><h2 class="pHeading1">
+5.1	Version Information
+</h2>
+<a name="wp444455"> </a><h3 class="pHeading2">
+5.1.1	KNI_GetVersion</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444456">
+  <caption><a name="wp444458"> </a><div class="pTableCaption">
+TABLE&#160;6&#160;&#160;&#8211;&#160;&#160;KNI_GetVersion
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp444462"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp444464"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp444466"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp444468"> </a><div class="pTableText">
+<code class="cCode">jint KNI_GetVersion();</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444470"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp444472"> </a><div class="pTableText">
+Returns the version number of the KNI interface.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444474"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp444476"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444478"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp444480"> </a><div class="pTableText">
+Returns the version number of the KNI interface. Hexadecimal number &#8220;0x00010000&#8221; identifies KNI version 1.0.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444482"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp444484"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp445870"> </a><p class="pBody">
+
+</p>
+<a name="wp450774"> </a><h2 class="pHeading1">
+5.2	Class and Interface Operations
+</h2>
+<a name="wp444621"> </a><h3 class="pHeading2">
+5.2.1	KNI_FindClass</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq446326">
+  <caption><a name="wp446328"> </a><div class="pTableCaption">
+TABLE&#160;7&#160;&#160;&#8211;&#160;&#160;KNI_FindClass
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp446332"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp446334"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp446336"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp446338"> </a><div class="pTableText">
+<code class="cCode">void KNI_FindClass(const char* name, jclass classHandle);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446340"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp446342"> </a><div class="pTableText">
+Initializes a handle with a reference to the named class or interface. The function assumes that the class has already been loaded to the system and properly initialized. If this is not the case, or if no class is found, the handle will be initialized to NULL.
+</div>
+<a name="wp446832"> </a><div class="pTableText">
+&#160;
+</div>
+<a name="wp446833"> </a><div class="pTableText">
+The <code class="cCode">name</code> argument is a class descriptor (See <a  href="04-DataTypes.html#wp442806"><span style="color: #3366CC">Section&#160;4.3.2 &#8220;Class Descriptors</span></a>&#8221;). For example, the descriptor for the <code class="cCode">java.lang.String</code> class is:
+</div>
+<a name="wp446836"> </a><div class="pTableText">
+&#160;
+</div>
+<a name="wp446372"> </a><div class="pTableText">
+    &#8220;<code class="cCode">java/lang/String</code>&#8221;
+</div>
+<a name="wp446373"> </a><div class="pTableText">
+&#160;
+</div>
+<a name="wp446834"> </a><div class="pTableText">
+The descriptor of the array class <code class="cCode">java.lang.object[]</code> is:
+</div>
+<a name="wp446374"> </a><div class="pTableText">
+&#160;
+</div>
+<a name="wp446835"> </a><div class="pTableText">
+    &#8220;<code class="cCode">[Ljava/lang/Object;</code>&#8221;.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446344"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp446346"> </a><div class="pTableText">
+<code class="cCode">name</code>: the descriptor of the class or interface to be returned. The name is represented as a UTF-8 string.
+</div>
+<a name="wp448142"> </a><div class="pTableText">
+<code class="cCode">classHandle</code>: a handle in which the class pointer will be returned.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446348"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp446350"> </a><div class="pTableText">
+Returns nothing directly, but returns the class pointer in the &#8216;classHandle&#8217; handle. If the class cannot be found, the returned handle will be set to NULL.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446352"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp446354"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp444629"> </a><h3 class="pHeading2">
+5.2.2	KNI_GetSuperClass</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444498">
+  <caption><a name="wp444500"> </a><div class="pTableCaption">
+TABLE&#160;8&#160;&#160;&#8211;&#160;&#160;KNI_GetSuperClass
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp444504"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp444506"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp444508"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp444510"> </a><div class="pTableText">
+void <code class="cCode">KNI_GetSuperClass(jclass classHandle, jclass superclassHandle);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444512"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp444514"> </a><div class="pTableText">
+Initializes the <code class="cCode">superclassHandle</code> handle to contain a pointer to the superclass of the given class (represented by <code class="cCode">classHandle</code>).  If <code class="cCode">classHandle</code> represents the class <code class="cCode">java.lang.Object</code>, then the function sets the <code class="cCode">superclassHandle</code> handle to NULL.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444516"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp444518"> </a><div class="pTableText">
+<code class="cCode">classHandle</code>: a handle initialized with a reference to the class object whose superclass is to be determined.
+</div>
+<a name="wp448170"> </a><div class="pTableText">
+<code class="cCode">superclassHandle</code>: a handle which, upon return from this function, will contain a reference to the superclass object.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444520"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp444522"> </a><div class="pTableText">
+Returns nothing directly, but parameter <code class="cCode">superclassHandle </code>is used as a result value.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444524"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp444526"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp444573"> </a><p class="pBody">
+
+</p>
+<a name="wp450770"> </a><h3 class="pHeading2">
+5.2.3	KNI_IsAssignableFrom</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444538">
+  <caption><a name="wp444540"> </a><div class="pTableCaption">
+TABLE&#160;9&#160;&#160;&#8211;&#160;&#160;KNI_IsAssignableFrom
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp444544"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp444546"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp444548"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp444550"> </a><div class="pTableText">
+<code class="cCode">jboolean KNI_IsAssignableFrom(jclass classHandle1, jclass classHandle2);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444552"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp444554"> </a><div class="pTableText">
+Determines whether an object of class or interface <code class="cCode">classHandle1</code> can be safely cast to a class or interface <code class="cCode">classHandle2</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444556"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp444558"> </a><div class="pTableText">
+<code class="cCode">classHandle1</code>: handle initialized with a reference to the first class or interface argument
+</div>
+<a name="wp444559"> </a><div class="pTableText">
+<code class="cCode">classHandle2</code>: handle initialized with a reference to the second class or interface argument
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444561"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp444563"> </a><div class="pTableText">
+Returns <code class="cCode">KNI_TRUE</code> if any of the following is true:
+</div>
+<a name="wp444564"> </a><div class="pTableText">
+&#160;
+</div>
+<a name="wp444565"> </a><div class="pTableText">
+The first and second argument refer to the same class or interface
+</div>
+<a name="wp444566"> </a><div class="pTableText">
+The first argument refers to a subclass of the second argument
+</div>
+<a name="wp444567"> </a><div class="pTableText">
+The first argument refers to a class that has the second argument as one of its interfaces
+</div>
+<a name="wp444568"> </a><div class="pTableText">
+The first and second arguments both refer to array of classes with element types <code class="cCode">X</code> and <code class="cCode">Y</code>, and <code class="cCode">KNI_IsAssignableFrom(X,</code> <code class="cCode">Y)</code> is <code class="cCode">KNI_TRUE</code>; otherwise it returns KNI_FALSE
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444570"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp444572"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp444419"> </a><p class="pBody">
+
+</p>
+<a name="wp450778"> </a><h2 class="pHeading1">
+5.3	Exceptions
+</h2>
+<a name="wp444709"> </a><h3 class="pHeading2">
+5.3.1	KNI_ThrowNew</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444680">
+  <caption><a name="wp444682"> </a><div class="pTableCaption">
+TABLE&#160;10&#160;&#160;&#8211;&#160;&#160;KNI_ThrowNew
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp444686"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp444688"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp444690"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp444692"> </a><div class="pTableText">
+<code class="cCode">jint KNI_ThrowNew(const char* name, const char* message);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444694"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp444696"> </a><div class="pTableText">
+Instantiates an exception object with the message specified by <code class="cCode">message</code>, and causes that exception to be thrown. A thrown exception will be pending in the current thread, but does not immediately disrupt native code execution. The actual exception will be thrown when the program control returns from the native function back to the virtual machine. Note that <code class="cCode">KNI_ThrowNew</code> does not run the constructor on the new exception object.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444698"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp444700"> </a><div class="pTableText">
+<code class="cCode">name</code>: the name of a <code class="cCode">java.lang.Throwable</code> class as a UTF-8 string.
+</div>
+<a name="wp448033"> </a><div class="pTableText">
+<code class="cCode">message:</code> the message used to construct the <code class="cCode">java.lang.Throwable</code> object; represented as a UTF-8 string.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444702"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp444704"> </a><div class="pTableText">
+<code class="cCode">KNI_OK</code> on success; otherwise <code class="cCode">KNI_ERR</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444706"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp444708"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<hr class="pHr"/><div class="note">
+<a name="wp450909"> </a>
+<b>Note &#8211;</b>  Since KNI does not allow Java code to be run from native methods, <code class="cCode">KNI_ThrowNew</code> does not run the constructor of the exception object when it creates a new exception object. If you use <code class="cCode">KNI_ThrowNew</code> to throw exceptions that have other fields than those defined in class <code class="cCode">java.lang.Throwable</code>, the additional fields will not be initialized.
+<hr class="pHr"/></div>
+<a name="wp451358"> </a><h3 class="pHeading2">
+5.3.2	KNI_FatalError</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444638">
+  <caption><a name="wp444640"> </a><div class="pTableCaption">
+TABLE&#160;11&#160;&#160;&#8211;&#160;&#160;KNI_FatalError
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp444644"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp444646"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp444648"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp444650"> </a><div class="pTableText">
+<code class="cCode">void KNI_FatalError(const char* message);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444652"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp444654"> </a><div class="pTableText">
+Prints an error message to the system&#8217;s standard error output, and terminates the execution of the virtual machine immediately.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444656"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp444658"> </a><div class="pTableText">
+<code class="cCode">message</code>: the error message as a UTF-8 string.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444660"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp444662"> </a><div class="pTableText">
+This function does not return.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444664"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp444666"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp444422"> </a><h2 class="pHeading1">
+5.4	Object Operations
+</h2>
+<a name="wp444797"> </a><h3 class="pHeading2">
+5.4.1	KNI_GetObjectClass</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444768">
+  <caption><a name="wp444770"> </a><div class="pTableCaption">
+TABLE&#160;12&#160;&#160;&#8211;&#160;&#160;KNI_GetObjectClass
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp444774"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp444776"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp444778"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp444780"> </a><div class="pTableText">
+<code class="cCode">void KNI_GetObjectClass(jobject objectHandle, jclass classHandle);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444782"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp444784"> </a><div class="pTableText">
+Sets the handle <code class="cCode">classHandle</code> to point to the class of the object represented by <code class="cCode">objectHandle</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444786"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp444788"> </a><div class="pTableText">
+<code class="cCode">objectHandle</code>: a handle pointing to an object whose class is being sought.
+</div>
+<a name="wp448189"> </a><div class="pTableText">
+<code class="cCode">classHandle</code>: a handle which, upon return of this function, will contain a reference to the class of this object.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444790"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp444792"> </a><div class="pTableText">
+Returns nothing directly, but parameter <code class="cCode">classHandle</code> is used as a return value.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444794"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp444796"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp444851"> </a><h3 class="pHeading2">
+5.4.2	KNI_IsInstanceOf</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444821">
+  <caption><a name="wp444823"> </a><div class="pTableCaption">
+TABLE&#160;13&#160;&#160;&#8211;&#160;&#160;KNI_IsInstanceOf
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp444827"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp444829"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp444831"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp444833"> </a><div class="pTableText">
+<code class="cCode">jboolean KNI_IsInstanceOf(jobject objectHandle, jclass classHandle);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444835"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp444837"> </a><div class="pTableText">
+Tests whether an object represented by <code class="cCode">objectHandle</code> is an instance of a class or interface represented by <code class="cCode">classHandle</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444839"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp444841"> </a><div class="pTableText">
+<code class="cCode">objectHandle</code>: a handle pointing to an object.
+</div>
+<a name="wp444842"> </a><div class="pTableText">
+<code class="cCode">clazz</code>: a handle pointing to a class or interface.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444844"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp444846"> </a><div class="pTableText">
+Returns <code class="cCode">KNI_TRUE</code> if the given object is an instance of given class, <code class="cCode">KNI_FALSE</code> otherwise. 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444848"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp444850"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp444425"> </a><h2 class="pHeading1">
+5.5	Instance Field Access
+</h2>
+<a name="wp444916"> </a><h3 class="pHeading2">
+5.5.1	KNI_GetFieldID</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444884">
+  <caption><a name="wp444886"> </a><div class="pTableCaption">
+TABLE&#160;14&#160;&#160;&#8211;&#160;&#160;KNI_GetFieldID
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp444890"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp444892"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp444894"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp444896"> </a><div class="pTableText">
+<code class="cCode">jfieldID KNI_GetFieldID(jclass classHandle, const char* name, const char* signature);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444899"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp444901"> </a><div class="pTableText">
+Returns the field ID of an instance field of the class represented by <code class="cCode">classHandle</code>. The field is specified by its name and signature.  The <code class="cCode">Get&lt;Type&gt;Field</code> and <code class="cCode">Set&lt;Type&gt;Field</code> families of accessor functions use field IDs to retrieve the value of instance fields.  The field must be accessible from the class referred to by <code class="cCode">classHandle</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444903"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp444905"> </a><div class="pTableText">
+<code class="cCode">classHandle</code>: a handle pointing to a class whose field ID will be retrieved.
+</div>
+<a name="wp449454"> </a><div class="pTableText">
+<code class="cCode">name</code>: the field name as a UTF-8 string.
+</div>
+<a name="wp444907"> </a><div class="pTableText">
+<code class="cCode">signature</code>: the field descriptor as a UTF-8 string.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444909"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp444911"> </a><div class="pTableText">
+Returns a field ID or NULL if the lookup fails for any reason.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444913"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp444915"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp445084"> </a><h3 class="pHeading2">
+5.5.2	KNI_Get&lt;Type&gt;Field</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq445054">
+  <caption><a name="wp445056"> </a><div class="pTableCaption">
+TABLE&#160;15&#160;&#160;&#8211;&#160;&#160;KNI_Get&lt;Type&gt;Field
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp445060"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp445062"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp445064"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp445066"> </a><div class="pTableText">
+<code class="cCode">&lt;NativeType&gt; KNI_Get&lt;Type&gt;Field(jobject objectHandle, jfieldID fieldID);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445068"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp445070"> </a><div class="pTableText">
+Returns the value of an instance field of a primitive type. The field to access is denoted by <code class="cCode">fieldID</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445072"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp445074"> </a><div class="pTableText">
+<code class="cCode">objectHandle</code>: a handle pointing to an object whose field is to be accessed.
+</div>
+<a name="wp449460"> </a><div class="pTableText">
+<code class="cCode">fieldID</code>: the field ID of the given instance field.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445077"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp445079"> </a><div class="pTableText">
+Returns the value of a primitive instance field.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445081"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp445083"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp445085"> </a><p class="pBody">
+This family of functions consists of eight members that are listed in the table below. Note that those functions that manipulate <code class="cCode">jfloat</code> or <code class="cCode">jdouble</code> data types are assumed to be available only if the underlying virtual machine or J2ME configuration supports floating point data types.</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq445086">
+  <caption><a name="wp445088"> </a><div class="pTableCaption">
+TABLE&#160;16&#160;&#160;&#8211;&#160;&#160;KNI_Get&lt;Type&gt;Field Functions
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp445092"> </a><div style="text-align: left" class="pTableHead">
+KNI_Get&lt;Type&gt;Field
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp445094"> </a><div style="text-align: left" class="pTableHead">
+&lt;NativeType&gt;
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp445100"> </a><div class="pTableText">
+<code class="cCode">KNI_GetBooleanField</code>
+</div>
+</td>
+    <td><a name="wp445102"> </a><div class="pTableText">
+<code class="cCode">jboolean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445104"> </a><div class="pTableText">
+<code class="cCode">KNI_GetByteField</code>
+</div>
+</td>
+    <td><a name="wp445106"> </a><div class="pTableText">
+<code class="cCode">jbyte</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445108"> </a><div class="pTableText">
+<code class="cCode">KNI_GetCharField</code>
+</div>
+</td>
+    <td><a name="wp445110"> </a><div class="pTableText">
+<code class="cCode">jchar</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445112"> </a><div class="pTableText">
+<code class="cCode">KNI_GetShortField</code>
+</div>
+</td>
+    <td><a name="wp445114"> </a><div class="pTableText">
+<code class="cCode">jshort</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445116"> </a><div class="pTableText">
+<code class="cCode">KNI_GetIntField</code>
+</div>
+</td>
+    <td><a name="wp445118"> </a><div class="pTableText">
+<code class="cCode">jint</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445120"> </a><div class="pTableText">
+<code class="cCode">KNI_GetLongField</code>
+</div>
+</td>
+    <td><a name="wp445122"> </a><div class="pTableText">
+<code class="cCode">jlong</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445124"> </a><div class="pTableText">
+<code class="cCode">KNI_GetFloatField</code>
+</div>
+</td>
+    <td><a name="wp445126"> </a><div class="pTableText">
+<code class="cCode">jfloat</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445128"> </a><div class="pTableText">
+<code class="cCode">KNI_GetDoubleField</code>
+</div>
+</td>
+    <td><a name="wp445130"> </a><div class="pTableText">
+<code class="cCode">jdouble</code>
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp445193"> </a><h3 class="pHeading2">
+5.5.3	KNI_Set&lt;Type&gt;Field</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq445162">
+  <caption><a name="wp445164"> </a><div class="pTableCaption">
+TABLE&#160;17&#160;&#160;&#8211;&#160;&#160;KNI_Set&lt;Type&gt;Field
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp445168"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp445170"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp445172"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp445174"> </a><div class="pTableText">
+<code class="cCode">void KNI_Set&lt;Type&gt;Field(jobject objectHandle, jfieldID fieldID, &lt;NativeType&gt; value);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445176"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp445178"> </a><div class="pTableText">
+Sets the value of an instance field of a primitive type. The field to modify is denoted by <code class="cCode">fieldID</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445180"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp445182"> </a><div class="pTableText">
+<code class="cCode">objectHandle</code>: a handle pointing to an object whose field is to be modified.
+</div>
+<a name="wp445183"> </a><div class="pTableText">
+<code class="cCode">fieldID</code>: the field ID of the given instance field.
+</div>
+<a name="wp445184"> </a><div class="pTableText">
+<code class="cCode">value</code>: the value to set to the instance field.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445186"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp445188"> </a><div class="pTableText">
+<code class="cCode">void</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445190"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp445192"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp445239"> </a><p class="pBody">
+This family of functions consists of nine members that are listed in the table below. Note that those functions that manipulate <code class="cCode">jfloat</code> or <code class="cCode">jdouble</code> data types are assumed to be available only if the underlying virtual machine or J2ME configuration supports floating point data types.</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq445194">
+  <caption><a name="wp445196"> </a><div class="pTableCaption">
+TABLE&#160;18&#160;&#160;&#8211;&#160;&#160;KNI_Set&lt;Type&gt;Field Functions
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp445200"> </a><div style="text-align: left" class="pTableHead">
+KNI_Set&lt;Type&gt;Field
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp445202"> </a><div style="text-align: left" class="pTableHead">
+&lt;NativeType&gt;
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp445208"> </a><div class="pTableText">
+<code class="cCode">KNI_SetBooleanField</code>
+</div>
+</td>
+    <td><a name="wp445210"> </a><div class="pTableText">
+<code class="cCode">jboolean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445212"> </a><div class="pTableText">
+<code class="cCode">KNI_SetByteField</code>
+</div>
+</td>
+    <td><a name="wp445214"> </a><div class="pTableText">
+<code class="cCode">jbyte</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445216"> </a><div class="pTableText">
+<code class="cCode">KNI_SetCharField</code>
+</div>
+</td>
+    <td><a name="wp445218"> </a><div class="pTableText">
+<code class="cCode">jchar</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445220"> </a><div class="pTableText">
+<code class="cCode">KNI_SetShortField</code>
+</div>
+</td>
+    <td><a name="wp445222"> </a><div class="pTableText">
+<code class="cCode">jshort</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445224"> </a><div class="pTableText">
+<code class="cCode">KNI_SetIntField</code>
+</div>
+</td>
+    <td><a name="wp445226"> </a><div class="pTableText">
+<code class="cCode">jint</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445228"> </a><div class="pTableText">
+<code class="cCode">KNI_SetLongField</code>
+</div>
+</td>
+    <td><a name="wp445230"> </a><div class="pTableText">
+<code class="cCode">jlong</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445232"> </a><div class="pTableText">
+<code class="cCode">KNI_SetFloatField</code>
+</div>
+</td>
+    <td><a name="wp445234"> </a><div class="pTableText">
+<code class="cCode">jfloat</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445236"> </a><div class="pTableText">
+<code class="cCode">KNI_SetDoubleField</code>
+</div>
+</td>
+    <td><a name="wp445238"> </a><div class="pTableText">
+<code class="cCode">jdouble</code>
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp448227"> </a><h3 class="pHeading2">
+5.5.4	KNI_GetObjectField</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq448197">
+  <caption><a name="wp448199"> </a><div class="pTableCaption">
+TABLE&#160;19&#160;&#160;&#8211;&#160;&#160;KNI_GetObjectField
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp448203"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp448205"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp448207"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp448209"> </a><div class="pTableText">
+<code class="cCode">void KNI_GetObjectField(jobject objectHandle, jfieldID fieldID, jobject toHandle);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448211"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp448213"> </a><div class="pTableText">
+Returns the value of a field of a reference type, and assigns it to the handle <code class="cCode">toHandle.</code> The field to access is denoted by <code class="cCode">fieldID</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448215"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp448217"> </a><div class="pTableText">
+<code class="cCode">objectHandle</code>: a handle pointing to an object whose whose field is to be accessed.
+</div>
+<a name="wp448218"> </a><div class="pTableText">
+<code class="cCode">fieldID</code>: the field ID of the given instance field.
+</div>
+<a name="wp448271"> </a><div class="pTableText">
+<code class="cCode">toHandle</code>: a handle to which the return value will be assigned.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448220"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp448222"> </a><div class="pTableText">
+Returns nothing directly, but handle <code class="cCode">toHandle</code> will contain the return value.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448224"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp448226"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp448268"> </a><h3 class="pHeading2">
+5.5.5	KNI_SetObjectField</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq448238">
+  <caption><a name="wp448240"> </a><div class="pTableCaption">
+TABLE&#160;20&#160;&#160;&#8211;&#160;&#160;KNI_SetObjectField
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp448244"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp448246"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp448248"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp448250"> </a><div class="pTableText">
+<code class="cCode">void KNI_SetObjectField(jobject objectHandle, jfieldID fieldID, jobject fromHandle);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448252"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp448254"> </a><div class="pTableText">
+Sets the value of an instance field of a reference type. The field to modify is denoted by <code class="cCode">fieldID</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448256"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp448258"> </a><div class="pTableText">
+<code class="cCode">objectHandle</code>: a handle pointing to an object whose field is to be modified.
+</div>
+<a name="wp449479"> </a><div class="pTableText">
+<code class="cCode">fieldID</code>: the field ID of the given instance field.
+</div>
+<a name="wp448286"> </a><div class="pTableText">
+<code class="cCode">fromHandle</code>: a handle pointing to an object that will be assigned to the field.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448261"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp448263"> </a><div class="pTableText">
+<code class="cCode">void</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448265"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp448267"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp448195"> </a><p class="pBody">
+
+</p>
+<a name="wp444428"> </a><h2 class="pHeading1">
+5.6	Static Field Access
+</h2>
+<a name="wp445319"> </a><h3 class="pHeading2">
+5.6.1	KNI_GetStaticFieldID</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq445288">
+  <caption><a name="wp445290"> </a><div class="pTableCaption">
+TABLE&#160;21&#160;&#160;&#8211;&#160;&#160;KNI_GetStaticField
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp445294"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp445296"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp445298"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp445300"> </a><div class="pTableText">
+<code class="cCode">jfieldID KNI_GetStaticFieldID(jclass classHandle, const char* name, const char* signature);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445302"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp445304"> </a><div class="pTableText">
+Returns the field ID of a static field of the class represented by <code class="cCode">classHandle</code>. The field is specified by its name and signature.  The <code class="cCode">GetStatic&lt;Type&gt;Field</code> and <code class="cCode">SetStatic&lt;Type&gt;Field</code> families of accessor functions use field IDs to retrieve the value of static fields.  The field must be accessible from the class referred to by <code class="cCode">classHandle</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445306"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp445308"> </a><div class="pTableText">
+<code class="cCode">classHandle</code>: a handle pointing to a class whose field ID will be retrieved.
+</div>
+<a name="wp445309"> </a><div class="pTableText">
+<code class="cCode">name</code>: the field name as a UTF-8 string
+</div>
+<a name="wp445310"> </a><div class="pTableText">
+<code class="cCode">signature</code>: the field descriptor as a UTF-8 string.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445312"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp445314"> </a><div class="pTableText">
+Returns a field ID or NULL if the lookup fails for any reason.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445316"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp445318"> </a><div class="pTableText">
+Lookup of field IDs in interfaces is not supported.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp445427"> </a><p class="pBody">
+
+</p>
+<a name="wp450794"> </a><h3 class="pHeading2">
+5.6.2	KNI_GetStatic&lt;Type&gt;Field</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq445397">
+  <caption><a name="wp445399"> </a><div class="pTableCaption">
+TABLE&#160;22&#160;&#160;&#8211;&#160;&#160;KNI_GetStatic&lt;Type&gt;Field
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp445403"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp445405"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp445407"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp445409"> </a><div class="pTableText">
+<code class="cCode">&lt;NativeType&gt; KNI_GetStatic&lt;Type&gt;Field(jclass classHandle, jfield fieldID);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445411"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp445413"> </a><div class="pTableText">
+Returns the value of a static field of a primitive type. The field to access is denoted by <code class="cCode">fieldID</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445415"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp445417"> </a><div class="pTableText">
+<code class="cCode">classHandle</code>: a handle pointing to a class or interface whose static field is to be accessed.
+</div>
+<a name="wp445418"> </a><div class="pTableText">
+<code class="cCode">fieldID</code>: a field ID of the given class.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445420"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp445422"> </a><div class="pTableText">
+Returns the value of a static field of a primitive type.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445424"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp445426"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp445473"> </a><p class="pBody">
+This family of functions consists of eight members that are listed in the table below. Note that those functions that manipulate <code class="cCode">jfloat</code> or <code class="cCode">jdouble</code> data types are assumed to be available only if the underlying virtual machine or J2ME configuration supports floating point data types:</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq445428">
+  <caption><a name="wp445430"> </a><div class="pTableCaption">
+TABLE&#160;23&#160;&#160;&#8211;&#160;&#160;KNI_GetStatic&lt;Type&gt;Field Functions
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp445434"> </a><div style="text-align: left" class="pTableHead">
+KNI_GetStatic&lt;Type&gt;Field
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp445436"> </a><div style="text-align: left" class="pTableHead">
+&lt;NativeType&gt;
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp445442"> </a><div class="pTableText">
+<code class="cCode">KNI_GetStaticBooleanField</code>
+</div>
+</td>
+    <td><a name="wp445444"> </a><div class="pTableText">
+<code class="cCode">jboolean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445446"> </a><div class="pTableText">
+<code class="cCode">KNI_GetStaticByteField</code>
+</div>
+</td>
+    <td><a name="wp445448"> </a><div class="pTableText">
+<code class="cCode">jbyte</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445450"> </a><div class="pTableText">
+<code class="cCode">KNI_GetStaticCharField</code>
+</div>
+</td>
+    <td><a name="wp445452"> </a><div class="pTableText">
+<code class="cCode">jchar</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445454"> </a><div class="pTableText">
+<code class="cCode">KNI_GetStaticShortField</code>
+</div>
+</td>
+    <td><a name="wp445456"> </a><div class="pTableText">
+<code class="cCode">jshort</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445458"> </a><div class="pTableText">
+<code class="cCode">KNI_GetStaticIntField</code>
+</div>
+</td>
+    <td><a name="wp445460"> </a><div class="pTableText">
+<code class="cCode">jint</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445462"> </a><div class="pTableText">
+<code class="cCode">KNI_GetStaticLongField</code>
+</div>
+</td>
+    <td><a name="wp445464"> </a><div class="pTableText">
+<code class="cCode">jlong</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445466"> </a><div class="pTableText">
+<code class="cCode">KNI_GetStaticFloatField</code>
+</div>
+</td>
+    <td><a name="wp445468"> </a><div class="pTableText">
+<code class="cCode">jfloat</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445470"> </a><div class="pTableText">
+<code class="cCode">KNI_GetStaticDoubleField</code>
+</div>
+</td>
+    <td><a name="wp445472"> </a><div class="pTableText">
+<code class="cCode">jdouble</code>
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp448377"> </a><h3 class="pHeading2">
+5.6.3	KNI_SetStatic&lt;Type&gt;Field</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq445521">
+  <caption><a name="wp445523"> </a><div class="pTableCaption">
+TABLE&#160;24&#160;&#160;&#8211;&#160;&#160;KNI_SetStatic&lt;Type&gt;Field
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp445527"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp445529"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp445531"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp445533"> </a><div class="pTableText">
+<code class="cCode">void KNI_SetStatic&lt;Type&gt;Field(jclass classHandle, jfieldID fieldID, &lt;NativeType&gt; value);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445535"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp445537"> </a><div class="pTableText">
+Sets the value of a static field of a primitive type. The field to modify is denoted by <code class="cCode">fieldID</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445539"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp445541"> </a><div class="pTableText">
+<code class="cCode">classHandle</code>: a handle pointing to the class or interface whose static field is to be modified.
+</div>
+<a name="wp445542"> </a><div class="pTableText">
+<code class="cCode">fieldID</code>: a field ID of the given class.
+</div>
+<a name="wp445543"> </a><div class="pTableText">
+<code class="cCode">value</code>: the value to set to the static field.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445545"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp445547"> </a><div class="pTableText">
+<code class="cCode">void</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445549"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp445551"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp445553"> </a><p class="pBody">
+This family of functions consists of eight members that are listed in the table below. Note that those functions that manipulate <code class="cCode">jfloat</code> or <code class="cCode">jdouble</code> data types are assumed to be available only if the underlying virtual machine or J2ME configuration supports floating point data types:</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq445554">
+  <caption><a name="wp445556"> </a><div class="pTableCaption">
+TABLE&#160;25&#160;&#160;&#8211;&#160;&#160;KNI_SetStatic&lt;Type&gt;Field Functions
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp445560"> </a><div style="text-align: left" class="pTableHead">
+KNI_SetStatic&lt;Type&gt;Field
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp445562"> </a><div style="text-align: left" class="pTableHead">
+&lt;NativeType&gt;
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp445568"> </a><div class="pTableText">
+<code class="cCode">KNI_SetStaticBooleanField</code>
+</div>
+</td>
+    <td><a name="wp445570"> </a><div class="pTableText">
+<code class="cCode">jboolean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445572"> </a><div class="pTableText">
+<code class="cCode">KNI_SetStaticByteField</code>
+</div>
+</td>
+    <td><a name="wp445574"> </a><div class="pTableText">
+<code class="cCode">jbyte</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445576"> </a><div class="pTableText">
+<code class="cCode">KNI_SetStaticCharField</code>
+</div>
+</td>
+    <td><a name="wp445578"> </a><div class="pTableText">
+<code class="cCode">jchar</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445580"> </a><div class="pTableText">
+<code class="cCode">KNI_SetStaticShortField</code>
+</div>
+</td>
+    <td><a name="wp445582"> </a><div class="pTableText">
+<code class="cCode">jshort</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445584"> </a><div class="pTableText">
+<code class="cCode">KNI_SetStaticIntField</code>
+</div>
+</td>
+    <td><a name="wp445586"> </a><div class="pTableText">
+<code class="cCode">jint</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445588"> </a><div class="pTableText">
+<code class="cCode">KNI_SetStaticLongField</code>
+</div>
+</td>
+    <td><a name="wp445590"> </a><div class="pTableText">
+<code class="cCode">jlong</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445592"> </a><div class="pTableText">
+<code class="cCode">KNI_SetStaticFloatField</code>
+</div>
+</td>
+    <td><a name="wp445594"> </a><div class="pTableText">
+<code class="cCode">jfloat</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445596"> </a><div class="pTableText">
+<code class="cCode">KNI_SetStaticDoubleField</code>
+</div>
+</td>
+    <td><a name="wp445598"> </a><div class="pTableText">
+<code class="cCode">jdouble</code>
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp448335"> </a><h3 class="pHeading2">
+5.6.4	KNI_GetStaticObjectField</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq448305">
+  <caption><a name="wp448307"> </a><div class="pTableCaption">
+TABLE&#160;26&#160;&#160;&#8211;&#160;&#160;KNI_GetStaticObjectField
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp448311"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp448313"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp448315"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp448317"> </a><div class="pTableText">
+<code class="cCode">void KNI_GetStaticObjectField(jclass classHandle, jfield fieldID, jobject toHandle);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448319"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp448321"> </a><div class="pTableText">
+Returns the value of a static field of a reference type, and assigns it to the handle <code class="cCode">toHandle</code>. The field to access is denoted by <code class="cCode">fieldID</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448323"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp448325"> </a><div class="pTableText">
+<code class="cCode">classHandle</code>: a handle pointing to a class or interface whose static field is to be accessed.
+</div>
+<a name="wp448382"> </a><div class="pTableText">
+<code class="cCode">fieldID</code>: a field ID of the given class.
+</div>
+<a name="wp448387"> </a><div class="pTableText">
+<code class="cCode">toHandle</code>: a handle to which the return value will be assigned.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448328"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp448330"> </a><div class="pTableText">
+Nothing directly, but handle <code class="cCode">toHandle</code> will contain the return value.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448332"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp448334"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp448369"> </a><h3 class="pHeading2">
+5.6.5	KNI_SetStaticObjectField</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq448339">
+  <caption><a name="wp448341"> </a><div class="pTableCaption">
+TABLE&#160;27&#160;&#160;&#8211;&#160;&#160;KNI_SetStaticObjectField
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp448345"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp448347"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp448349"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp448351"> </a><div class="pTableText">
+<code class="cCode">void KNI_SetStaticObjectField(jclass classHandle, jfield fieldID, jobject fromHandle);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448353"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp448355"> </a><div class="pTableText">
+Sets the value of a static field of a reference type. The field to modify is denoted by <code class="cCode">fieldID</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448357"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp448359"> </a><div class="pTableText">
+<code class="cCode">classHandle</code>: a handle pointing to the class or interface whose whose static field is to be modified.
+</div>
+<a name="wp448360"> </a><div class="pTableText">
+<code class="cCode">fieldID</code>: a field ID of the given class.
+</div>
+<a name="wp448391"> </a><div class="pTableText">
+<code class="cCode">fromHandle</code>: a handle pointing to an object that will assigned to the field.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448362"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp448364"> </a><div class="pTableText">
+<code class="cCode">void</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448366"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp448368"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp448303"> </a><p class="pBody">
+
+</p>
+<a name="wp444431"> </a><h2 class="pHeading1">
+5.7	String Operations
+</h2>
+<a name="wp450956"> </a><h3 class="pHeading2">
+5.7.1	KNI_GetStringLength</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq450927">
+  <caption><a name="wp450929"> </a><div class="pTableCaption">
+TABLE&#160;28&#160;&#160;&#8211;&#160;&#160;KNI_GetStringLength
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp450933"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp450935"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp450937"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp450939"> </a><div class="pTableText">
+<code class="cCode">jsize KNI_GetStringLength(jstring stringHandle);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450941"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp450943"> </a><div class="pTableText">
+Returns the number of Unicode characters in a <code class="cCode">java.lang.String</code> object. If the given string handle is NULL, the function returns -1.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450945"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp450947"> </a><div class="pTableText">
+<code class="cCode">stringHandle</code>: a handle pointing to a <code class="cCode">java.lang.String</code> string object whose length is to be determined.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450949"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp450951"> </a><div class="pTableText">
+Returns the length of the string, or -1 if the given string handle is NULL.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450953"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp450955"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp450957"> </a><p class="pBody">
+
+</p>
+<a name="wp450990"> </a><h3 class="pHeading2">
+5.7.2	KNI_GetStringRegion</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq450958">
+  <caption><a name="wp450960"> </a><div class="pTableCaption">
+TABLE&#160;29&#160;&#160;&#8211;&#160;&#160;KNI_GetStringRegion
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp450964"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp450966"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp450968"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp450970"> </a><div class="pTableText">
+<code class="cCode">void KNI_GetStringRegion(jstring stringHandle, jsize offset, jsize n, jchar* jcharbuf);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450972"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp450974"> </a><div class="pTableText">
+Copies <code class="cCode">a</code> number of Unicode characters from a <code class="cCode">java.lang.String</code> object <code class="cCode">(</code>denoted by <code class="cCode">stringHandle)</code>, beginning at <code class="cCode">offset</code>, to the given buffer <code class="cCode">jcharbuf</code>. No range checking is performed. It is the responsibility of the native function programmer to allocate the return buffer, and to make sure that it is large enough.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450976"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp450978"> </a><div class="pTableText">
+<code class="cCode">stringHandle</code>: a handle pointing to a <code class="cCode">java.lang.String</code> object whose contents are to be copied.
+</div>
+<a name="wp450979"> </a><div class="pTableText">
+<code class="cCode">offset</code>: the offset within the string object at which to start copying (<code class="cCode">offset</code> 0: first character in the Java string.)
+</div>
+<a name="wp450980"> </a><div class="pTableText">
+<code class="cCode">n</code>: the number of 16-bit Unicode characters to copy.
+</div>
+<a name="wp450981"> </a><div class="pTableText">
+<code class="cCode">jcharbuf</code>: a pointer to a buffer to hold the Unicode characters.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450983"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp450985"> </a><div class="pTableText">
+Data is returned in user-allocated buffer <code class="cCode">jcharbuf</code>. Each character in the returned buffer is 16 bits wide.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450987"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp450989"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp451084"> </a><h3 class="pHeading2">
+5.7.3	KNI_NewString</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq451054">
+  <caption><a name="wp451056"> </a><div class="pTableCaption">
+TABLE&#160;30&#160;&#160;&#8211;&#160;&#160;KNI_NewString
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp451060"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp451062"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp451064"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp451066"> </a><div class="pTableText">
+<code class="cCode">void KNI_NewString(const jchar* uchars, jsize length, jstring stringHandle);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp451068"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp451070"> </a><div class="pTableText">
+Creates a <code class="cCode">java.lang.String</code> object from the given Unicode sequence. The resulting object is returned to the caller via the <code class="cCode">stringHandle</code> handle.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp451072"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp451074"> </a><div class="pTableText">
+<code class="cCode">uchars</code>: a Unicode sequence that will make up the contents of the new string object.
+</div>
+<a name="wp451075"> </a><div class="pTableText">
+<code class="cCode">str</code>ingHandle: a handle to hold the reference to the new <code class="cCode">java.lang.String</code> object..
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp451077"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp451079"> </a><div class="pTableText">
+Returns nothing directly, but handle <code class="cCode">str</code>ingHandle will contain a reference to the new string object.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp451081"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp451083"> </a><div class="pTableText">
+<code class="cCode">OutOfMemoryError</code> if the virtual machine runs out of memory.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp449029"> </a><h3 class="pHeading2">
+5.7.4	KNI_NewStringUTF</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq448997">
+  <caption><a name="wp448999"> </a><div class="pTableCaption">
+TABLE&#160;31&#160;&#160;&#8211;&#160;&#160;KNI_NewStringUTF
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp449003"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp449005"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp449007"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp449009"> </a><div class="pTableText">
+<code class="cCode">void KNI_NewStringUTF(const char* utf8chars, jstring stringHandle);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp449011"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp449013"> </a><div class="pTableText">
+Creates a <code class="cCode">java.lang.String</code> object from the given UTF-8 string. The resulting object is returned to the caller via the <code class="cCode">stringHandle</code> handle.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp449015"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp449017"> </a><div class="pTableText">
+<code class="cCode">utf8chars</code>: a UTF-8 string that will make up the contents of the new string object.
+</div>
+<a name="wp451098"> </a><div class="pTableText">
+<code class="cCode">lenght</code>: length of the Unicode string.
+</div>
+<a name="wp449020"> </a><div class="pTableText">
+<code class="cCode">str</code>ingHandle: a handle to hold the reference to the new <code class="cCode">java.lang.String</code> object..
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp449022"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp451112"> </a><div class="pTableText">
+Returns nothing directly, but handle <code class="cCode">str</code>ingHandle will contain a reference to the new string object.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp449026"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp449028"> </a><div class="pTableText">
+<code class="cCode">OutOfMemoryError</code> if the virtual machine runs out of memory.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp444435"> </a><p class="pBody">
+
+</p>
+<a name="wp451117"> </a><h2 class="pHeading1">
+5.8	Array Operations
+</h2>
+<a name="wp445918"> </a><h3 class="pHeading2">
+5.8.1	KNI_GetArrayLength</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq445889">
+  <caption><a name="wp445891"> </a><div class="pTableCaption">
+TABLE&#160;32&#160;&#160;&#8211;&#160;&#160;KNI_GetArrayLength
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp445895"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp445897"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp445899"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp445901"> </a><div class="pTableText">
+<code class="cCode">jsize KNI_GetArrayLength(jarray arrayHandle);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445903"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp445905"> </a><div class="pTableText">
+Returns the number of elements in a given Java array object. The <code class="cCode">array</code> argument may denote an array of any element type, including primitive types or reference types. If the given <code class="cCode">array</code> handle is NULL, the function returns -1.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445907"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp445909"> </a><div class="pTableText">
+<code class="cCode">arrayHandle</code>: a handle pointing to an array object whose length is to be determined.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445911"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp445913"> </a><div class="pTableText">
+Returns the number of elements in the array, or -1 if the given array handle is NULL.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445915"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp445917"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp445979"> </a><h3 class="pHeading2">
+5.8.2	KNI_Get&lt;Type&gt;ArrayElement</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq445948">
+  <caption><a name="wp445950"> </a><div class="pTableCaption">
+TABLE&#160;33&#160;&#160;&#8211;&#160;&#160;KNI_Get&lt;Type&gt;ArrayElement
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp445954"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp445956"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp445958"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp445960"> </a><div class="pTableText">
+<code class="cCode">&lt;NativeType&gt; KNI_Get&lt;Type&gt;ArrayElement(&lt;ArrayType&gt; arrayHandle, jint index);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445963"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp445965"> </a><div class="pTableText">
+Returns an element of an array of <code class="cCode">&lt;Type&gt;</code> type. The given array reference must not be NULL. No array type checking or index range checking is performed.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445967"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp445969"> </a><div class="pTableText">
+<code class="cCode">arrayHandle</code>: a handle pointing to an array object.
+</div>
+<a name="wp445970"> </a><div class="pTableText">
+<code class="cCode">index</code>: the index of the element in the array. Index 0 denotes the first element in the array.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445972"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp445974"> </a><div class="pTableText">
+Returns the element at position <code class="cCode">index</code> of an array of <code class="cCode">&lt;Type&gt;</code> type.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp445976"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp445978"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp445980"> </a><p class="pBody">
+This family of functions consists of eight members that are listed in the table below. Note that those functions that manipulate <code class="cCode">jfloat</code> or <code class="cCode">jdouble</code> data types are assumed to be available only if the underlying virtual machine or J2ME configuration supports floating point data types.</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq445981">
+  <caption><a name="wp445983"> </a><div class="pTableCaption">
+TABLE&#160;34&#160;&#160;&#8211;&#160;&#160;KNI_Get&lt;Type&gt;ArrayElement Functions
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp445989"> </a><div style="text-align: left" class="pTableHead">
+KNI_Get&lt;Type&gt;ArrayELement
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp445991"> </a><div style="text-align: left" class="pTableHead">
+&lt;ArrayType&gt;
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp445993"> </a><div style="text-align: left" class="pTableHead">
+&lt;NativeType&gt;
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp446001"> </a><div class="pTableText">
+<code class="cCode">KNI_GetBooleanArrayElement</code>
+</div>
+</td>
+    <td><a name="wp446003"> </a><div class="pTableText">
+<code class="cCode">jbooleanArray</code>
+</div>
+</td>
+    <td><a name="wp446005"> </a><div class="pTableText">
+<code class="cCode">jboolean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446007"> </a><div class="pTableText">
+<code class="cCode">KNI_GetByteArrayElement</code>
+</div>
+</td>
+    <td><a name="wp446009"> </a><div class="pTableText">
+<code class="cCode">jbyteArray</code>
+</div>
+</td>
+    <td><a name="wp446011"> </a><div class="pTableText">
+<code class="cCode">jbyte</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446013"> </a><div class="pTableText">
+<code class="cCode">KNI_GetCharArrayElement</code>
+</div>
+</td>
+    <td><a name="wp446015"> </a><div class="pTableText">
+<code class="cCode">jcharArray</code>
+</div>
+</td>
+    <td><a name="wp446017"> </a><div class="pTableText">
+<code class="cCode">jchar</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446019"> </a><div class="pTableText">
+<code class="cCode">KNI_GetShortArrayElement</code>
+</div>
+</td>
+    <td><a name="wp446021"> </a><div class="pTableText">
+<code class="cCode">jshortArray</code>
+</div>
+</td>
+    <td><a name="wp446023"> </a><div class="pTableText">
+<code class="cCode">jshort</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446025"> </a><div class="pTableText">
+<code class="cCode">KNI_GetIntArrayElement</code>
+</div>
+</td>
+    <td><a name="wp446027"> </a><div class="pTableText">
+<code class="cCode">jintArray</code>
+</div>
+</td>
+    <td><a name="wp446029"> </a><div class="pTableText">
+<code class="cCode">jint</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446031"> </a><div class="pTableText">
+<code class="cCode">KNI_GetLongArrayElement</code>
+</div>
+</td>
+    <td><a name="wp446033"> </a><div class="pTableText">
+<code class="cCode">jlongArray</code>
+</div>
+</td>
+    <td><a name="wp446035"> </a><div class="pTableText">
+<code class="cCode">jlong</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446037"> </a><div class="pTableText">
+<code class="cCode">KNI_GetFloatArrayElement</code>
+</div>
+</td>
+    <td><a name="wp446039"> </a><div class="pTableText">
+<code class="cCode">jfloatArray</code>
+</div>
+</td>
+    <td><a name="wp446041"> </a><div class="pTableText">
+<code class="cCode">jfloat</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446043"> </a><div class="pTableText">
+<code class="cCode">KNI_GetDoubleArrayElement</code>
+</div>
+</td>
+    <td><a name="wp446045"> </a><div class="pTableText">
+<code class="cCode">jdoubleArray</code>
+</div>
+</td>
+    <td><a name="wp446047"> </a><div class="pTableText">
+<code class="cCode">jdouble</code>
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp448653"> </a><h3 class="pHeading2">
+5.8.3	KNI_Set&lt;Type&gt;ArrayElement</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq448553">
+  <caption><a name="wp448555"> </a><div class="pTableCaption">
+TABLE&#160;35&#160;&#160;&#8211;&#160;&#160;KNI_Set&lt;Type&gt;ArrayElement
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp448559"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp448561"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp448563"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp448565"> </a><div class="pTableText">
+<code class="cCode">void KNI_Set&lt;Type&gt;ArrayElement(&lt;ArrayType&gt; arrayHandle, jint index, &lt;NativeType&gt; value);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448567"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp448569"> </a><div class="pTableText">
+Sets an element of an array of <code class="cCode">&lt;Type&gt;</code> type. The given array handle must not be NULL. No array type checking or index range checking is performed.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448571"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp448573"> </a><div class="pTableText">
+<code class="cCode">arrayHandle</code>: a handle pointing to an array object.
+</div>
+<a name="wp448574"> </a><div class="pTableText">
+<code class="cCode">index</code>: the index of the element in the array.  Index 0 denotes the first element in the array.
+</div>
+<a name="wp448575"> </a><div class="pTableText">
+<code class="cCode">value</code>: the value that will be stored in the array.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448577"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp448579"> </a><div class="pTableText">
+<code class="cCode">void</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448581"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp448583"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp448646"> </a><p class="pBody">
+This family of functions consists of eight members that are listed in the table below. Note that those functions that manipulate <code class="cCode">jfloat</code> or <code class="cCode">jdouble</code> data types are assumed to be available only if the underlying virtual machine or J2ME configuration supports floating point data types.</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq448585">
+  <caption><a name="wp448587"> </a><div class="pTableCaption">
+TABLE&#160;36&#160;&#160;&#8211;&#160;&#160;KNI_Set&lt;Type&gt;ArrayElement Functions
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp448593"> </a><div style="text-align: left" class="pTableHead">
+KNI_Set&lt;Type&gt;ArrayElement
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp448595"> </a><div style="text-align: left" class="pTableHead">
+&lt;ArrayType&gt;
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp448597"> </a><div style="text-align: left" class="pTableHead">
+&lt;NativeType&gt;
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp448599"> </a><div class="pTableText">
+<code class="cCode">KNI_SetBooleanArrayElement</code>
+</div>
+</td>
+    <td><a name="wp448601"> </a><div class="pTableText">
+<code class="cCode">jbooleanArray</code>
+</div>
+</td>
+    <td><a name="wp448603"> </a><div class="pTableText">
+<code class="cCode">jboolean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448605"> </a><div class="pTableText">
+<code class="cCode">KNI_SetByteArrayElement</code>
+</div>
+</td>
+    <td><a name="wp448607"> </a><div class="pTableText">
+<code class="cCode">jbyteArray</code>
+</div>
+</td>
+    <td><a name="wp448609"> </a><div class="pTableText">
+<code class="cCode">jbyte</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448611"> </a><div class="pTableText">
+<code class="cCode">KNI_SetCharArrayElement</code>
+</div>
+</td>
+    <td><a name="wp448613"> </a><div class="pTableText">
+<code class="cCode">jcharArray</code>
+</div>
+</td>
+    <td><a name="wp448615"> </a><div class="pTableText">
+<code class="cCode">jchar</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448617"> </a><div class="pTableText">
+<code class="cCode">KNI_SetShortArrayElement</code>
+</div>
+</td>
+    <td><a name="wp448619"> </a><div class="pTableText">
+<code class="cCode">jshortArray</code>
+</div>
+</td>
+    <td><a name="wp448621"> </a><div class="pTableText">
+<code class="cCode">jshort</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448623"> </a><div class="pTableText">
+<code class="cCode">KNI_SetIntArrayElement</code>
+</div>
+</td>
+    <td><a name="wp448625"> </a><div class="pTableText">
+<code class="cCode">jintArray</code>
+</div>
+</td>
+    <td><a name="wp448627"> </a><div class="pTableText">
+<code class="cCode">jint</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448629"> </a><div class="pTableText">
+<code class="cCode">KNI_SetLongArrayElement</code>
+</div>
+</td>
+    <td><a name="wp448631"> </a><div class="pTableText">
+<code class="cCode">jlongArray</code>
+</div>
+</td>
+    <td><a name="wp448633"> </a><div class="pTableText">
+<code class="cCode">jlong</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448635"> </a><div class="pTableText">
+<code class="cCode">KNI_SetFloatArrayElement</code>
+</div>
+</td>
+    <td><a name="wp448637"> </a><div class="pTableText">
+<code class="cCode">jfloatArray</code>
+</div>
+</td>
+    <td><a name="wp448639"> </a><div class="pTableText">
+<code class="cCode">jfloat</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448641"> </a><div class="pTableText">
+<code class="cCode">KNI_SetDoubleArrayElement</code>
+</div>
+</td>
+    <td><a name="wp448643"> </a><div class="pTableText">
+<code class="cCode">jdoubleArray</code>
+</div>
+</td>
+    <td><a name="wp448645"> </a><div class="pTableText">
+<code class="cCode">jdouble</code>
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp448689"> </a><h3 class="pHeading2">
+5.8.4	KNI_GetObjectArrayElement</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq448659">
+  <caption><a name="wp448661"> </a><div class="pTableCaption">
+TABLE&#160;37&#160;&#160;&#8211;&#160;&#160;KNI_GetObjectArrayElement
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp448665"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp448667"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp448669"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp448671"> </a><div class="pTableText">
+<code class="cCode">void KNI_GetObjectArrayElement(jobjectArray arrayHandle, jint index, jobject toHandle);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448673"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp448675"> </a><div class="pTableText">
+Returns an element of an array of a reference type. The given <code class="cCode">array</code> handle must not be NULL. No array type checking or index range checking is performed.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448677"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp448679"> </a><div class="pTableText">
+<code class="cCode">arrayHandle</code>: a handle pointing to an array object.
+</div>
+<a name="wp450183"> </a><div class="pTableText">
+<code class="cCode">index</code>: the index of the element in the array. Index 0 denotes the first element in the array.
+</div>
+<a name="wp448711"> </a><div class="pTableText">
+<code class="cCode">toHandle</code>: a handle to which the return value will be assigned.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448682"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp448684"> </a><div class="pTableText">
+Returns nothing directly, but handle <code class="cCode">toHandle</code> will contain the return value.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448686"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp448688"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp448754"> </a><h3 class="pHeading2">
+5.8.5	KNI_SetObjectArrayElement</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq448723">
+  <caption><a name="wp448725"> </a><div class="pTableCaption">
+TABLE&#160;38&#160;&#160;&#8211;&#160;&#160;KNI_SetObjectArrayElement
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp448729"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp448731"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp448733"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp448735"> </a><div class="pTableText">
+<code class="cCode">void KNI_SetObjectArrayElement(jobjectArray arrayHandle, jint index, jobject fromHandle);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448737"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp448739"> </a><div class="pTableText">
+Sets an element of an array of a reference type. The given <code class="cCode">array</code> handle must not be NULL. No array type checking or index range checking is performed.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448741"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp448743"> </a><div class="pTableText">
+<code class="cCode">arrayHandle</code>: a handle pointing to an array object.
+</div>
+<a name="wp448744"> </a><div class="pTableText">
+<code class="cCode">index</code>: the index of the element in the array. Index 0 denotes the first element in the array.
+</div>
+<a name="wp448745"> </a><div class="pTableText">
+<code class="cCode">fromHandle</code>: a handle from which value will be read.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448747"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp448749"> </a><div class="pTableText">
+<code class="cCode">void</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448751"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp448753"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp448795"> </a><h3 class="pHeading2">
+5.8.6	KNI_GetRawArrayRegion</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq448764">
+  <caption><a name="wp448766"> </a><div class="pTableCaption">
+TABLE&#160;39&#160;&#160;&#8211;&#160;&#160;KNI_GetRawArrayRegion
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp448770"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp448772"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp448774"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp448776"> </a><div class="pTableText">
+<code class="cCode">void KNI_GetRawArrayRegion(jarray arrayHandle, jsize offset, jsize n, jbyte* dstBuffer);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448778"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp448780"> </a><div class="pTableText">
+Gets a region of n bytes of an array of a primitive type. The given <code class="cCode">array</code> handle must not be NULL. No array type checking or range checking is performed.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448782"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp448784"> </a><div class="pTableText">
+<code class="cCode">arrayHandle</code>: a handle initialized with the array reference.
+</div>
+<a name="wp448785"> </a><div class="pTableText">
+<code class="cCode">offset</code>: a byte offset within the array.
+</div>
+<a name="wp448855"> </a><div class="pTableText">
+<code class="cCode">n</code>: the number of bytes of raw data to get.
+</div>
+<a name="wp448786"> </a><div class="pTableText">
+<code class="cCode">dstBuffer</code>: the destination of the data as bytes.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448788"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp448790"> </a><div class="pTableText">
+<code class="cCode">void</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448792"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp448794"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp448848"> </a><h3 class="pHeading2">
+5.8.7	KNI_SetRawArrayRegion</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq448817">
+  <caption><a name="wp448819"> </a><div class="pTableCaption">
+TABLE&#160;40&#160;&#160;&#8211;&#160;&#160;KNI_SetRawArrayRegion
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp448823"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp448825"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp448827"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp448829"> </a><div class="pTableText">
+<code class="cCode">void KNI_SetRawArrayRegion(jarray arrayHandle, jsize offset, jsize n, const jbyte* srcBuffer);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448831"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp448833"> </a><div class="pTableText">
+Sets a region of <code class="cCode">n</code> bytes of an array of a primitive type. The given <code class="cCode">array</code> handle must not be NULL. No array type checking or range checking is performed.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448835"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp448837"> </a><div class="pTableText">
+<code class="cCode">arrayHandle</code>: a handle initialized with the array reference.
+</div>
+<a name="wp448838"> </a><div class="pTableText">
+<code class="cCode">offset</code>: a byte offset within the array.
+</div>
+<a name="wp450862"> </a><div class="pTableText">
+<code class="cCode">n</code>: the number of bytes of raw data to change.
+</div>
+<a name="wp448839"> </a><div class="pTableText">
+<code class="cCode">srcBuffer</code>: the source of the data as bytes.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448841"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp448843"> </a><div class="pTableText">
+<code class="cCode">void</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp448845"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp448847"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp448815"> </a><p class="pBody">
+
+</p>
+<a name="wp448811"> </a><h2 class="pHeading1">
+5.9	Parameter (Operand Stack) Access
+</h2>
+<a name="wp442611"> </a><p class="pBody">
+KNI introduces a new set of functions for reading the parameters (local variables) that a Java method has passed on to a native method, as well as a set of functions for returning values back from native methods to Java methods. These functions are typically used in conjunction of the handle operations introduced in <a  href="05-Functions.html#wp449049"><span style="color: #3366CC">Section&#160;5.10 &#8220;Handle Operations</span></a>.&#8221;
+</p>
+<a name="wp450377"> </a><h3 class="pHeading2">
+5.9.1	KNI_GetParameterAs&lt;Type&gt;</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq442612">
+  <caption><a name="wp442614"> </a><div class="pTableCaption">
+TABLE&#160;41&#160;&#160;&#8211;&#160;&#160;KNI_GetParameterAs&lt;Type&gt;
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp442618"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp442620"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp442622"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp442624"> </a><div class="pTableText">
+<code class="cCode">&lt;ReturnType&gt; KNI_GetParameterAs&lt;Type&gt;(jint index);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp442626"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp442628"> </a><div class="pTableText">
+Returns the value of a parameter of a primitive type <code class="cCode">&lt;Type&gt;</code> at physical location specified by <code class="cCode">index</code>. Parameter indices are mapped from left to right. Index value 1 refers to the leftmost parameter that has been passed on to the native method. Remember that parameters of type <code class="cCode">long</code> or <code class="cCode">double</code> take up two entries on the operand stack. No type checking or index range checking is performed.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp442630"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp442633"> </a><div class="pTableText">
+<code class="cCode">index</code>: the index of a parameter of a primitive type to the native method. Index value 1 refers to the leftmost parameter in the Java method.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp442635"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp442637"> </a><div class="pTableText">
+Returns the argument of a primitive type at position <code class="cCode">index</code> in the list of arguments to the native method.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp442639"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp442641"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<hr class="pHr"/><div class="note">
+<a name="wp442643"> </a>
+<b>Note &#8211;</b>  It is important to note that parameters of type <code class="cCode">long</code> or <code class="cCode">double</code> take up two entries on the operand stack. For example, when calling the following function<br /><br /><code class="cCode">    native void foo(int a, long b, int c);<br /></code><br />the index of parameter &#8216;<code class="cCode">a</code>&#8217; would be 1, index of parameter &#8216;<code class="cCode">b</code>&#8217; would be 2, and index of parameter &#8216;<code class="cCode">c</code>&#8217; would 4.
+<hr class="pHr"/>
+<a name="wp451011"> </a><p class="pBody">
+This family of functions consists of eight members that are listed in the table below. Note that those functions that manipulate <code class="cCode">jfloat</code> or <code class="cCode">jdouble</code> data types are assumed to be available only if the underlying virtual machine or J2ME configuration supports floating point data types.</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq442644">
+  <caption><a name="wp442646"> </a><div class="pTableCaption">
+TABLE&#160;42&#160;&#160;&#8211;&#160;&#160;Support for accessing a native method actual parameters
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp442652"> </a><div style="text-align: left" class="pTableHead">
+KNI_GetParameterAs&lt;Type&gt;
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp442654"> </a><div style="text-align: left" class="pTableHead">
+&lt;Type&gt;
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp442656"> </a><div style="text-align: left" class="pTableHead">
+&lt;ReturnType&gt;
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp442658"> </a><div class="pTableText">
+<code class="cCode">KNI_GetParameterAsBoolean</code>
+</div>
+</td>
+    <td><a name="wp442660"> </a><div class="pTableText">
+<code class="cCode">Boolean</code>
+</div>
+</td>
+    <td><a name="wp442662"> </a><div class="pTableText">
+<code class="cCode">jboolean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp442664"> </a><div class="pTableText">
+<code class="cCode">KNI_GetParameterAsByte</code>
+</div>
+</td>
+    <td><a name="wp442666"> </a><div class="pTableText">
+<code class="cCode">Byte</code>
+</div>
+</td>
+    <td><a name="wp442668"> </a><div class="pTableText">
+<code class="cCode">jbyte</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp442670"> </a><div class="pTableText">
+<code class="cCode">KNI_GetParameterAsChar</code>
+</div>
+</td>
+    <td><a name="wp442672"> </a><div class="pTableText">
+<code class="cCode">Char</code>
+</div>
+</td>
+    <td><a name="wp442674"> </a><div class="pTableText">
+<code class="cCode">jchar</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp442676"> </a><div class="pTableText">
+<code class="cCode">KNI_GetParameterAsShort</code>
+</div>
+</td>
+    <td><a name="wp442678"> </a><div class="pTableText">
+<code class="cCode">Short</code>
+</div>
+</td>
+    <td><a name="wp442680"> </a><div class="pTableText">
+<code class="cCode">jshort</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp442682"> </a><div class="pTableText">
+<code class="cCode">KNI_GetParameterAsInt</code>
+</div>
+</td>
+    <td><a name="wp442684"> </a><div class="pTableText">
+<code class="cCode">Int</code>
+</div>
+</td>
+    <td><a name="wp442686"> </a><div class="pTableText">
+<code class="cCode">jint</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp442688"> </a><div class="pTableText">
+<code class="cCode">KNI_GetParameterAsLong</code>
+</div>
+</td>
+    <td><a name="wp442690"> </a><div class="pTableText">
+<code class="cCode">Long</code>
+</div>
+</td>
+    <td><a name="wp442692"> </a><div class="pTableText">
+<code class="cCode">jlong</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp442694"> </a><div class="pTableText">
+<code class="cCode">KNI_GetParameterAsFloat</code>
+</div>
+</td>
+    <td><a name="wp442696"> </a><div class="pTableText">
+<code class="cCode">Float</code>
+</div>
+</td>
+    <td><a name="wp442698"> </a><div class="pTableText">
+<code class="cCode">jfloat</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp442700"> </a><div class="pTableText">
+<code class="cCode">KNI_GetParameterAsDouble</code>
+</div>
+</td>
+    <td><a name="wp442702"> </a><div class="pTableText">
+<code class="cCode">Double</code>
+</div>
+</td>
+    <td><a name="wp442704"> </a><div class="pTableText">
+<code class="cCode">jdouble</code>
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp450423"> </a><h3 class="pHeading2">
+5.9.2	KNI_GetParameterAsObject</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq450393">
+  <caption><a name="wp450395"> </a><div class="pTableCaption">
+TABLE&#160;43&#160;&#160;&#8211;&#160;&#160;KNI_GetParameterAsObject
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp450399"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp450401"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp450403"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp450405"> </a><div class="pTableText">
+<code class="cCode">void KNI_GetParameterAsObject(jint index, jobject toHandle);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450407"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp450409"> </a><div class="pTableText">
+Reads the value (object reference) of the parameter specified by <code class="cCode">index</code>, and stores it in the handle <code class="cCode">toHandle</code>. Parameter indices are mapped from left to right. Index value 1 refers to the leftmost parameter that has been passed on to the native method. No type checking or index range checking is performed.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450411"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp450413"> </a><div class="pTableText">
+<code class="cCode">index</code>: the index of a parameter of a reference type to the native method. Index value 1 refers to the leftmost parameter in the Java method.
+</div>
+<a name="wp450414"> </a><div class="pTableText">
+<code class="cCode">toHandle</code>: a handle to to which the return value will be assigned.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450416"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp450418"> </a><div class="pTableText">
+Returns nothing directly, but handle <code class="cCode">toHandle</code> will contain the return value.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450420"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp450422"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp450424"> </a><p class="pBody">
+
+</p>
+<a name="wp450454"> </a><h3 class="pHeading2">
+5.9.3	KNI_GetThisPointer</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq450425">
+  <caption><a name="wp450427"> </a><div class="pTableCaption">
+TABLE&#160;44&#160;&#160;&#8211;&#160;&#160;KNI_GetThisPointer
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp450431"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp450433"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp450435"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp450437"> </a><div class="pTableText">
+<code class="cCode">void KNI_GetThisPointer(jobject toHandle);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450439"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp450441"> </a><div class="pTableText">
+Reads the value of the &#8216;<code class="cCode">this</code>&#8217; pointer in the current stack frame of an instance (non-static) native method, and stores the value in the handle <code class="cCode">toHandle</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450443"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp450445"> </a><div class="pTableText">
+<code class="cCode">toHandle:</code> a handle to contain the <code class="cCode">&#8216;this&#8217;</code> pointer.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450447"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp450449"> </a><div class="pTableText">
+Returns nothing directly, but handle <code class="cCode">toHandle</code> will contain the return value. The return value is unspecified if this method is called inside a static native method.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450451"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp450453"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<hr class="pHr"/><div class="note">
+<a name="wp446718"> </a>
+<b>Note &#8211;</b>  The function <code class="cCode">KNI_GetThisPointer</code> should only be used only inside instance (non-static) native methods. The return value of this function is unspecified if the function is called from a static native method.
+<hr class="pHr"/>
+<a name="wp450290"> </a><h3 class="pHeading2">
+5.9.4	KNI_GetClassPointer</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq446689">
+  <caption><a name="wp446691"> </a><div class="pTableCaption">
+TABLE&#160;45&#160;&#160;&#8211;&#160;&#160;KNI_GetClassPointer
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp446695"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp446697"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp446699"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp446701"> </a><div class="pTableText">
+<code class="cCode">void KNI_GetClassPointer(jclass toHandle);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446703"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp446705"> </a><div class="pTableText">
+Reads the value of the class pointer in the current stack frame of a static native method, and stores the value in the handle <code class="cCode">toHandle</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446707"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp446709"> </a><div class="pTableText">
+<code class="cCode">toHandle:</code> a handle to contain the class pointer.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446711"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp450309"> </a><div class="pTableText">
+Returns nothing directly, but handle <code class="cCode">toHandle</code> will contain the return value.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp446715"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp446717"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp450493"> </a><h3 class="pHeading2">
+5.9.5	KNI_ReturnVoid</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq450464">
+  <caption><a name="wp450466"> </a><div class="pTableCaption">
+TABLE&#160;46&#160;&#160;&#8211;&#160;&#160;KNI_ReturnVoid
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp450470"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp450472"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp450474"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp450476"> </a><div class="pTableText">
+<code class="cCode">void KNI_ReturnVoid();</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450478"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp450480"> </a><div class="pTableText">
+Returns a void value from a native function. Calling this function terminates the execution of the native function immediately.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450482"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp450484"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450486"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp450488"> </a><div class="pTableText">
+None
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450490"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp450492"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<hr class="pHr"/><div class="note">
+<a name="wp450494"> </a>
+<b>Note &#8211;</b>  IMPORTANT: The <code class="cCode">KNI_ReturnVoid</code> function MUST BE CALLED at the end of a native function when a native function function does not want to return a value back to the calling Java function. Otherwise the operand stack of the Java virtual machine may become corrupted.
+<hr class="pHr"/>
+<a name="wp449102"> </a><h3 class="pHeading2">
+5.9.6	KNI_Return&lt;Type&gt;</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq449073">
+  <caption><a name="wp449075"> </a><div class="pTableCaption">
+TABLE&#160;47&#160;&#160;&#8211;&#160;&#160;KNI_Return&lt;Type&gt;
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp449079"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp449081"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp449083"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp449085"> </a><div class="pTableText">
+<code class="cCode">void KNI_Return&lt;Type&gt;(&lt;NativeType&gt; value);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp449087"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp449089"> </a><div class="pTableText">
+Returns a primitive value from a native function. Calling any of the <code class="cCode">KNI_Return&lt;Type&gt;</code> functions will terminate the execution of the native function immediately.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp449091"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp449093"> </a><div class="pTableText">
+<code class="cCode">value</code>: the result value of the native method.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp449095"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp449097"> </a><div class="pTableText">
+Returns a primitive value back to the function that called the native function containing the <code class="cCode">KNI_Return&lt;Type&gt;</code> call.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp449099"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp449101"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<hr class="pHr"/><div class="note">
+<a name="wp449951"> </a>
+<b>Note &#8211;</b>  The semantics of the <code class="cCode">KNI_Return&lt;Type&gt;</code> functions are similar to the standard C/C++ return statement. The execution of the function is terminated immediately, and the control is returned back to the caller.
+<hr class="pHr"/>
+<a name="wp449164"> </a><p class="pBody">
+This family of functions consists of eight members that are listed in the table below. Note that those functions that manipulate <code class="cCode">jfloat</code> or <code class="cCode">jdouble</code> data types are assumed to be available only if the underlying virtual machine or J2ME configuration supports floating point data types.</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq449103">
+  <caption><a name="wp449178"> </a><div class="pTableCaption">
+TABLE&#160;48&#160;&#160;&#8211;&#160;&#160;Support for setting a native result value
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp449184"> </a><div style="text-align: left" class="pTableHead">
+KNI_Return&lt;Type&gt;
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp449186"> </a><div style="text-align: left" class="pTableHead">
+&lt;Type&gt;
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp449188"> </a><div style="text-align: left" class="pTableHead">
+&lt;NativeType&gt;
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp449190"> </a><div class="pTableText">
+<code class="cCode">KNI_ReturnBoolean</code>
+</div>
+</td>
+    <td><a name="wp449192"> </a><div class="pTableText">
+<code class="cCode">Boolean</code>
+</div>
+</td>
+    <td><a name="wp449194"> </a><div class="pTableText">
+<code class="cCode">jboolean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp449196"> </a><div class="pTableText">
+<code class="cCode">KNI_ReturnByte</code>
+</div>
+</td>
+    <td><a name="wp449198"> </a><div class="pTableText">
+<code class="cCode">Byte</code>
+</div>
+</td>
+    <td><a name="wp449200"> </a><div class="pTableText">
+<code class="cCode">jbyte</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp449202"> </a><div class="pTableText">
+<code class="cCode">KNI_ReturnChar</code>
+</div>
+</td>
+    <td><a name="wp449204"> </a><div class="pTableText">
+<code class="cCode">Char</code>
+</div>
+</td>
+    <td><a name="wp449206"> </a><div class="pTableText">
+<code class="cCode">jchar</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp449208"> </a><div class="pTableText">
+<code class="cCode">KNI_ReturnShort</code>
+</div>
+</td>
+    <td><a name="wp449210"> </a><div class="pTableText">
+<code class="cCode">Short</code>
+</div>
+</td>
+    <td><a name="wp449212"> </a><div class="pTableText">
+<code class="cCode">jshort</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp449214"> </a><div class="pTableText">
+<code class="cCode">KNI_ReturnInt</code>
+</div>
+</td>
+    <td><a name="wp449216"> </a><div class="pTableText">
+<code class="cCode">Int</code>
+</div>
+</td>
+    <td><a name="wp449218"> </a><div class="pTableText">
+<code class="cCode">jint</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp449220"> </a><div class="pTableText">
+<code class="cCode">KNI_ReturnLong</code>
+</div>
+</td>
+    <td><a name="wp449222"> </a><div class="pTableText">
+<code class="cCode">Long</code>
+</div>
+</td>
+    <td><a name="wp449224"> </a><div class="pTableText">
+<code class="cCode">jlong</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp449226"> </a><div class="pTableText">
+<code class="cCode">KNI_ReturnFloat</code>
+</div>
+</td>
+    <td><a name="wp449228"> </a><div class="pTableText">
+<code class="cCode">Float</code>
+</div>
+</td>
+    <td><a name="wp449230"> </a><div class="pTableText">
+<code class="cCode">jfloat</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp449244"> </a><div class="pTableText">
+<code class="cCode">KNI_ReturnDouble</code>
+</div>
+</td>
+    <td><a name="wp449246"> </a><div class="pTableText">
+<code class="cCode">Double</code>
+</div>
+</td>
+    <td><a name="wp449248"> </a><div class="pTableText">
+<code class="cCode">jdouble</code>
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp449049"> </a><h2 class="pHeading1">
+5.10	Handle Operations
+</h2>
+<a name="wp449758"> </a><p class="pBody">
+To avoid garbage collection problems , all the object references used by KNI are handles to objects rather than direct object references. Many KNI functions (such as <code class="cCode">KNI_GetParameterAsObject</code> and <code class="cCode">KNI_GetObjectField</code>) use object handles as input or output parameters. It is the programmer&#8217;s responsibility to allocate, declare and unallocate the handles that are needed inside a native function.
+</p>
+<a name="wp450576"> </a><p class="pBody">
+Seven handle functions are provided, as listed below. 
+</p>
+<hr class="pHr"/><div class="note">
+<a name="wp450883"> </a>
+<b>Note &#8211;</b>  It is important to notice that the implementation of KNI handle operations may vary significantly from one virtual machine to another. The native function programmer should not assume anything about the internal structure or behavior of the handles. In order to write portable code, the programmer must only use the public KNI handle operations defined below.
+<hr class="pHr"/>
+<a name="wp449769"> </a><h3 class="pHeading2">
+5.10.1	KNI_StartHandles</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq449267">
+  <caption><a name="wp449269"> </a><div class="pTableCaption">
+TABLE&#160;49&#160;&#160;&#8211;&#160;&#160;KNI_StartHandles
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp449273"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp449275"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp449277"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp449279"> </a><div class="pTableText">
+<code class="cCode">void KNI_StartHandles(n)</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp449281"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp449283"> </a><div class="pTableText">
+Allocates enough space for <code class="cCode">n</code> handles for the current native method.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp449285"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp449287"> </a><div class="pTableText">
+<code class="cCode">n</code>: a positive integer specifying the number of handles to allocate.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp449289"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp449291"> </a><div class="pTableText">
+Nothing directly, but allocates space for a number of handles in an implementation-dependent fashion.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp449293"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp449295"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<hr class="pHr"/><div class="note">
+<a name="wp449336"> </a>
+<b>Note &#8211;</b>  Every call to <code class="cCode">KNI_StartHandles</code> must be matched with a corresponding   <code class="cCode">KNI_EndHandles</code> or <code class="cCode">KNI_EndHandlesAndReturnObject</code>  call. Nested <code class="cCode">KNI_StartHandles</code> and <code class="cCode">KNI_EndHandles</code> / <code class="cCode">KNI_EndHandlesAndReturnObject</code> calls are not allowed inside the same C/C++ code block (<code class="cCode">{ ... }</code>).
+<hr class="pHr"/>
+<a name="wp450587"> </a><h3 class="pHeading2">
+5.10.2	KNI_DeclareHandle</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq449307">
+  <caption><a name="wp449309"> </a><div class="pTableCaption">
+TABLE&#160;50&#160;&#160;&#8211;&#160;&#160;KNI_DeclareHandle
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp449313"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp449315"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp449317"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp449319"> </a><div class="pTableText">
+<code class="cCode">void KNI_DeclareHandle(handle)</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp449321"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp449323"> </a><div class="pTableText">
+Declares a handle that can be used as an input, output, or in/out parameter to an appropriate KNI function. The initial value of the handle is unspecified. If the programmer has not allocated enough space for the handle in the preceding call to <code class="cCode">KNI_StartHandles</code>, the behavior of this function is unspecified.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp449325"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp449327"> </a><div class="pTableText">
+<code class="cCode">handle</code>: the name by which the handle will be identified between the calls to <code class="cCode">KNI_StartHandles</code> and <code class="cCode">KNI_EndHandles </code>/ <code class="cCode">KNI_EndHandlesAndReturnObject</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp449329"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp449331"> </a><div class="pTableText">
+Nothing directly, but declares a handle in an implementation-dependent fashion.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp449333"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp449335"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp451155"> </a><h3 class="pHeading2">
+5.10.3	KNI_IsNullHandle</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq451126">
+  <caption><a name="wp451128"> </a><div class="pTableCaption">
+TABLE&#160;51&#160;&#160;&#8211;&#160;&#160;KNI_IsNullHandle
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp451132"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp451134"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp451136"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp451138"> </a><div class="pTableText">
+<code class="cCode">jboolean KNI_IsNullHandle(handle)</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp451140"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp451142"> </a><div class="pTableText">
+Checks if the given handle is NULL.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp451144"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp451146"> </a><div class="pTableText">
+<code class="cCode">handle</code>: the handle whose contents will be examined.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp451148"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp451150"> </a><div class="pTableText">
+KNI_TRUE if the handle is NULL, KNI_FALSE otherwise.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp451152"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp451154"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp451156"> </a><p class="pBody">
+
+</p>
+<a name="wp450752"> </a><h3 class="pHeading2">
+5.10.4	KNI_IsSameObject</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq450655">
+  <caption><a name="wp450657"> </a><div class="pTableCaption">
+TABLE&#160;52&#160;&#160;&#8211;&#160;&#160;KNI_IsSameObject
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp450661"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp450663"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp450665"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp450667"> </a><div class="pTableText">
+<code class="cCode">jboolean KNI_IsSameObject(handle1, handle2)</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450669"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp450671"> </a><div class="pTableText">
+Checks if the given two handles refer to the same object. No parameter type checking is performed.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450673"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp450675"> </a><div class="pTableText">
+<code class="cCode">handle1</code>: a handle pointing to an object.
+</div>
+<a name="wp451179"> </a><div class="pTableText">
+<code class="cCode">handle2</code>: a handle pointing to an object.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450677"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp450679"> </a><div class="pTableText">
+KNI_TRUE if the handles refer to the same object, KNI_FALSE otherwise.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450681"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp450683"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp450748"> </a><h3 class="pHeading2">
+5.10.5	KNI_ReleaseHandle</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq450706">
+  <caption><a name="wp450708"> </a><div class="pTableCaption">
+TABLE&#160;53&#160;&#160;&#8211;&#160;&#160;KNI_ReleaseHandle
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp450712"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp450714"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp450716"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp450718"> </a><div class="pTableText">
+<code class="cCode">void KNI_ReleaseHandle(handle)</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450720"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp450722"> </a><div class="pTableText">
+Sets the value of the given handle to NULL.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450724"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp450726"> </a><div class="pTableText">
+<code class="cCode">handle</code>: the handle whose value will be set to NULL.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450728"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp450730"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp450732"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp450734"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp449369"> </a><p class="pBody">
+
+</p>
+<a name="wp451186"> </a><h3 class="pHeading2">
+5.10.6	KNI_EndHandles</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq449340">
+  <caption><a name="wp449342"> </a><div class="pTableCaption">
+TABLE&#160;54&#160;&#160;&#8211;&#160;&#160;KNI_EndHandles
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp449346"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp449348"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp449350"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp449352"> </a><div class="pTableText">
+<code class="cCode">void KNI_EndHandles()</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp449354"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp449356"> </a><div class="pTableText">
+Undeclares and unallocates the handles defined after the preceding <code class="cCode">KNI_StartHandles</code> call.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp449358"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp449360"> </a><div class="pTableText">
+<code class="cCode">None.</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp449362"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp450637"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp449366"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp449368"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<hr class="pHr"/><div class="note">
+<a name="wp450651"> </a>
+<b>Note &#8211;</b>  Every call to <code class="cCode">KNI_StartHandles</code> must be matched with a corresponding   <code class="cCode">KNI_EndHandles</code> or <code class="cCode">KNI_EndHandlesAndReturnObject</code> call. Nested <code class="cCode">KNI_StartHandles</code> and <code class="cCode">KNI_EndHandles/KNI_EndHandlesAndReturnObject</code> calls are not allowed inside the same C/C++ code block ({ ... }).
+<hr class="pHr"/>
+<a name="wp451303"> </a><h3 class="pHeading2">
+5.10.7	KNI_EndHandlesAndReturnObject</h3><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq451274">
+  <caption><a name="wp451276"> </a><div class="pTableCaption">
+TABLE&#160;55&#160;&#160;&#8211;&#160;&#160;KNI_EndHandlesAndReturnObject
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp451280"> </a><div style="text-align: left" class="pTableHead">
+Function
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp451282"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp451284"> </a><div class="pTableText">
+Prototype
+</div>
+</td>
+    <td><a name="wp451286"> </a><div class="pTableText">
+<code class="cCode">void KNI_EndHandlesAndReturnObject(jobject objectHandle);</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp451288"> </a><div class="pTableText">
+Description
+</div>
+</td>
+    <td><a name="wp451290"> </a><div class="pTableText">
+Undeclares and unallocates the handles defined after the preceding <code class="cCode">KNI_StartHandles</code> call. At the same time, this function will terminate the execution of the native function immediately and return an object reference back to the caller.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp451292"> </a><div class="pTableText">
+Parameters
+</div>
+</td>
+    <td><a name="wp451294"> </a><div class="pTableText">
+<code class="cCode">objectHandle</code>: the handle from which the result value will be read.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp451296"> </a><div class="pTableText">
+Return Values
+</div>
+</td>
+    <td><a name="wp451298"> </a><div class="pTableText">
+Returns an object value back to the function that called the native function containing the <code class="cCode">KNI_EndHandlesAndReturnObject</code> call. 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp451300"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp451302"> </a><div class="pTableText">
+None.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h3 class="pHeading2">
+
+</h3>
+<a name="wp449305"> </a><p class="pBody">
+
+</p>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" width="100%">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="04-DataTypes.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="06-ProgOverview.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KNI Specification <br /> K Native Interface (KNI), 1.0</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    <p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169;
+       2002 Sun Microsystems, Inc. All rights reserved.</p>
+  </div></div></div></div></div></div></div></body>
+</html>

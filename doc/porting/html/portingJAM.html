@@ -1,0 +1,368 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="book-no-index" />
+    <meta name="LASTUPDATED" content="02/20/03 12:37:52" />
+    <title>Java Application Manager (JAM)</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="portingJCC.html" />
+    <link rel="Next" href="portingJavaDebugger.html" />
+    <link rel="Index" href="portingJavaDebugger.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" class="full-width">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="portingJCC.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="portingJavaDebugger.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp418771"> </a><h2 class="pChapNum">
+Chapter &#160; 15
+</h2>
+<a name="wp431766"> </a><h2 class="pTitle">
+Java Application Manager (JAM)
+</h2>
+<hr class="pHr"/>
+<a name="wp436119"> </a><p class="pBody">
+A central requirement for KVM in most target devices is to be able to execute applications that have been downloaded dynamically from the network. Once downloaded, the user commonly wants to use the applications several times before deleting them. The process of downloading, installing, inspecting, launching and uninstalling of Java applications is referred to generally as <em class="cEmphasis">application management</em>. In typical desktop computing environments, these tasks can be performed by utilizing the facilities of the host operating system. However, the situation is very different in many small, resource-constrained devices which often lack even basic facilities such as a built-in file system.
+</p>
+<a name="wp436674"> </a><p class="pBody">
+To facilitate the porting of KVM to small, resource-constrained platforms, KVM implementation contains an optional component called <em class="cEmphasis">Java Application Manager</em> (JAM) that can be used as a starting point for machine-specific implementations.
+</p>
+<hr class="pHr"/><div class="note">
+<a name="wp437035"> </a>
+<b>Note &#8211;</b>  The JAM that is provided as part of the CLDC Reference Implementation is used primarily for compatibility testing purposes. This JAM implementation is not compatible with the requirements of J2ME profiles such as MIDP. To implement a MIDP-compliant Java Application Manager, refer to the MIDP Reference Implementation.
+<hr class="pHr"/></div>
+<a name="wp436679"> </a><p class="pBody">
+At the compilation level, JAM can be turned on or off by using the flag
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;<code class="cCode">#define USE_JAM 1</code><a name="wp436702"> </a>
+</pre></div>
+<a name="wp437038"> </a><p class="pBody">
+When building the KVM using gnumake, the following command automatically builds the system with the JAM enabled:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;<code class="cCode">gnumake USE_JAM=true</code><a name="wp437039"> </a>
+</pre></div>
+<a name="wp436652"> </a><p class="pBody">
+This section provides a brief overview of the JAM reference implementation provided with KVM. The description below assumes that the target device has some kind of a &#8220;microbrowser&#8221; that can be used for initiating the downloading of applications. This microbrowser is commonly provided as part of the native computing environment, but it can also be part of the JAM in some implementations.
+</p>
+<a name="wp436129"> </a><h2 class="pHeading1">
+15.1	Using the JAM to install applications
+</h2>
+<a name="wp436688"> </a><p class="pBody">
+Java Application Manager is a native C application that is responsible for downloading, installing, inspecting, launching, and uninstalling Java applications.
+</p>
+<a name="wp436122"> </a><p class="pBody">
+From the user&#8217;s viewpoint, the JAM is typically used as follows:
+</p>
+<ol class="pList1"><a name="wp436137"> </a><div class="pList1"><li>The user sees an application advertised on a content provider&#8217;s web page.</li></div>
+<a name="wp436138"> </a><div class="pList1Plus"><li>The user selects the tag to install it.</li></div>
+<a name="wp436139"> </a><div class="pList1Plus"><li>The Java application is downloaded and installed.</li></div>
+<a name="wp436140"> </a><div class="pList1Plus"><li>The user runs it.</li></div></div>
+<a name="wp436141"> </a><p class="pBody">
+</ol>
+Here&#8217;s a more detailed description:
+</p>
+<ol class="pList1"><a name="wp436151"> </a><div class="pList1"><li>While browsing a content provider web page using a native microbrowser, the user sees a description of the Java application in the text of the page, and a highlighted tag (or button) that asks them if they want to install the application. The tag contains a reference to an application <em class="cEmphasis">Descriptor File</em>. The Descriptor File, typically with a <code class="cCode">.jam</code> file extension, is a text file consisting of name/value pairs. The purpose of this file is to allow the JAM to decide, before it tries to download it, whether the Java application the user selected can be installed successfully on the device. This saves the user the cost of moving the Java application to the device if it cannot be installed. The Descriptor File is small (several hundred bytes), while a typical Java application is from 10 to 20 kilobytes, so it is much cheaper to download the Descriptor File rather than the entire Java application.</li></div>
+<a name="wp436152"> </a><div class="pList1Plus"><li>The user selects the tag to start the installation process. The browser retrieves the Descriptor File from the web site.</li></div>
+<a name="wp436153"> </a><div class="pList1Plus"><li>The browser transfers program control to the JAM, passing it the content of the Descriptor File and the URL for the page it was browsing.</li></div>
+<a name="wp436154"> </a><div class="pList1Plus"><li>The JAM checks to see if the application is already installed on the device, and checks its version number (see later discussion on the details of application updating.) It then reads the <code class="cCode">JAR-File-Size</code> tag of the Java application to ensure that there is sufficient space on the device to save it.</li></div>
+<a name="wp436155"> </a><div class="pList1Plus"><li>If there is sufficient space to install the application, the JAM uses the <code class="cCode">JAR-File-URL</code> tag in the descriptor file to get the URL of the JAR file (it may use the base URL to the Descriptor File, if the <code class="cCode">JAR-File-URL</code> tag is a relative URL) and start the download process using HTTP. The JAM then stores the JAR file on the device. <br /><br />If the download process is interrupted, the JAM discards the partially downloaded application, as if the application was never downloaded before.</li></div>
+<a name="wp436158"> </a><div class="pList1Plus"><li>The JAM adds the application to the list of installed Java applications, and registers it with any other native tools as required. The JAM saves the following information along with the JAR file:</li></div>
+<ul class="pBullet2"><a name="wp436159"> </a><div class="pBullet2"><li>name of JAR file,</li></div>
+<a name="wp436160"> </a><div class="pBullet2Plus"><li>absolute URL from which the JAR file was downloaded,</li></div>
+<a name="wp436161"> </a><div class="pBullet2Plus"><li>main class of the java application,</li></div>
+<a name="wp436162"> </a><div class="pBullet2Plus"><li>name of the application,</li></div>
+<a name="wp436163"> </a><div class="pBullet2Last"><li>version number of the application.</li></div>
+</ul>
+<a name="wp436164"> </a><p class="pIndented1">
+The absolute URL and the version number are used to uniquely identify an application during application update (see next subsection.)
+</p>
+<a name="wp436165"> </a><p class="pIndented1">
+In the reference implementation of the JAM, the user is shown the list of installed Java applications on the device, with the recently installed application selected for execution. 
+</p>
+<a name="wp436166"> </a><p class="pIndented1">
+However, if the <code class="cCode">Use-Once</code> tag is set to yes, JAM does not add the application to the list, and it launches the application immediately. 
+</p>
+<a name="wp436167"> </a><div class="pList1Plus"><li>Any errors encountered during the process must be handled by the JAM. A help page URL for the content provider is included in the Descriptor File. The JAM can then direct the user to this URL using the native browser.</li></div>
+</ol>
+<a name="wp436180"> </a><h3 class="pHeading2">
+15.1.1	Application launching
+</h3>
+<a name="wp436181"> </a><p class="pBody">
+Here&#8217;s a typical use case for launching a Java application:
+</p>
+<ol class="pList1"><a name="wp436182"> </a><div class="pList1"><li>The user is shown a list of Java applications (the user interface design is left up to the manufacturer.)</li></div>
+<a name="wp436490"> </a><div class="pList1Plus"><li>The user selects the Java application that is to be launched (the user interface design and selection mechanism is left up to the manufacturer).</li></div>
+<a name="wp436493"> </a><div class="pList1Plus"><li>The JAM launches the KVM with a parameter containing the <code class="cCode">main</code> class of the application. The KVM initializes the <code class="cCode">main</code> class and starts executing it. As additional classes are required for the execution of the application, the KVM uses a manufacturer-defined API to unpack and load the class files from the stored JAR file.</li></div>
+<a name="wp436496"> </a><div class="pList1Plus"><li>The Java application is displayed on the screen to the user.</li></div>
+<a name="wp436499"> </a><div class="pList1Plus"><li>When the application exits, and if the <code class="cCode">Use-Once</code> tag in the Descriptor File is set to <code class="cCode">YES</code>, the JAM removes the JAR file.</li></div>
+</ol>
+<a name="wp436188"> </a><h3 class="pHeading2">
+15.1.2	Application updating
+</h3>
+<a name="wp436190"> </a><p class="pBody">
+When the content provider updates an application (for example, to fix bugs or add new features), the content provider should do the following:
+</p>
+<ol class="pList1"><a name="wp436192"> </a><div class="pList1"><li>Assign a new version number to the application.</li></div>
+<a name="wp436481"> </a><div class="pList1Plus"><li>Change the Descriptor File of the application to use the new version number.</li></div>
+<a name="wp436485"> </a><div class="pList1Plus"><li>Post the updated JAR file on the content provider&#39;s web site, using the same <code class="cCode">JAR-File-URL</code> tag as the previous version of the application.</li></div>
+</ol>
+<a name="wp436196"> </a><p class="pBody">
+When the user requests the installation of an application, the JAM checks if the application&#39;s <code class="cCode">JAR-File-URL</code> is the same as one of the installed applications. If so, and the Application-Version of the requested version is newer than the installed version, the JAM prompts for user approval before downloading and installing the newer version of the application.
+</p>
+<a name="wp436776"> </a><p class="pBody">
+The reference implementation uses a string to specify the version number in the following format:
+</p>
+<a name="wp436777"> </a><p class="pIndented1">
+<code class="cCode">Major.Minor[.Micro]</code> <code class="cCode">(X.X[.X])</code>, where the <code class="cCode">.Micro</code> portion is optional (it defaults to &#8220;0&#8221;). In addition, each portion of the version number is allowed to a maximum of 2 decimal digits (that is, the range is from 0 to 99.)
+</p>
+<a name="wp436202"> </a><p class="pBody">
+For example, &#8220;1.0.0&#8221; can be used to specify the first version of an application. For each portion of the version number, leading zeros are not significant. For example, &#8220;08&#8221; is equivalent to &#8220;8&#8221;. Also, &#8220;1.0&#8221; is equivalent to &#8220;1.0.0&#8221;. However, &#8220;1.1&#8221; is equivalent to &#8220;1.1.0&#8221;, and not &#8220;1.0.1&#8221;.
+</p>
+<a name="wp436204"> </a><p class="pBody">
+In the reference implementation, missing Application-Version tag is assumed to be &#8220;0.0.0&#8221;, which means that any non-zero version number is considered as a newer version of the application.
+</p>
+<a name="wp436206"> </a><p class="pBody">
+The JAM must ensure that if the application update fails for any reason, the older version is left intact on the device. When the update is successful, the older version of the application is removed. 
+</p>
+<a name="wp436209"> </a><h2 class="pHeading1">
+15.2	JAM components
+</h2>
+<a name="wp436211"> </a><h3 class="pHeading2">
+15.2.1	Security requirements
+</h3>
+<a name="wp436213"> </a><p class="pBody">
+The JAM, its data, and associated libraries, should be stored securely on the device. The device manufacturer must ensure that these components cannot be modified by Java applications or other downloadable content.
+</p>
+<a name="wp436215"> </a><h3 class="pHeading2">
+15.2.2	JAR file
+</h3>
+<a name="wp436217"> </a><p class="pBody">
+JAR files are a standard feature of Java technology designed to hold class files and application resource data in a compressed format. JAM-compliant JAR files hold exactly one Java application and its associated resources. Compressed JAR files reduce the size of the application by approximately 40% to 50%. This both reduces the storage requirements on the device and reduces the download time for the application. Items in the JAR file are unpacked as required by the JAM.
+</p>
+<a name="wp436219"> </a><h3 class="pHeading2">
+15.2.3	Application Descriptor File
+</h3>
+<a name="wp436221"> </a><p class="pBody">
+The Application Descriptor File is a readable text file. It consists of name-value pairs that describe the important aspects of its associated Java application. It is referenced from a tag on a content provider&#39;s web page. It is created and maintained by the Java application developer and stored along with its application JAR file on the same web site. Developers may create this file with any text editor.
+</p>
+<a name="wp437867"> </a><p class="pBody">
+The Descriptor File has the following entries (tag names are case sensitive):
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<code class="cCode">Application-Name</code><a name="wp437868"> </a>
+</pre></div>
+<a name="wp437869"> </a><p class="pIndented1">
+Displayable text, limited to width of screen on the device 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<code class="cCode">Application-Version	</code><a name="wp436943"> </a>
+</pre></div>
+<a name="wp436529"> </a><p class="pIndented1">
+<code class="cCode">Major.Minor[.Micro] (X.X[.X]</code>, where <code class="cCode">X</code> is a 1 or 2 digit decimal number, and the <code class="cCode">.Micro</code> part is optional) 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<code class="cCode">KVM-Version</code><a name="wp436227"> </a>
+</pre></div>
+<a name="wp436530"> </a><p class="pIndented1">
+Comma separated list of KVM version strings as defined in the CLDC microedition.configuration system property (see CLDC Specification). <br />&#8220;CLDC-1.0&#8221; is an example of the KVM version string. The items in the list are matched against the KVM version string on the device, and an exact match is required to execute this application. Any item matching the KVM version string on the device satisfies this condition. For example, &#8220;CLDC-1.0, CLDC-1.0.3&#8221; runs on either version of KVM on the device.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<code class="cCode">Main-Class</code><a name="wp436228"> </a>
+</pre></div>
+<a name="wp436531"> </a><p class="pIndented1">
+Text name of the application&#39;s Main class in standard Java format.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<code class="cCode">JAR-File-Size</code><a name="wp436229"> </a>
+</pre></div>
+<a name="wp436535"> </a><p class="pIndented1">
+Integer in bytes
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<code class="cCode">JAR-File-URL</code><a name="wp436230"> </a>
+</pre></div>
+<a name="wp436532"> </a><p class="pIndented1">
+Standard URL text format to specify the source URL. If this is a relative URL, then the URL to the Descriptor File is the base URL. 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<code class="cCode">Use-Once</code><a name="wp436231"> </a>
+</pre></div>
+<a name="wp436533"> </a><p class="pIndented1">
+yes/no 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<code class="cCode">Help-Page-URL	</code><a name="wp436232"> </a>
+</pre></div>
+<a name="wp436534"> </a><p class="pIndented1">
+Standard URL text format, used by the browser to access help pages
+</p>
+<a name="wp436233"> </a><p class="pBody">
+Additional requirements and restrictions:
+</p>
+<ul class="pBullet1"><a name="wp436234"> </a><div class="pBullet1"><li>The MIME type for the Descriptor File is <code class="cCode">application/x-jam</code> and the extension is <code class="cCode">.jam</code>.</li></div>
+<a name="wp436550"> </a><div class="pBullet1Plus"><li>All URLs must point to the same server from which the web page was loaded.</li></div>
+<a name="wp436553"> </a><div class="pBullet1Last"><li>The JAM must store the Descriptor File contents, in a manufacturer-specific format for possible later use.</li></div>
+</ul>
+<a name="wp436238"> </a><p class="pBody">
+The application developer may add any application specific name-value pairs to the Descriptor File. This allows the application to be configured at deployment by changing the values in the Descriptor File. So, different Descriptor Files could use the same application JAR file, with different application parameters.
+</p>
+<a name="wp436240"> </a><p class="pBody">
+The format of the tag is a string, but it is recommended that it follow a similar style as the tags defined in the above table. The format of the value is an application specific string. 
+</p>
+<a name="wp436242"> </a><p class="pBody">
+A simple proposed API to retrieve the value via the JAM could be:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;<code class="cCode">public String GetApplicationParameter(String name)</code><a name="wp436244"> </a>
+</pre></div>
+<a name="wp436247"> </a><h3 class="pHeading2">
+15.2.4	Network communication
+</h3>
+<a name="wp436249"> </a><p class="pBody">
+Whenever a Java application tries to make an HTTP connection, the networking implementation should check with the JAM to find the name of the server where the application was downloaded. This ensures that the connection is made to the same server the application came from. A string comparison is made between the host name in both the URLs. 
+</p>
+<a name="wp436254"> </a><h2 class="pHeading1">
+15.3	Application lifecycle management
+</h2>
+<a name="wp436256"> </a><p class="pBody">
+The lifecycle of a Java application is defined to be the following:
+</p>
+<ul class="pBullet1"><a name="wp436258"> </a><div class="pBullet1"><li>The KVM task is launched and instructed to execute the main class of the Java application (as described by the <code class="cCode">Main-Class</code> entry of the Descriptor File.)</li></div>
+<a name="wp436639"> </a><div class="pBullet1Plus"><li>The Java application executes inside the context of the KVM task and responds to user events.</li></div>
+<a name="wp436642"> </a><div class="pBullet1Last"><li>The KVM task exits, either voluntarily, or involuntarily, and terminates the Java application.</li></div>
+</ul>
+<a name="wp436262"> </a><p class="pBody">
+The term task is used loosely to describe the KVM as a logically distinct execution unit. In actual devices, the KVM task can be implemented as a task, a process or a thread of the underlying operating system.
+</p>
+<a name="wp436264"> </a><p class="pBody">
+The API functions for controlling the lifecycle of the KVM are not specified, as the mechanism is vastly different from platform to platform. Instead, it is required that all JAM implementations support the following features:
+</p>
+<ul class="pBullet1"><a name="wp436266"> </a><div class="pBullet1"><li>The JAM implementation must be able to launch the KVM task and start executing the <code class="cCode">main</code> class of the Java application.</li></div>
+<a name="wp436267"> </a><div class="pBullet1Plus"><li>The JAM implementation must be able to forcibly terminate the KVM task, and optionally be able to suspend and resume the KVM task.</li></div>
+<a name="wp436268"> </a><div class="pBullet1Last"><li>The suspension, resumption, and termination of the KVM must be performed by the procedures described below.</li></div>
+</ul>
+<a name="wp436270"> </a><h3 class="pHeading2">
+15.3.1	Termination of the KVM Task
+</h3>
+<a name="wp436272"> </a><p class="pBody">
+The KVM task can be terminated in two ways: voluntarily or involuntarily.
+</p>
+<a name="wp436273"> </a><p class="pBody">
+The application can voluntarily terminate itself by calling the Java method <code class="cCode">System.exit</code>. Under certain conditions, the JAM may decide to force the KVM to terminate. The exact method of triggering forced termination is platform dependent. For example, the JAM may spawn a watchdog thread that wakes up after a certain period. If the watchdog thread detects that the KVM has not terminated voluntarily, it forces the KVM to terminate.
+</p>
+<a name="wp436275"> </a><p class="pBody">
+During forced termination, the JAM actively frees all resources allocated by the KVM and terminates the KVM task. The exact procedure is platform dependent. On some platforms, calling <code class="cCode">exit</code> or <code class="cCode">kill</code> may be enough. On other platforms, more elaborate clean-up may be required.
+</p>
+<a name="wp436277"> </a><h2 class="pHeading1">
+15.4	Error handling
+</h2>
+<a name="wp436279"> </a><p class="pBody">
+The JAM is responsible for handling all errors encountered in installing and launching Java applications. The method of handling errors differs from implementation to implementation, but the JAM should be able to interact with the user to resolve the error if possible. To assist in this, the Descriptor File has a tag called <code class="cCode">Help-Page-URL</code> that is set by the content provider. The JAM may decide that under certain conditions, the browser should be invoked and the user sent to the help page. The help page could have information that would allow the user to contact the content provider for additional assistance. 
+</p>
+<a name="wp436281"> </a><h3 class="pHeading2">
+15.4.1	Error conditions
+</h3>
+<a name="wp436283"> </a><p class="pBody">
+The following are a set of possible error conditions and sample messages that can be displayed to describe the error to the user. Manufacturers should design the messages so that they are appropriate to their device user interface.
+</p>
+<ul class="pBullet1"><a name="wp436285"> </a><div class="pBullet1"><li>The user tries to install an application whose size is larger than the total storage space available on the device:</li></div>
+<a name="wp436287"> </a><p class="pIndented2">
+&#8220;NAMEOFAPP&#8221; is too large to run on this device and cannot be installed.
+</p>
+<a name="wp436290"> </a><div class="pBullet1Plus"><li>The user tries to install an application, whose size is larger than the free storage space (but smaller than the total storage space) on the device:</li></div>
+<a name="wp436292"> </a><p class="pIndented2">
+There is not enough room to install. Try removing an application and trying again.
+</p>
+<a name="wp436294"> </a><div class="pBullet1Plus"><li>The user tries to install an application that is already installed on the device.</li></div>
+<a name="wp436296"> </a><p class="pIndented2">
+&#8220;NAMEOFAPP&#8221; is already installed. (Soft buttons should be labeled OK and Launch. Launch would run the existing application on the device.)
+</p>
+<a name="wp436298"> </a><div class="pBullet1Plus"><li>The user tries to install an application that is not designed for the particular device they own.</li></div>
+<a name="wp436300"> </a><p class="pIndented2">
+&#8220;NAMEOFAPP&#8221; won&#39;t work on this device. Choose another application. (Soft button label = Back, Done.)
+</p>
+<a name="wp436302"> </a><div class="pBullet1Plus"><li>The user tries to install an application and the tags describing the Java application have a syntax error or an invalid format that results in installation failure.</li></div>
+<a name="wp436304"> </a><p class="pIndented2">
+The installation failed. Contact your ISP for help.
+</p>
+<a name="wp436306"> </a><div class="pBullet1Plus"><li>The user tries to install an application, the URL to the application is incorrect or inaccessible, and the application cannot be installed.</li></div>
+<a name="wp436308"> </a><p class="pIndented2">
+The URL for &#8220;NAMEOFAPP&#8221; is invalid. Contact your ISP for help.
+</p>
+<a name="wp436310"> </a><div class="pBullet1Plus"><li>The user tries to install an application, the application is not the same size as described in the Descriptor File. The application should be discarded.</li></div>
+<a name="wp436312"> </a><p class="pIndented2">
+&#8220;NAMEOFAPP&#8221; does not match its description and may be invalid. Contact your ISP for help.
+</p>
+<a name="wp436315"> </a><div class="pBullet1Plus"><li>The user is installing an application. During application download, the connection drops, and the application is not loaded onto the device successfully.</li></div>
+<a name="wp436317"> </a><p class="pIndented2">
+The connection dropped and the installation did not complete. Please try installing again. [Soft button label = Install, Back]
+</p>
+<a name="wp436320"> </a><div class="pBullet1Plus"><li>The user is installing an application, and the URL specified matches exactly with the one located already on the device. </li></div>
+<a name="wp436322"> </a><p class="pIndented2">
+The JAM should check the version # of both versions and present a decision to the user.
+</p>
+<a name="wp436324"> </a><div class="pBullet1Plus"><li>The user tries to run an application and for some reason the application cannot launch (for example, the JAM failed to create a new OS task to run the KVM).</li></div>
+<a name="wp436326"> </a><p class="pIndented2">
+Cannot launch &#8220;NAMEOFAPP&#8221;. Contact your ISP for help.
+</p>
+<a name="wp436328"> </a><div class="pBullet1Plus"><li>The user has been running an application. The application tries to save to the scratchpad and fails.</li></div>
+<a name="wp436330"> </a><p class="pIndented2">
+Cannot save data. Contact your ISP for help.
+</p>
+<a name="wp436332"> </a><div class="pBullet1Last"><li>The user is running an application and it crashes or hangs during execution. NOTE: This is a generic error.</li></div>
+</ul>
+<a name="wp436334"> </a><p class="pIndented2">
+&#8220;NAMEOFAPP&#8221; has unexpectedly quit.
+</p>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" class="full-width">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="portingJCC.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="portingJavaDebugger.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KVM Porting Guide <br /> , CLDC 1.1</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    
+<p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169; 2003 Sun Microsystems, Inc. 
+  All rights reserved.</p>
+  </body>
+</html>

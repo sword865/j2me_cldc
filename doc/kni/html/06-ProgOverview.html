@@ -1,0 +1,179 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="book-no-index" />
+    <meta name="LASTUPDATED" content="10/19/02 17:07:45" />
+    <title>KNI Programming Overview</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="05-Functions.html" />
+    <link rel="Next" href="07-Examples.html" />
+    <link rel="Index" href="07-Examples.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" width="100%">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="05-Functions.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="07-Examples.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp434413"> </a><h2 class="pChapNum">
+Chapter &#160; 6
+</h2>
+<a name="wp442099"> </a><h2 class="pNewHTMLPage">
+KNI Programming Overview
+</h2>
+<hr class="pHr"/>
+<a name="wp443017"> </a><h2 class="pHeading1">
+6.1	The &#8216;kni.h&#8217; Include File
+</h2>
+<a name="wp443030"> </a><p class="pBody">
+As mentioned earlier in <a  href="02-Goals.html#wp434413"><span style="color: #3366CC">Chapter&#160;2</span></a>, one of the key goals of the KNI is to isolate the native function programmer from the implementation details of the virtual machine. Consequently, the KNI programmer should never include any VM-specific files into the files that implement native functions.
+</p>
+<a name="wp443137"> </a><p class="pBody">
+The file &#8216;<code class="cCode">kni.h</code>&#8217; is a C header file that provides the declarations and definitions of all the data types exported by KNI as well as the prototypes of all the functions exported by KNI. When implementing native methods using KNI, this header file must always be included
+</p>
+<a name="wp443057"> </a><h2 class="pHeading1">
+6.2	Sample KNI Application
+</h2>
+<a name="wp443073"> </a><p class="pBody">
+This section shows a simple example that illustrates the use of KNI. We write a small Java class that calls a native (C) input/output function to print a message to standard output. We highlight the necessary steps that are required when writing new native functions. More comprehensive examples illustrating the use of KNI are provided in <a  href="07-Examples.html#wp434413"><span style="color: #3366CC">Chapter&#160;7</span></a>.
+</p>
+<a name="wp442616"> </a><h3 class="pHeading2">
+6.2.1	Java Code
+</h3>
+<a name="wp442617"> </a><p class="pBody">
+Below is a small Java application that defines a class named <code class="cCode">HelloWorld</code> contained in a package called <code class="cCode">mypackage</code>.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+package mypackage;<a name="wp442741"> </a>
+<a name="wp442620"> </a>
+public class HelloWorld {<a name="wp442621"> </a>
+    public native void sayHello();<a name="wp442622"> </a>
+    public static void main(String[] args) {<a name="wp442623"> </a>
+        new HelloWorld().sayHello();<a name="wp442624"> </a>
+    }<a name="wp442625"> </a>
+}<a name="wp442898"> </a>
+</pre></div>
+<a name="wp442899"> </a><p class="pBody">
+The <code class="cCode">HelloWorld</code> class definition contains two method declarations: a native method called <code class="cCode">sayHello</code> and a Java method called <code class="cCode">main</code>. When the application is run, the <code class="cCode">main</code> method creates an instance of the <code class="cCode">HelloWorld</code> class and invokes the native method <code class="cCode">sayHello</code> for this instance.
+</p>
+<a name="wp442628"> </a><p class="pBody">
+In this example, the native method <code class="cCode">sayHello</code> is implemented in a separate C programming language source file illustrated in the next subsection.
+</p>
+<a name="wp442630"> </a><h3 class="pHeading2">
+6.2.2	The Corresponding Native Code
+</h3>
+<a name="wp442631"> </a><p class="pBody">
+The function that implements the native method <code class="cCode">sayHello</code> must follow the function prototype definition specified in the header file that would be generated on invocation of <code class="cCode">javah</code> on the <code class="cCode">mypackage.HelloWorld</code> file. In this case, since the <code class="cCode">HelloWorld</code> application is contained in a package called <code class="cCode">mypackage</code>, the name of the native function must be as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    void Java_mypackage_HelloWorld_sayHello()<a name="wp443124"> </a>
+</pre></div>
+<a name="wp443253"> </a><p class="pBody">
+The <code class="cCode">mypackage.HelloWorld.sayHello</code> method is implemented in a C source file &#8217;<code class="cCode">Java_mypackage_HelloWorld.c</code>&#8217; as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<a name="wp443254"> </a>
+#include &lt;kni.h&gt;<a name="wp443707"> </a>
+#include &lt;stdio.h&gt;<a name="wp443255"> </a>
+<a name="wp443256"> </a>
+KNIEXPORT KNI_RETURNTYPE_VOID Java_mypackage_HelloWorld_sayHello() {<a name="wp443257"> </a>
+  char* message = &quot;hello, world!&quot;;<a name="wp443258"> </a>
+  fprintf(stdout, &quot;%s\n&quot;, message);<a name="wp443259"> </a>
+  KNI_ReturnVoid();<a name="wp443704"> </a>
+}<a name="wp443260"> </a>
+</pre></div>
+<a name="wp443261"> </a><p class="pBody">
+In this case, the implementation of the native function is very simple. It uses the  standard C input/output function <code class="cCode">fprintf</code> to display the message &#8220;hello, world!&#8221;.
+</p>
+<a name="wp443262"> </a><p class="pBody">
+The C source file includes three header files:
+</p>
+<ul class="pBullet1"><a name="wp442642"> </a><div class="pBullet1"><li><code class="cCode">kni.h</code> &#8211; This C header file provides the declarations and definitions of all the data types exported by KNI as well as the prototypes of all the functions exported by KNI. When implementing native methods, this C header file must always be included.</li></div>
+<a name="wp443647"> </a><div class="pBullet1Last"><li><code class="cCode">stdio.h</code> &#8211; The code snippet above includes <code class="cCode">stdio.h</code> because it uses the standard C input/output function <code class="cCode">fprintf</code>.</li></div>
+</ul>
+<a name="wp442991"> </a><h3 class="pHeading2">
+6.2.3	Compiling and Running the Sample Application in the KVM
+</h3>
+<hr class="pHr"/><div class="note">
+<a name="wp442978"> </a>
+<b>Note &#8211;</b>  The information provided in this subsection is KVM-specific and not part of the KNI Specification. Implementation details for other Java virtual machines supporting the K Native Interface may be entirely different.
+<hr class="pHr"/></note></div>
+<a name="wp443084"> </a><p class="pBody">
+Below is a summary of the steps to run the sample KNI application in the KVM:
+</p>
+<ol class="pList1"><a name="wp442980"> </a><div class="pList1"><li>Create the Java class source file <code class="cCode">HelloWorld.java</code> shown above. In the simplest case, the Java class source file should reside in &#8216;<code class="cCode">${KVM_ROOT}/api/src/mypackage/HelloWorld.java</code>&#8216; so that the JavaCodeCompact tool can find, compile and romize the class automatically as part of the build process.</li></div>
+<a name="wp442982"> </a><div class="pList1Plus"><li>Create a C source file <code class="cCode">Java_mypackage_HelloWorld.c</code> that implements the native method defined above. In this example, the C source file will reside in &#8216;<code class="cCode">${KVM_ROOT}/kvm/VmUnix/src/Java_mypackage_HelloWorld.c</code>&#8216;.</li></div>
+<a name="wp442983"> </a><div class="pList1Plus"><li>Now that the native method has been implemented, we need to rebuild the KVM runtime interpreter and update its native function table (e.g., ${KVM_ROOT}/tools/jcc/nativeFunctionTableUnix.c); this latter step is performed by JavaCodeCompact. Rebuild the KVM system by compiling it with the following compilation option:</li></div>
+<div class="pPreformatted"><pre class="pPreformatted">
+    gnumake USE_KNI=true<a name="wp443168"> </a>
+</pre></div>
+<a name="wp442984"> </a><div class="pList1Last"><li>Run the Java class bytecode file <code class="cCode">HelloWorld.class</code> with the new KVM interpreter. On a Solaris system and from the top of the current release of the CLDC directory hierarchy, we would invoke the KVM interpreter as follows:</li></div>
+</ol>
+<div class="pPreformatted"><pre class="pPreformatted">
+   ${KVM_ROOT}/kvm/VmUnix/build/kvm -classpath                  ${KVM_ROOT}/api/classes mypackage.HelloWorld<a name="wp442651"> </a>
+</pre></div>
+<a name="wp443279"> </a><p class="pBody">
+You should see the following displayed on the standard output:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+hello, world!<a name="wp442653"> </a>
+</pre></div>
+<a name="wp442604"> </a><p class="pBody">
+The high-level process for implementing native methods is illustrated below in <a  href="06-ProgOverview.html#wp443594">FIGURE&#160;2</a>.
+</p>
+<a name="wp443593"> </a><p class="pBody">
+</p><div align="center"><img src="images/06-ProgOverviewa.gif" height="395" width="335" alt="Flow chart showing the four steps to implementing a native method with KNI." longdesc="images/06-ProgOverviewa.txt" border="0" hspace="0" vspace="0"/><a href="images/06-ProgOverviewa.txt" title="Description link for Flow chart showing the four steps to implementing a native method with KNI.">[D]</a></div><p class="pBody">    
+</p>
+<a name="wp443594"> </a><div class="pFigureCaption">
+FIGURE&#160;2&#160;&#160;&#8211;&#160;&#160;Steps involved in implementing native methods
+<br /><br />
+</div><a name="wp443566"> </a><p class="pBody">
+
+</p>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" width="100%">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="05-Functions.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="07-Examples.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KNI Specification <br /> K Native Interface (KNI), 1.0</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    <p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169;
+       2002 Sun Microsystems, Inc. All rights reserved.</p>
+  </body>
+</html>

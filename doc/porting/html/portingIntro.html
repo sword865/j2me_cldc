@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="book-no-index" />
+    <meta name="LASTUPDATED" content="02/20/03 12:37:36" />
+    <title>About This Document</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="portingLOT.html" />
+    <link rel="Next" href="portingKVMIntro.html" />
+    <link rel="Index" href="portingJavaDebugger.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" class="full-width">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="portingLOT.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="portingKVMIntro.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp418622"> </a><h2 class="pChapNum">
+Chapter &#160; 1
+</h2>
+<a name="wp431762"> </a><h2 class="pTitle">
+About This Document
+</h2>
+<hr class="pHr"/>
+<a name="wp418772"> </a><p class="pBody">
+This document provides information for porting the K Virtual Machine (KVM), version 1.1, to a new platform. KVM is a Java Virtual Machine implementation that is commonly used as the execution engine for J2ME CLDC (Java<em class="cEmphasis">&#8482;</em> 2 Micro Edition, Connected Limited Device Configuration.)
+</p>
+<a name="wp431843"> </a><h2 class="pHeading1">
+1.1	Who should use this document
+</h2>
+<a name="wp422809"> </a><p class="pBody">
+This document is intended primarily to those individuals and companies who want to port Sun&#8217;s reference implementation of the K Virtual Machine to a new platform. The document is useful also to those persons who want to learn more about the internal details of the KVM.
+</p>
+<a name="wp431869"> </a><h2 class="pHeading1">
+1.2	Related documentation
+</h2>
+<a name="wp431874"> </a><p class="pBody">
+The Java<em style="font-style: italic" class="cEmphasis">&#8482;</em> Language Specification (Java Series), Second Edition by James Gosling, Bill Joy, Guy Steele and Gilad Bracha. Addison-Wesley, 2000, ISBN 0-201-31008-2
+</p>
+<a name="wp431876"> </a><p class="pBody">
+The Java<em style="font-style: italic" class="cEmphasis">&#8482;</em> Virtual Machine Specification (Java Series), Second Edition by Tim Lindholm and Frank Yellin. Addison-Wesley, 1999, ISBN 0-201-43294-3
+</p>
+<a name="wp431944"> </a><p class="pBody">
+Programming Wireless Devices with the Java<em style="font-style: italic" class="cEmphasis">&#8482;</em> 2 Platform, Micro Edition (Java Series) <br />by Roger Riggs, Antero Taivalsaari, and Mark VandenBrink. Addison-Wesley, 2001, ISBN 0-201-74627-1 (Second edition planned for publication in Q2, 2003.)
+</p>
+<a name="wp431959"> </a><p class="pBody">
+Connected, Limited Device Configuration Specification, version 1.1, Java Community Process, Sun Microsystems, Inc.<br /><a href="http://jcp.org/jsr/detail/139.jsp" target="_blank">
+<span class="cWebJump">http://jcp.org/jsr/detail/139.jsp</span></a>
+</p>
+<a name="wp431953"> </a><p class="pBody">
+Connected, Limited Device Configuration Specification, version 1.0, Java Community Process, Sun Microsystems, Inc. <br /><a href="http://jcp.org/aboutJava/communityprocess/final/jsr030/index.html" target="_blank">
+<span class="cWebJump">http://jcp.org/aboutJava/communityprocess/final/jsr030/index.html</span></a>
+</p>
+<a name="wp431963"> </a><p class="pBody">
+Mobile Information Device Profile Specification, version 2.0, Java Community Process, Sun Microsystems, Inc.<br /><a href="http://jcp.org/jsr/detail/118.jsp" target="_blank">
+<span class="cWebJump">http://jcp.org/jsr/detail/118.jsp</span></a>
+</p>
+<a name="wp431906"> </a><p class="pBody">
+Mobile Information Device Profile Specification, version 1.0, Java Community Process, Sun Microsystems, Inc. <br /><a href="http://jcp.org/aboutJava/communityprocess/final/jsr037/index.html" target="_blank">
+<span class="cWebJump">http://jcp.org/aboutJava/communityprocess/final/jsr037/index.html</span></a>
+</p>
+<a name="wp431846"> </a><p class="pBody">
+Java 2 Platform Micro Edition (J2ME<em style="font-style: italic" class="cEmphasis">&#8482;</em>) Technology for Creating Mobile Devices, A White Paper, Sun Microsystems, Inc. <br /><a href="http://java.sun.com/products/cldc/wp/KVMwp.pdf" target="_blank">
+<span class="cWebJump">http://java.sun.com/products/cldc/wp/KVMwp.pdf</span></a>
+</p>
+<a name="wp431923"> </a><p class="pBody">
+KVM Debug Wire Protocol (KDWP) Specification, Sun Microsystems, Inc.
+</p>
+<a name="wp431969"> </a><p class="pBody">
+K Native Interface (KNI) Specification, version 1.0, Sun Microsystems, Inc.
+</p>
+<a name="wp432849"> </a><p class="pBody">
+<em class="cEmphasis">IEEE Standard for Binary Floating-Point Arithmetic</em> (IEEE Std 754-1985), American National Standards Institute 
+</p>
+<a name="wp432872"> </a><p class="pBody">
+<em class="cEmphasis">Making Java Work for High-End Computing</em>, Java Grande Forum Report 
+</p>
+<a name="wp432883"> </a><p class="pBody">
+<em class="cEmphasis">Improving Java for Numerical Computation</em>, Numerics Working Group, Java Grande Forum
+</p>
+<a name="wp431924"> </a><p class="pBody">
+
+</p>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" class="full-width">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="portingLOT.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="portingKVMIntro.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KVM Porting Guide <br /> , CLDC 1.1</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    
+<p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169; 2003 Sun Microsystems, Inc. 
+  All rights reserved.</p>
+  </body>
+</html>

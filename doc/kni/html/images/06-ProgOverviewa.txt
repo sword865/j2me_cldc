@@ -1,0 +1,1 @@
+1. Create classes that declare native methods. 2. Implement native methods. 3. Add to VM native function table. 4. Rebuild the vm from source.

@@ -1,0 +1,594 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="book-no-index" />
+    <meta name="LASTUPDATED" content="02/21/03 15:59:19" />
+    <title>Directory Structure</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="portingRequired.html" />
+    <link rel="Next" href="portingFlags.html" />
+    <link rel="Index" href="portingJavaDebugger.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" class="full-width">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="portingRequired.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="portingFlags.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp418770"> </a><h2 class="pChapNum">
+Chapter &#160; 5
+</h2>
+<a name="wp431769"> </a><h2 class="pTitle">
+Directory Structure
+</h2>
+<hr class="pHr"/>
+<a name="wp434020"> </a><h2 class="pHeading1">
+5.1	Overview
+</h2>
+<a name="wp432151"> </a><p class="pBody">
+Unzip the release package into any directory of your choice. This will create a directory <code class="cCode">j2me_cldc</code> with the following subdirectories:
+</p>
+<ul class="pBullet1"><a name="wp432152"> </a><div class="pBullet1"><li><code class="cCode">api	</code></li></div>
+<a name="wp432153"> </a><div class="pBullet1Plus"><li><code class="cCode">bin</code></li></div>
+<a name="wp432206"> </a><div class="pBullet1Plus"><li><code class="cCode">build</code></li></div>
+<a name="wp432129"> </a><div class="pBullet1Plus"><li><code class="cCode">doc</code></li></div>
+<a name="wp435029"> </a><div class="pBullet1Plus"><li><code class="cCode">jam</code></li></div>
+<a name="wp432174"> </a><div class="pBullet1Plus"><li><code class="cCode">kvm</code></li></div>
+<a name="wp432133"> </a><div class="pBullet1Last"><li><code class="cCode">tools</code></li></div>
+</ul>
+<a name="wp433429"> </a><p class="pBody">
+The contents of these directories are detailed in <a  href="portingDirStruct.html#wp433439">TABLE&#160;3</a>.<code class="cCode"></code></p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq433437">
+  <caption><a name="wp433439"> </a><div class="pTableCaption">
+TABLE&#160;3&#160;&#160;&#8211;&#160;&#160;Distribution directories
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp433443"> </a><div style="text-align: left" class="pTableHead">
+Subdirectory
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp433445"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp433447"> </a><div class="pTableText">
+<code class="cCode">api</code>
+</div>
+</td>
+    <td><a name="wp433449"> </a><div class="pTableText">
+Contains the Java library source code that is provided with the release.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433451"> </a><div class="pTableText">
+<code class="cCode">bin</code>
+</div>
+</td>
+    <td><a name="wp433453"> </a><div class="pTableText">
+Contains all the binary executables and compiled Java library classes.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433455"> </a><div class="pTableText">
+<code class="cCode">build</code>
+</div>
+</td>
+    <td><a name="wp433457"> </a><div class="pTableText">
+Contains makefiles for building the KVM.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433459"> </a><div class="pTableText">
+<code class="cCode">doc</code>
+</div>
+</td>
+    <td><a name="wp433461"> </a><div class="pTableText">
+Contains documentation.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp435033"> </a><div class="pTableText">
+<code class="cCode">jam</code>
+</div>
+</td>
+    <td><a name="wp435035"> </a><div class="pTableText">
+Contains the source code of the optional Java Application Manager (JAM) component that is provided with the KVM.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433467"> </a><div class="pTableText">
+<code class="cCode">kvm</code>
+</div>
+</td>
+    <td><a name="wp433469"> </a><div class="pTableText">
+Contains the source code of the KVM.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433475"> </a><div class="pTableText">
+<code class="cCode">tools</code>
+</div>
+</td>
+    <td><a name="wp433477"> </a><div class="pTableText">
+Contains the source code for a number of tools (JavaCodeCompact, preverifier, KDWP Debug Proxy) that are provided with the release.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody"><code class="cCode">
+</code>
+</p>
+<a name="wp432235"> </a><h2 class="pHeading1">
+5.2	Directory kvm/VmCommon
+</h2>
+<a name="wp432140"> </a><p class="pBody">
+All common, platform-independent source code of KVM is located in the directory <code class="cCode">kvm/VmCommon/src/</code>. All common include files are in the directory <code class="cCode">kvm/VmCommon/h/</code>.
+</p>
+<a name="wp431812"> </a><p class="pBody">
+Port specific source and include files should go into the directories <code class="cCode">kvm/Vm</code><em class="cEmphasis">Port</em><code class="cCode">/src/ </code>and <code class="cCode">kvm/Vm</code><em class="cEmphasis">Port</em><code class="cCode">/h/</code>, where <em style="font-style: oblique" class="cEmphasis">Port</em> is replaced by the name of your platform (e.g., <code class="cCode">kvm/VmWin</code>, <code class="cCode">kvm/VmPilot</code>, <code class="cCode">kvm/VmUnix</code>.)
+</p>
+<a name="wp431835"> </a><p class="pBody">
+Some ports may choose to create a <code class="cCode">kvm/Vm</code><em class="cEmphasis">Port</em><code class="cCode">/build/</code> subdirectory which holds files that are part of the build process, but are not part of the source code <em class="cEmphasis">per se</em>.
+</p>
+<a name="wp433712"> </a><p class="pBody">
+<a  href="portingDirStruct.html#wp433716">TABLE&#160;4</a> gives an overview of the KVM source code files contained in <code class="cCode">kvm/VmCommon/src/</code> and <code class="cCode">kvm/VmCommon/h/</code>.</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq433713">
+  <caption><a name="wp433716"> </a><div class="pTableCaption">
+TABLE&#160;4&#160;&#160;&#8211;&#160;&#160;Files in VmCommon
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp433720"> </a><div style="text-align: left" class="pTableHead">
+File
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp433722"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp433724"> </a><div class="pTableText">
+<code class="cCode">StartJVM.c</code>
+</div>
+</td>
+    <td><a name="wp433726"> </a><div class="pTableText">
+Virtual machine startup and command line argument reading.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433861"> </a><div class="pTableText">
+<code class="cCode">bytecodes.c</code>
+</div>
+</td>
+    <td><a name="wp433863"> </a><div class="pTableText">
+The definition of Java bytecodes for the redesigned bytecode interpreter (since KVM 1.0.2).
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433728"> </a><div class="pTableText">
+<code class="cCode">cache.h<br />cache.c</code>
+</div>
+</td>
+    <td><a name="wp433730"> </a><div class="pTableText">
+Inline caching operations for speeding up method lookup and for supporting &#8220;fast&#8221; bytecodes.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433732"> </a><div class="pTableText">
+<code class="cCode">class.h<br />class.c</code>
+</div>
+</td>
+    <td><a name="wp433734"> </a><div class="pTableText">
+Internal runtime data structures and operations for representing Java classes.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433736"> </a><div class="pTableText">
+<code class="cCode">events.h<br />events.c</code>
+</div>
+</td>
+    <td><a name="wp433738"> </a><div class="pTableText">
+Event system implementation.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433857"> </a><div class="pTableText">
+<code class="cCode">execute.h<br />execute.c</code>
+</div>
+</td>
+    <td><a name="wp433859"> </a><div class="pTableText">
+Interpreter execution macros and operations needed by the redesigned bytecode interpreter (since KVM 1.0.2).
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433848"> </a><div class="pTableText">
+<code class="cCode">fields.h<br />fields.c</code>
+</div>
+</td>
+    <td><a name="wp433742"> </a><div class="pTableText">
+Internal runtime data structures and operations for representing fields and methods.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434220"> </a><div class="pTableText">
+<code class="cCode">fp_math.h<br />fp_math.c</code>
+</div>
+</td>
+    <td><a name="wp434222"> </a><div class="pTableText">
+High-level floating point function interface.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433744"> </a><div class="pTableText">
+<code class="cCode">frame.h<br />frame.c</code>
+</div>
+</td>
+    <td><a name="wp433746"> </a><div class="pTableText">
+Stack frame and exception handling operations.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433748"> </a><div class="pTableText">
+<code class="cCode">garbage.h<br />garbage.c<br />collector.c<br />collectorDebug.c</code>
+</div>
+</td>
+    <td><a name="wp433750"> </a><div class="pTableText">
+Garbage collector and memory management.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433752"> </a><div class="pTableText">
+<code class="cCode">global.h<br />global.c</code>
+</div>
+</td>
+    <td><a name="wp433754"> </a><div class="pTableText">
+Miscellaneous global variables and definitions.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433756"> </a><div class="pTableText">
+<code class="cCode">hashtable.h<br />hashtable.c</code>
+</div>
+</td>
+    <td><a name="wp433758"> </a><div class="pTableText">
+Hashtable implementation that is used internally by the virtual machine.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433760"> </a><div class="pTableText">
+<code class="cCode">interpret.h<br />interpret.c</code>
+</div>
+</td>
+    <td><a name="wp433762"> </a><div class="pTableText">
+Bytecode interpreter. Note that starting from KVM 1.0.2 the actual interpreter code and bytecode definitions are located in other files (<code class="cCode">bytecodes.c</code>, <code class="cCode">execute.h</code>, <code class="cCode">execute.c</code>).
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp434195"> </a><div class="pTableText">
+<code class="cCode">kni.h<br />kni.c</code>
+</div>
+</td>
+    <td><a name="wp434197"> </a><div class="pTableText">
+K Native Interface (KNI) support.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433772"> </a><div class="pTableText">
+<code class="cCode">loader.h<br />loader.c</code>
+</div>
+</td>
+    <td><a name="wp433774"> </a><div class="pTableText">
+Class loader and class format checks required by the class file verifier.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433776"> </a><div class="pTableText">
+<code class="cCode">log.h<br />log.c</code>
+</div>
+</td>
+    <td><a name="wp433778"> </a><div class="pTableText">
+Logging/diagnostic operations for debugging and profiling.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433780"> </a><div class="pTableText">
+<code class="cCode">long.h</code>
+</div>
+</td>
+    <td><a name="wp433782"> </a><div class="pTableText">
+Special macros to handle 64-bit operations in a portable fashion.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433784"> </a><div class="pTableText">
+<code class="cCode">main.h</code>
+</div>
+</td>
+    <td><a name="wp433786"> </a><div class="pTableText">
+Compilation options and system-wide default settings.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433988"> </a><div class="pTableText">
+<code class="cCode">messages.h</code>
+</div>
+</td>
+    <td><a name="wp433990"> </a><div class="pTableText">
+Error and warning messages.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433788"> </a><div class="pTableText">
+<code class="cCode">native.h<br />native.c<br />nativeCore.c</code>
+</div>
+</td>
+    <td><a name="wp433790"> </a><div class="pTableText">
+Native function table operations and core native library functions.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433792"> </a><div class="pTableText">
+<code class="cCode">pool.h<br />pool.c</code>
+</div>
+</td>
+    <td><a name="wp433794"> </a><div class="pTableText">
+Runtime data structures and operations for representing constant pools.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433796"> </a><div class="pTableText">
+<code class="cCode">profiling.h<br />profiling.c</code>
+</div>
+</td>
+    <td><a name="wp433798"> </a><div class="pTableText">
+Data declarations and operations for profiling virtual machine execution.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433800"> </a><div class="pTableText">
+<code class="cCode">property.h<br />property.c</code>
+</div>
+</td>
+    <td><a name="wp433802"> </a><div class="pTableText">
+Operations for accessing Java system properties.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433804"> </a><div class="pTableText">
+<code class="cCode">rom.h</code>
+</div>
+</td>
+    <td><a name="wp433806"> </a><div class="pTableText">
+Macros needed by the ROMizer (JavaCodeCompact tool).
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433940"> </a><div class="pTableText">
+<code class="cCode">runtime.h</code>
+</div>
+</td>
+    <td><a name="wp433942"> </a><div class="pTableText">
+Function templates for certain machine-specific operations that need to defined for each KVM port.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433952"> </a><div class="pTableText">
+<code class="cCode">stackmap.c</code>
+</div>
+</td>
+    <td><a name="wp433954"> </a><div class="pTableText">
+Stackmap operations that are used for supporting exact garbage collection.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433812"> </a><div class="pTableText">
+<code class="cCode">thread.h<br />thread.c</code>
+</div>
+</td>
+    <td><a name="wp433814"> </a><div class="pTableText">
+Internal runtime data structures and operations for multithreading and Java thread management.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433816"> </a><div class="pTableText">
+<code class="cCode">verifier.h<br />verifier.c</code>
+</div>
+<a name="wp434217"> </a><div class="pTableText">
+<code class="cCode">verifierUtil.h</code>
+</div>
+<a name="wp434218"> </a><div class="pTableText">
+<code class="cCode">verifierUtil.c</code>
+</div>
+</td>
+    <td><a name="wp433821"> </a><div class="pTableText">
+Classfile verifier (see <a  href="portingVerifier.html#wp418771"><span style="color: #3366CC">Chapter&#160;13</span></a> for details).
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp433822"> </a><h2 class="pHeading1">
+5.3	Directory kvm/VmExtra
+</h2>
+<a name="wp432668"> </a><p class="pBody">
+The directory <code class="cCode">kvm/VmExtra/</code> contains additional components that are potentially useful to a large number of ports. These files include an implementation of the most commonly needed networking protocols for Windows/Unix, a file interface for supporting class loading on those target platforms that have a regular file system, and a JAR file reader/inflater. This directory also contains the implementation of the Java-level debugger and the KDWP (KVM Debug Wire Protocol) interface.
+</p>
+<a name="wp432708"> </a><p class="pBody">
+In addition, the directory defines some optional macros for asynchronous event handling, and defines the virtual machine startup operations that are needed on non-embedded, command line based target platforms such as Windows and Solaris.
+</p>
+<a name="wp433037"> </a><p class="pBody">
+A description of the <code class="cCode">VmExtra</code> files is provided in <a  href="portingDirStruct.html#wp433055">TABLE&#160;5</a>.</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq433053">
+  <caption><a name="wp433055"> </a><div class="pTableCaption">
+TABLE&#160;5&#160;&#160;&#8211;&#160;&#160;Files in VmExtra
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp433059"> </a><div style="text-align: left" class="pTableHead">
+File
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp433061"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp433063"> </a><div class="pTableText">
+<code class="cCode">async.h<br />async.c</code>
+</div>
+</td>
+    <td><a name="wp433065"> </a><div class="pTableText">
+Macros for supporting asynchronous I/O (see <a  href="portingNative.html#wp433595"><span style="color: #3366CC">Section&#160;11.4 &quot;Asynchronous native methods</span></a>&#8221; and <a  href="portingEvent.html#wp432430"><span style="color: #3366CC">Section&#160;12.1.4 &quot;Asynchronous notification</span></a>&#8221;).
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433067"> </a><div class="pTableText">
+<code class="cCode">loaderFile.c</code>
+</div>
+</td>
+    <td><a name="wp433069"> </a><div class="pTableText">
+Low-level binding between the file system, class loader and JAR reader for those platforms that have a &#8220;real&#8221; file system.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433071"> </a><div class="pTableText">
+<code class="cCode">main.c</code>
+</div>
+</td>
+    <td><a name="wp433073"> </a><div class="pTableText">
+Default main program for those platforms that have a file system and support VM startup from a command line.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433967"> </a><div class="pTableText">
+<code class="cCode">jar.h<br />inflate.h</code>
+</div>
+<a name="wp433985"> </a><div class="pTableText">
+<code class="cCode">inflateint.h<br />inflatetables.h<br />jar.c</code>
+</div>
+<a name="wp433986"> </a><div class="pTableText">
+<code class="cCode">inflate.c</code>
+</div>
+</td>
+    <td><a name="wp433969"> </a><div class="pTableText">
+Jar file reader and inflater (decompressor).
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433095"> </a><div class="pTableText">
+<code class="cCode">resource.c</code>
+</div>
+</td>
+    <td><a name="wp433097"> </a><div class="pTableText">
+Implementation of a stream-based protocol for reading external resources.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp433910"> </a><div class="pTableText">
+<code class="cCode">debugger.h</code>
+</div>
+<a name="wp433911"> </a><div class="pTableText">
+<code class="cCode">debugger.c</code>
+</div>
+<a name="wp433876"> </a><div class="pTableText">
+<code class="cCode">debuggerCommands.h</code>
+</div>
+<a name="wp433902"> </a><div class="pTableText">
+<code class="cCode">debuggerStreams.h</code>
+</div>
+<a name="wp433901"> </a><div class="pTableText">
+<code class="cCode">debuggerInputStream.c</code>
+</div>
+<a name="wp433882"> </a><div class="pTableText">
+<code class="cCode">debuggerOutputStream.c</code>
+</div>
+<a name="wp433892"> </a><div class="pTableText">
+<code class="cCode">debuggerSocketIO.c</code>
+</div>
+</td>
+    <td><a name="wp433875"> </a><div class="pTableText">
+Implementation of the Java-level debugger and the KDWP (KVM Debug Wire Protocol) interface.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp434232"> </a><h2 class="pHeading1">
+5.4	Directory kvm/VmExtra/src/fp
+</h2>
+<a name="wp434233"> </a><p class="pBody">
+The directory <code class="cCode">kvm/VmExtra/src/fp</code> contains library functions that are needed for supporting various floating-point functions required by CLDC Specification version 1.1. For more information on floating point support, refer to <a  href="portingFloatingPoint.html#wp418771"><span style="color: #3366CC">Chapter&#160;10</span></a>.
+</p>
+<a name="wp432531"> </a><p class="pBody">
+
+</p>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" class="full-width">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="portingRequired.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="portingFlags.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KVM Porting Guide <br /> , CLDC 1.1</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    
+<p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169; 2003 Sun Microsystems, Inc. 
+  All rights reserved.</p>
+  </body>
+</html>

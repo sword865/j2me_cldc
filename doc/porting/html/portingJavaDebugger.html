@@ -1,0 +1,309 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="book-no-index" />
+    <meta name="LASTUPDATED" content="02/21/03 16:03:04" />
+    <title>Java-Level Debugging Support (KDWP)</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="portingJAM.html" />
+    <link rel="Next" href="" />
+    <link rel="Index" href="portingJavaDebugger.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" class="full-width">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="portingJAM.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="">
+	  <img id="LongDescNotReq3" src="images/nextx.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp418771"> </a><h2 class="pChapNum">
+Chapter &#160; 16
+</h2>
+<a name="wp431766"> </a><h2 class="pTitle">
+Java-Level Debugging Support (KDWP)
+</h2>
+<hr class="pHr"/>
+<a name="wp437923"> </a><p class="pBody">
+KVM provides facilities for plugging the virtual machine into third-party Java development and debugging environments that are compliant with the JPDA (Java Platform Debug Architecture) specification supported by Java 2 Standard Edition. Further information on the JPDA architecture is available at <br /><a href="http://java.sun.com/products/jpda/" target="_blank">
+<span class="cWebJump">http://java.sun.com/products/jpda/</span></a>.
+</p>
+<a name="wp437367"> </a><p class="pBody">
+Due to strict memory constraints, KVM does not implement support for the JVMDI (Java Virtual Machine Debug Interface) and full JDWP (Java Debug Wire Protocol) specifications required by JPDA.
+</p>
+<a name="wp437374"> </a><p class="pBody">
+Instead, KVM implements a subset of the JDWP known as KDWP (KVM Debug Wire Protocol). A specification of the KDWP protocol is available in a separate document listed in <a  href="portingIntro.html#wp431869"><span style="color: #3366CC">Section&#160;1.2 &#8220;Related documentation</span></a>.&#8221;
+</p>
+<a name="wp436204"> </a><h2 class="pHeading1">
+16.1	Overall architecture
+</h2>
+<a name="wp436206"> </a><p class="pBody">
+The KDWP was designed to be a strict subset of the JDWP, primarily based on the resource constraints imposed on the KVM. In order to make KVM run with a JPDA-compatible debugger IDEs, a <em style="font-style: italic" class="cEmphasis">debug agent</em> (debug proxy) program is interposed between the KVM and the JPDA-compatible debugger. The debug agent allows many of the memory-consuming components of a JPDA-compliant debugging environment to be located on the development workstation instead of the KVM, therefore reducing the memory overhead that the debugging interfaces have on the KVM and target devices. As obvious, the debugging interfaces can be turned off completely (at compile time) on those platforms and ports that do not need Java-level debugging support.
+</p>
+<a name="wp436207"> </a><p class="pBody">
+At the high level, the Java-level debugging support implementation consists of two parts:
+</p>
+<ul class="pBullet1"><a name="wp437427"> </a><div class="pBullet1"><li>the actual code in the KVM to support a subset of the JDWP, and</li></div>
+<a name="wp437428"> </a><div class="pBullet1Last"><li>the debug agent that performs some of the debug commands on behalf of the KVM.</li></div>
+</ul>
+<a name="wp437429"> </a><p class="pBody">
+The overall architecture for the Java-level debugging interface is illustrated in <a  href="portingJavaDebugger.html#wp436208">Figure&#160;2</a>. In that figure, the topmost box represents the JPDA-compliant debugging environment (&#8220;JPDA Debugger&#8221;) running on a development workstation. The debugger is connected to the debug agent that talks to the KVM.</p><div align="left"><img src="images/portingJavaDebuggera.gif" height="246" width="583" alt="Figure is completely described in previous paragraph." border="0" hspace="0" vspace="0"/></div><p class="pBody">
+</p>
+<a name="wp436208"> </a><div class="pFigureCaption">
+FIGURE&#160;2&#160;&#160;&#8211;&#160;&#160;Java-level debugging interface architecture
+<br /><br />
+</div><a name="wp436210"> </a><p class="pBody">
+The debug agent connects to the KVM via a socket connection. Similarly, the debugger connects to the debug agent over a socket. The debugger is unaware that it is connected to the debug agent. The debugger appears to be communicating directly with a JDWP-compliant Java Virtual Machine. In fact, the debug agent can be configured in <em class="cEmphasis">pass through mode </em>so that all packets are passed from input to output using the debug agent with a standard Java VM. In normal KVM debug mode, the debug agent examines packets from the debugger and determines which packets are to be handled by the KVM and which are to be handled within the debug agent.
+</p>
+<a name="wp436214"> </a><p class="pBody">
+The main processing done in the debug agent is the parsing of class files to extract debugging information. This includes line number and code offset information and variable information. The KDWP implementation within the KVM includes some <em style="font-style: italic" class="cEmphasis">vendor specific commands</em> that the debug agent uses to communicate with the KVM.
+</p>
+<a name="wp436215"> </a><h2 class="pHeading1">
+16.2	Debug Agent
+</h2>
+<a name="wp436216"> </a><p class="pBody">
+The debug agent (also known as <em style="font-style: italic" class="cEmphasis">debug proxy</em>) is written in the Java programming language and the code is in the KVM source tree under the directory <code class="cCode">tools/kdp/src/kdp</code>. There are two main portions of the code: the portion that handles connections to the debugger and to KVM, and the portion that handles the parsing of the class files. The latter code is located in subdirectory <code class="cCode">classparser</code>.
+</p>
+<a name="wp436218"> </a><h3 class="pHeading2">
+16.2.1	Connections between a debugger and the KVM
+</h3>
+<a name="wp436222"> </a><p class="pBody">
+The portion of the code that handles connections to the debugger and to KVM resides in file <code class="cCode">KVMDebugProxy.java</code>. This code creates two objects: <em style="font-style: oblique" class="cEmphasis">DebuggerListener</em> and <em style="font-style: oblique" class="cEmphasis">KVMListener</em>. The <code class="cCode">DebuggerListener</code> class handles the retrieval of packets from the debugger, and the <code class="cCode">KVMListener</code> class handles the retrieval of packets from the KVM. <code class="cCode">DebuggerListener</code> and <code class="cCode">KVMListener</code> are both subclasses of class <code class="cCode">Thread</code>. Therefore, when they are invoked they start a new thread of execution (on the development workstation.) Each object also gets passed a handle to the other object (that is, the <code class="cCode">KVMListener</code> object gets passed a handle to the <code style="font-style: normal" class="cCode">DebuggerListener</code> object, and vice versa). This enables cross-communication of packets between the debugger and the KVM. The following diagram (<a  href="portingJavaDebugger.html#wp436223">Figure&#160;3</a>) may help to clarify this further:</p><div align="left"><img src="images/portingJavaDebugger2.gif" height="284" width="583" alt="Figure is completely described in previous paragraph." border="0" hspace="0" vspace="0"/></div><p class="pBody">
+</p>
+<a name="wp436223"> </a><div class="pFigureCaption">
+FIGURE&#160;3&#160;&#160;&#8211;&#160;&#160;Debugger and KVM connections
+<br /><br />
+</div><a name="wp436226"> </a><p class="pBody">
+In a typical scenario, the KVM is started with the<code class="cCode"> -debugger</code> flag, which puts it into a <em style="font-style: italic" class="cEmphasis">debugger enabled</em> mode. In this mode the KVM listens on a socket for a connection from the debug agent. When the debug agent is started, it connects to this socket, and then listens on another socket for a connection from the debugger. When the debugger connects, it issues the <em class="cEmphasis">JDWP handshake</em> command, which consists of the string &#8220;<code class="cCode">JDWP-Handshake</code>&#8221;. The debug agent acknowledges by reflecting this string back to the debugger. Meanwhile, the debug agent has sent the handshake command to the KVM and the KVM has responded back with information concerning which optional events it supports. The <code class="cCode">KVMListener</code> then queries the KVM for a list of all the classes that are currently loaded into the VM. This information is used to build a hash table of <code class="cCode">ClassFile</code> objects that is used later when the debugger requests information about a specific class (such as line number information, method information, and so forth.) At this point, each thread is listening for packets. The KVM sends a <code class="cCode">VMInit</code> event to the debugger via the debug agent, which indicates to the debugger that the KVM is starting its execution of the Java application. The debugger might also send packets that indicate to the KVM to start up other events such as <code class="cCode">ClassPrepare</code> or <code class="cCode">ClassLoad</code>.
+</p>
+<a name="wp436232"> </a><p class="pBody">
+The communication code for the debug agent is in source file <code class="cCode">SocketConnection.java</code>. In this file, each object (<code class="cCode">KVMListener</code> and <code class="cCode">DebuggerListener</code>) creates a thread of execution that waits for packets to arrive from its respective socket. If the packet is a command packet (the <code class="cCode">Packet.Reply</code> bit is not set), then it puts that packet on a <code style="font-style: normal" class="cCode">packetQueue</code> list (see file <code class="cCode">ProxyListener.java</code>) and a notification is sent to any object waiting on that queue. The packet is then extracted from the queue by whatever listener is waiting for that packet on that queue. In the <code class="cCode">run</code> method for the <code class="cCode">KVMListener</code> and <code class="cCode">DebuggerListener</code>, each packet is analyzed to determine if the debug agent needs to process the packet or whether it is to be transmitted to the other object for further processing.
+</p>
+<a name="wp436242"> </a><h3 class="pHeading2">
+16.2.2	Packet processing
+</h3>
+<a name="wp436243"> </a><p class="pBody">
+The <code class="cCode">DebuggerListener</code> object intercepts a number of packets as is evident by examining the code for the large switch statement located after the call to <code class="cCode">waitForPacket</code>. When <code class="cCode">waitForPacket</code> returns with a packet, the debug agent first creates a new <code style="font-style: normal" class="cCode">PacketStream</code> object, then checks to see if the debug agent needs to process that packet (For example, the <code class="cCode">SENDVERSION_CMD</code> packet is processed by the debug agent directly, and a response is created and sent back to the debugger without any interaction with the KVM.) A more complex command would be the <code class="cCode">FIELDS_CMD</code> of the <code class="cCode">REFERENCE_TYPE_CMDSET</code>. For this command, the debugger has passed in a <em class="cEmphasis">class id</em>, which is used by the debug agent to find a <code class="cCode">ClassFile</code> object via the <code class="cCode">ClassManager.classMap</code> object. The <code class="cCode">classMap</code> object is filled by the <code class="cCode">KVMListener</code> object when it receives the <code class="cCode">ClassPrepare</code> events from the KVM. Once the debug agent has obtained the <code class="cCode">ClassFile</code> object, it uses the <code class="cCode">getAllFieldInfo</code> method to obtain a <em class="cEmphasis">list</em> of fields, and iterates through this list passing the information back to the debugger. Once again, there is no interaction with the KVM.
+</p>
+<a name="wp436244"> </a><p class="pBody">
+Similarly, within the source file for the <code class="cCode">KVMListener.java</code>, the <code class="cCode">KVMListener</code> object intercepts the <code class="cCode">CLASS_PREPARE</code> events (events whose type is equal to the constant <code class="cCode">JDWP_EventKind_CLASS_PREPARE</code>) that are passed up from the KVM. <code class="cCode">KVMListener</code> creates a new <code class="cCode">ClassFile</code> object via the call to <code class="cCode">manager.findClass</code> and inserts it into the <code class="cCode">ClassManager.classMap</code> hashtable. <code class="cCode">KVMListener</code> then passes the event to the debugger so that it can process the event as well.
+</p>
+<a name="wp436250"> </a><h2 class="pHeading1">
+16.3	Debugger support within KVM
+</h2>
+<a name="wp436893"> </a><p class="pBody">
+The debugger support within the KVM consists primarily of four source (<code class="cCode">.c</code>) files under the <code class="cCode">VmExtra/src</code> directory and three header (<code class="cCode">.h</code>) files under <code class="cCode">VmExtra/h</code> directory. All debugger code is included with the conditional compilation flag, <code class="cCode">ENABLE_JAVA_DEBUGGER</code>. If this flag is enabled, and the KVM is rebuilt, then the Java debugger support is included within the KVM. If Java debugger support is not desired, set this define in <code class="cCode">main.h</code> to 0.
+</p>
+<hr class="pHr"/><div class="note">
+<a name="wp437479"> </a>
+<b>Note &#8211;</b>  If your target platform or port does not require Java-level debugging support, we recommend turning the debugging code off at compile time (in file main.h or in your platform-specific machine_md.h file):<br /><br /><code class="cCode">#define ENABLE_JAVA_DEBUGGER 0<br /></code><br />This will make the KVM executable much smaller.
+<hr class="pHr"/></div>
+<a name="wp436252"> </a><p class="pBody">
+The primary file for the Java debugger support within the KVM is the source file <code style="font-style: normal" class="cCode">debugger.c</code>. This file contains all the support needed for the KDWP API. Socket communication is handled by the code in file <code class="cCode">debuggerSocketIO.c</code>. The <code style="font-style: normal" class="cCode">debuggerInputStream.c</code> and <code class="cCode">debuggerOutputStream.c</code> files contain the code for handling the transmission of data being sent to/from the debugger support functions in <code style="font-style: normal" class="cCode">debugger.c</code>. The code in <code class="cCode">debugger.c</code> file services all the KDWP requests that are sent by or through the debug agent. The function <code class="cCode">ProcessDebugCmds</code> handles the parsing of input packets to determine which command set and what command within the command set the packet is referring to. This function then determines the appropriate function that is to be invoked for handling this command. The <code class="cCode">inputStream</code> handle as well as the <code class="cCode">outputStream</code> handles are passed as parameters, and used for handling the reply back to the debug agent. For performance reasons, most commands use a global <code class="cCode">inputStream</code> and <code class="cCode">outputStream</code>. If these are already in use, another one is allocated from the heap.
+</p>
+<a name="wp436254"> </a><h3 class="pHeading2">
+16.3.1	Events
+</h3>
+<a name="wp436255"> </a><p class="pBody">
+Events are essentially commands generated by the KVM. Events are passed up to the debug agent, which may in turn pass them up to the debugger. The code for handling an event will appear as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#if ENABLE_JAVA_DEBUGGER<a name="wp436260"> </a>
+{<a name="wp436261"> </a>
+  CEModPtr cep = GetCEModifier();<a name="wp436262"> </a>
+  cep-&gt;thread = thisThread;<a name="wp436263"> </a>
+  setEvent_ThreadStart(cep);<a name="wp436264"> </a>
+  FreeCEModifier(cep);<a name="wp436265"> </a>
+}<a name="wp436266"> </a>
+#endif /* ENABLE_JAVA_DEBUGGER */<a name="wp436267"> </a>
+</pre></div>
+<a name="wp437862"> </a><p class="pBody">
+This creates a new <code class="cCode">CEModPtr</code> structure that contains state information for this particular event. It then invokes a routine in <code class="cCode">debugger.c</code>, which attempts to send the event. A typical event routine in <code class="cCode">debugger.c</code> first determines if the event attempting to be sent has been enabled by a previous <em class="cEmphasis">Set Event</em> command from the debugger (via the <code class="cCode">checkNOTIFY_WANTED</code> macro.) Then, <code class="cCode">findSatisfyingEvent</code> is invoked to determine if this particular event matches an event request sent down from the debugger. The <code class="cCode">findSatisfyingEvent</code> function also checks the event counter as well as any modifiers that the debugger has applied to this event. If the event passes, then it is sent on the <code class="cCode">outputStream</code>. After an event is sent, <code class="cCode">handleSuspendPolicy</code> is invoked to process whatever suspend policy the debugger has attached to this event when the debugger had issued the <em class="cEmphasis">Set Event</em> command. Some events such as breakpoints or single stepping will generally have a suspend policy of <code class="cCode">ALL</code>, which means that all threads are suspended and that the KVM will essentially spin through the reschedule loop at the top of the interpreter loop waiting for a thread to resume. The <em class="cEmphasis">Resume</em> command will eventually come from the debugger when the user issues a <em class="cEmphasis">Continue</em> command or when the user explicitly issues a <em class="cEmphasis">Resume Thread</em> command.
+</p>
+<a name="wp437863"> </a><p class="pBody">
+In certain situations, events need to be deferred. This is because it is not possible to send the event to the debug agent and subsequently suspend the KVM threads, since the interpreter might be in the midst of executing a byte code. Thus in such cases, <code class="cCode">insertDebugEvent(cep)</code> is called instead of <code class="cCode">setEvent_XXX(cep)</code>, as shown in the example above. At the top of the interpreter loop (see <code class="cCode">VmCommon/src/execute.c</code>), the events are checked, and if there is a pending event, it is sent when it is safe to do so.
+</p>
+<a name="wp436273"> </a><h3 class="pHeading2">
+16.3.2	Breakpoints
+</h3>
+<a name="wp436289"> </a><p class="pBody">
+When a <em class="cEmphasis">Set Event</em> command is received to add a breakpoint, the code for handling the breakpoint event determines if the opcode at that particular location is a <em class="cEmphasis">Fast opcode</em>. If so, then the original opcode must be retrieved from the <em class="cEmphasis">inline cache</em> before the breakpoint is added. The original opcode is stored in an <code class="cCode">EVENTMODIFIER</code> structure that is pointed to by the <code style="font-style: normal" class="cCode">VMEvent</code> structure for this particular event. When the Java bytecode interpreter hits the <code class="cCode">Breakpoint</code> opcode (see <code class="cCode">bytecodes.c</code>), and if not <em class="cEmphasis">single stepping</em>, then the <code class="cCode">handleBreakpoint</code> function is invoked. This function restores the original opcode into the <code class="cCode">thread</code> structure for the <code class="cCode">CurrentThread</code>, at the point where the breakpoint had been entered. It then also sends an event to the debugger via the debug agent. Eventually, the user will press the <em style="font-style: italic" class="cEmphasis">Continue</em> button on the debugger, which results in all threads to resume execution. The <code class="cCode">RESCHEDULE</code> macro (see <code class="cCode">execute.h</code>) includes some code in it for determining if this thread was just at a breakpoint, and if so, it will retrieve the next bytecode from a known location within the <code class="cCode">thread</code> structure. The code within the interpreter loop will then execute this instruction.
+</p>
+<a name="wp436290"> </a><h3 class="pHeading2">
+16.3.3	Single stepping
+</h3>
+<a name="wp436292"> </a><p class="pBody">
+When the debugger issues a <code style="font-style: normal" class="cCode">SingleStep</code> event request, the code in <code class="cCode">debugger.c</code> must determine which type of step function it is (that is, <em class="cEmphasis">step by bytecode</em> or <em class="cEmphasis">step by line</em>), whether the step is a <em class="cEmphasis">Step Into</em> (step into a function), <em class="cEmphasis">Step Over</em> (step over calls to functions; that is, do not single step into another function), or <em style="font-style: italic" class="cEmphasis">Step Out</em> (go back to the function that called this function). Additionally, if it is a <em class="cEmphasis">step by line</em>, then KVM needs to know what the code offset is for the next line number. To obtain this information, KVM calls a private API within the debug agent to return the target offset and the next line offset. The debug agent returns this information back to the KVM, which stores it into a <code class="cCode">stepInfo</code> structure, which is part of the <code style="font-style: normal" class="cCode">threadQueue</code> structure (see <code style="font-style: normal" class="cCode">thread.h</code>.) Within the interpreter loop, a flag is checked to determine if this particular thread is in single step mode. If so, then the <code class="cCode">handleSingleStep</code> function in <code style="font-style: normal" class="cCode">debugger.c</code> is invoked to process this <em class="cEmphasis">single step</em>. The <code class="cCode">handleSingleStep</code> function determines if the instruction pointer has reached the target offset or if it has popped up a frame or if it has gone beyond the target offset. Depending on the type of stepping being performed, this function will determine when to send a <code class="cCode">SingleStep</code> event to the debugger. In most cases, if the user is single stepping line by line, and when the code offset is equal to the target offset, it results in a <code class="cCode">SingleStep</code> event to be sent to the debugger. All threads are typically suspended at this point, and as was the case for the breakpoint scenario above, the KVM will wait until the debugger resumes the threads via a <code class="cCode">Continue</code> command or a subsequent <code class="cCode">SingleStep</code> event.
+</p>
+<a name="wp437762"> </a><h3 class="pHeading2">
+16.3.4	Suspend and nosuspend options
+</h3>
+<a name="wp438630"> </a><p class="pBody">
+It is desirable in certain IDE environments such as Borland&#8217;s JBuilder to provide an option similar to that available in J2SE for starting up the KVM in two different debugging modes. Thus, as of KVM 1.0.3, the KVM debugger can be started in the following two modes:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;kvm -debugger -suspend ...<a name="wp438631"> </a>
+&#160;&#160;&#160;&#160;kvm -debugger -nosuspend ...<a name="wp438632"> </a>
+</pre></div>
+<a name="wp437847"> </a><p class="pBody">
+In the <em class="cEmphasis">suspend</em> mode (this is the default), the KVM stops all Java threads upon VM startup and waits for further commands from the IDE (development and debugging environment) before the debugging session proceeds any further. In the <em class="cEmphasis">nosuspend</em> mode, the Java threads start running immediately when the KVM is started.
+</p>
+<a name="wp437775"> </a><p class="pBody">
+In the most common cases, the KVM debugger is usually invoked in the <em class="cEmphasis">suspend</em> mode. Unless the application program being debugged requires substantial processing or is recursive in nature, it may not make much sense to invoke the KVM in the <em class="cEmphasis">nosuspend</em> mode. This is because it is very likely that a simple application program may complete execution long before the debugger IDE is able to issue any commands to the KVM.
+</p>
+<a name="wp437524"> </a><h2 class="pHeading1">
+16.4	Using the Debug Agent and the JPDA Debugger
+</h2>
+<a name="wp437525"> </a><p class="pBody">
+In order to run the debug agent, it is necessary to build the application class or classes being debugged to include debug information. It is also necessary to transform the application class file(s) using the preverifier. Then, after the KVM is invoked on a specified host and port, the debug agent can be started so that it listens to KVM requests on the KVM port, and a local port is specified for connecting with a JPDA-compatible debugger.
+</p>
+<a name="wp437526"> </a><p class="pBody">
+The following section summarizes the steps necessary to start a debug session in much more detail.
+</p>
+<hr class="pHr"/><div class="note">
+<a name="wp437903"> </a>
+<b>Note &#8211;</b>  KVM debugger functionality is integrated into the J2ME Wireless Toolkit (WTK). Therefore, if you are using the WTK, the detailed steps in the next section are not necessary.
+<hr class="pHr"/></div>
+<a name="wp437527"> </a><h3 class="pHeading2">
+16.4.1	Starting a debug session
+</h3>
+<a name="wp437528"> </a><p class="pBody">
+To start a debug session, the following five steps are necessary:
+</p>
+<div class="pStep1">
+<ol class="pStep1"><a name="wp437529"> </a><li>Build the application classes to be debugged with the -g option to include debug information. Then, place the output in a separate directory for transforming the resulting class file. See <a  href="portingVerifier.html#wp431766"><span style="color: #3366CC">Chapter&#160;13, &#8220;Class File Verification</span></a>.&#8221;</li>
+<a name="wp437533"> </a><p class="pBody">
+<code style="font-style: normal" class="cCode">javac -g -classpath </code><em style="font-style: italic" class="cEmphasis">&lt;path&gt;</em><code style="font-style: normal" class="cCode"> -d </code><em style="font-style: italic" class="cEmphasis">&lt;directory&gt;</em><code style="font-style: normal" class="cCode"> </code><em style="font-style: italic" class="cEmphasis">&lt;class&gt;</em>
+</p>
+<ul class="pBullet1"><a name="wp437584"> </a><div class="pBullet1"><li><code class="cCode">-g</code> indicates to include debug information</li></div>
+<a name="wp437582"> </a><div class="pBullet1Plus"><li><code class="cCode">-classpath</code> <em class="cEmphasis">&lt;path&gt;, where &lt;path&gt; indicates the directory in which the CLDC/KVM Java library classes and the application classes for the application being debugged are located.</em></li></div>
+<a name="wp437535"> </a><div class="pBullet1Plus"><li><code class="cCode">-d</code> <em class="cEmphasis">&lt;directory&gt;</em>, where <em class="cEmphasis">&lt;directory&gt;</em> indicates the directory in which output classes will be written. The default output directory is <code class="cCode">./output</code>.</li></div>
+<a name="wp437536"> </a><div class="pBullet1Last"><li><em class="cEmphasis">&lt;class&gt;</em> is the application class or classes being debugged.</li></div>
+</ul>
+<a name="wp437537"> </a><li>Invoke the preverifier for transforming the class file.</li>
+<a name="wp437538"> </a><p class="pBody">
+<code style="font-style: normal" class="cCode">preverify -classpath </code><em style="font-style: italic" class="cEmphasis">&lt;path&gt;</em><code style="font-style: normal" class="cCode"> -d . </code><em style="font-style: italic" class="cEmphasis">&lt;directory&gt;</em>
+</p>
+<a name="wp437539"> </a><p class="pBody">
+This will transform all classes under <em class="cEmphasis">&lt;directory&gt;</em> and places the transformed class files in the current directory (as specified by the -d option).
+</p>
+<a name="wp437540"> </a><li>Start the KVM process:</li>
+<a name="wp437541"> </a><p class="pBody">
+<code style="font-style: normal" class="cCode">kvm -debugger -classpath </code><em style="font-style: italic" class="cEmphasis">&lt;path&gt;</em><code style="font-style: normal" class="cCode"> -port </code><em style="font-style: italic" class="cEmphasis">&lt;KVM port&gt;</em><code style="font-style: normal" class="cCode"> </code><em style="font-style: italic" class="cEmphasis">&lt;class&gt;</em>
+</p>
+<ul class="pBullet1"><a name="wp437542"> </a><div class="pBullet1"><li><code class="cCode">-debugger</code> indicates to put the KVM in debugger enabled mode</li></div>
+<a name="wp437543"> </a><div class="pBullet1Plus"><li><code class="cCode">-classpath</code> <em class="cEmphasis">&lt;path&gt;</em>, where <em class="cEmphasis">&lt;path&gt;</em> specifies the directory in which the CLDC/KVM Java library classes as well as the application classes for the application being debugged are located.</li></div>
+<a name="wp437544"> </a><div class="pBullet1Plus"><li><code class="cCode">-port</code> <em class="cEmphasis">&lt;KVM port&gt;</em> is the KVM port. The default KVM port is 2800. This must match the KVM port specified by the debug agent below.</li></div>
+<a name="wp437545"> </a><div class="pBullet1Last"><li><em class="cEmphasis">&lt;class&gt;</em> is the application class being debugged.</li></div>
+</ul>
+<a name="wp437546"> </a><li>Start the debug agent (debug proxy): </li>
+<a name="wp437547"> </a><p class="pBody">
+<code style="font-style: normal" class="cCode">java -classpath </code><em style="font-style: italic" class="cEmphasis">&lt;path&gt;</em><code style="font-style: normal" class="cCode"> kdp.KVMDebugProxy -l </code><em style="font-style: italic" class="cEmphasis">&lt;localport&gt;</em><code style="font-style: normal" class="cCode"> -p -r </code><em style="font-style: italic" class="cEmphasis">&lt;KVM host&gt; &lt;KVM port&gt;</em><code style="font-style: normal" class="cCode"> -cp </code><em style="font-style: italic" class="cEmphasis">&lt;KVM_path&gt;</em>
+</p>
+<ul class="pBullet1"><a name="wp437548"> </a><div class="pBullet1"><li><code class="cCode">-classpath</code> <em class="cEmphasis">&lt;path&gt;</em>, where <em class="cEmphasis">&lt;path&gt;</em> specifies the directories in which the debug proxy classes are located.</li></div>
+<a name="wp437549"> </a><div class="pBullet1Plus"><li><code class="cCode">-l</code> <em class="cEmphasis">&lt;localport&gt;</em>, where <em class="cEmphasis">&lt;localport&gt;</em> is the port that the debugger connects to.</li></div>
+<a name="wp437550"> </a><div class="pBullet1Plus"><li><code class="cCode">-p</code> indicates to use the class parser.</li></div>
+<a name="wp437551"> </a><div class="pBullet1Plus"><li><code class="cCode">-r</code> <em class="cEmphasis">&lt;KVM host&gt;</em>, where <em class="cEmphasis">&lt;KVM host&gt;</em> is the remote host name.</li></div>
+<a name="wp437552"> </a><div class="pBullet1Plus"><li><em class="cEmphasis">&lt;KVM port&gt; </em>is the KVM port. As stated earlier, this port must match the KVM port specified in step 3 above. </li></div>
+<a name="wp437553"> </a><div class="pBullet1Last"><li><code class="cCode">-cp</code> <em class="cEmphasis">&lt;path&gt;</em>, where <em class="cEmphasis">&lt;path&gt;</em> is the directory or directories where the CLDC/KVM Java library classes as well as the application classes for the application being debugged are located.</li></div>
+</ul>
+<a name="wp437554"> </a><li>Connect to the debug agent with the debugger:</li></div>
+<a name="wp437555"> </a><p class="pBody">
+You can use any JPDA-compliant debugger such as Forte, JBuilder or jdb. With the Forte debugger, go to the<em class="cEmphasis"> Debug-&gt;Connect </em>dialog box and insert the host where the debug agent is running and the local port number that had been specified using the <code class="cCode">-l</code> <em class="cEmphasis">&lt;localport&gt;</em> option.
+</p>
+<hr class="pHr"/><div class="note">
+<a name="wp437556"> </a>
+<b>Note &#8211;</b>  To download the Forte debugger and for further information on Forte, please refer to the Sun One Studio website at <br /><a href="http://wwws.sun.com/software/sundev/jde/index.html" target="_blank">
+<span class="cWebJump">http://wwws.sun.com/software/sundev/jde/index.html</span></a>. When running the Forte debugger, JDK 1.3 or later must be previously installed and be on the classpath, since only this version (or later) of the JDK includes support for the JPDA. For further information on downloading the JDK 1.3, please refer to the website at <a href="http://java.sun.com/j2se/1.3/" target="_blank">
+<span class="cWebJump">http://java.sun.com/j2se/1.3/</span></a>.
+<hr class="pHr"/></div>
+<a name="wp437557"> </a><p class="pBody">
+For jdb (Java debugger), the command is as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;<code class="cCode">jdb -attach &lt;agent hostname&gt;:&lt;localport&gt;</code><a name="wp437558"> </a>
+</pre></div>
+<a name="wp437653"> </a><h3 class="pHeading2">
+16.4.2	Debugging example
+</h3>
+<a name="wp437654"> </a><p class="pBody">
+If the KVM is running on a system called <em class="cEmphasis">sicily</em>, and the debug agent and debugger are running on <em class="cEmphasis">debughost</em>, then the commands for starting the debug session would appear as follows:
+</p>
+<ul class="pBullet1"><a name="wp438717"> </a><div class="pBullet1"><li>On the <em class="cEmphasis">sicily</em> system, build the application test as follows:</li></div>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;<code class="cCode">javac -g -classpath ../api/classes:../samples/classes</code><a name="wp438718"> </a>
+&#160;&#160;&#160;&#160;&#160;<code class="cCode">-d output test.java</code><a name="wp438719"> </a>
+</pre></div>
+<a name="wp437563"> </a><div class="pBullet1Plus"><li>Invoke the preverifier for building a preverified class file.</li></div>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;<code class="cCode">preverify -classpath ../api/classes:../samples/classes</code><a name="wp437564"> </a>
+&#160;&#160;&#160;&#160;&#160;<code class="cCode">-d . output</code><a name="wp438735"> </a>
+</pre></div>
+<a name="wp437565"> </a><div class="pBullet1Plus"><li>On the <em class="cEmphasis">sicily</em> system, type the following command to invoke the KVM:</li></div>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;<code class="cCode">kvm -debugger -classpath ../api/classes:../samples/classes</code><a name="wp437566"> </a>
+&#160;&#160;&#160;&#160;&#160;<code class="cCode">-port 2800 test</code><a name="wp438749"> </a>
+</pre></div>
+<a name="wp437567"> </a><div class="pBullet1Plus"><li>On the debughost<em style="font-style: oblique" class="cEmphasis"> </em>system, assuming the current directory is <code class="cCode">tools/kdp/classes</code>, then the following command would invoke the debug agent (debug proxy). </li></div>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;<code class="cCode">java -classpath . kdp.KVMDebugProxy -l 1234 -p -r sicily</code><a name="wp437568"> </a>
+&#160;&#160;&#160;&#160;&#160;<code class="cCode">2800 -cp ../../../api/classes:../../../samples/classes</code><a name="wp438764"> </a>
+</pre></div>
+<a name="wp437569"> </a><div class="pBullet1Last"><li>On the <em class="cEmphasis">sicily</em> system, start the JPDA-compliant debugger.</li></div>
+</ul>
+<a name="wp439193"> </a><p class="pIndented1">
+For example, in Forte, open the source file <code class="cCode">test.java</code> and insert a breakpoint at some line in the file.) In Forte, go to the <code class="cCode">Debug-&gt;Connect</code> menu selection. (Newer versions of Forte have an <code class="cCode">Attach</code> menu item). Then, enter <code class="cCode">debughost</code> in the hostname box, and enter 1234 in the port number box. Press OK. 
+</p>
+<a name="wp439206"> </a><p class="pIndented1">
+At this point the Forte debugger communicates with the KVM, the program starts to run, and eventually it hits the breakpoint you inserted. You can now use Forte to single-step, read or set variable values, and so forth.
+</p>
+<a name="wp437522"> </a><p class="pBody">
+
+</p>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" class="full-width">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="portingJAM.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="">
+	    <img id="LongDescNotReq3" src="images/nextx.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KVM Porting Guide <br /> , CLDC 1.1</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    
+<p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169; 2003 Sun Microsystems, Inc. 
+  All rights reserved.</p>
+  </body>
+</html>

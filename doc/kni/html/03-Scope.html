@@ -1,0 +1,312 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="book-no-index" />
+    <meta name="LASTUPDATED" content="10/19/02 17:07:31" />
+    <title>KNI Scope</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="02-Goals.html" />
+    <link rel="Next" href="04-DataTypes.html" />
+    <link rel="Index" href="07-Examples.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" width="100%">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="02-Goals.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="04-DataTypes.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp434413"> </a><h2 class="pChapNum">
+Chapter &#160; 3
+</h2>
+<a name="wp442099"> </a><h2 class="pNewHTMLPage">
+KNI Scope
+</h2>
+<hr class="pHr"/>
+<a name="wp442319"> </a><p class="pBody">
+KNI is designed to be a logical subset of the Java Native Interface (JNI). The scope of KNI compared to JNI is presented in <a  href="03-Scope.html#wp444272">TABLE&#160;1</a> below. For a summary of the JNI Scope, refer to the Java Native Interface Programmer&#8217;s Guide and Specification, pages 175&#8211;179.</p><div align="left">
+<table border="0" cellpadding="7" id="wp444272">
+  <caption><a name="wp444272"> </a><div class="pTableCaption">
+TABLE&#160;1&#160;&#160;&#8211;&#160;&#160;JNI vs. KNI Scope
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp444276"> </a><div style="text-align: left" class="pTableHead">
+JNI Function Categories
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp444278"> </a><div style="text-align: left" class="pTableHead">
+Supported by KNI (YES/NO)
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp444280"> </a><div class="pTableText">
+Version Information
+</div>
+</td>
+    <td><a name="wp444282"> </a><div class="pTableText">
+YES
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444284"> </a><div class="pTableText">
+Class and Interface Operations
+</div>
+</td>
+    <td><a name="wp444286"> </a><div class="pTableText">
+YES
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444288"> </a><div class="pTableText">
+Exceptions
+</div>
+</td>
+    <td><a name="wp444290"> </a><div class="pTableText">
+YES
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444292"> </a><div class="pTableText">
+Global and Local References
+</div>
+</td>
+    <td><a name="wp444294"> </a><div class="pTableText">
+NO
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444296"> </a><div class="pTableText">
+Object Operations
+</div>
+</td>
+    <td><a name="wp444298"> </a><div class="pTableText">
+YES
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444300"> </a><div class="pTableText">
+Instance Field Access
+</div>
+</td>
+    <td><a name="wp444302"> </a><div class="pTableText">
+YES
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444304"> </a><div class="pTableText">
+Static Field Access
+</div>
+</td>
+    <td><a name="wp444306"> </a><div class="pTableText">
+YES
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444308"> </a><div class="pTableText">
+Instance Method Calls
+</div>
+</td>
+    <td><a name="wp444310"> </a><div class="pTableText">
+NO
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444312"> </a><div class="pTableText">
+Static Method Calls
+</div>
+</td>
+    <td><a name="wp444314"> </a><div class="pTableText">
+NO
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444316"> </a><div class="pTableText">
+String Operations
+</div>
+</td>
+    <td><a name="wp444318"> </a><div class="pTableText">
+YES
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444320"> </a><div class="pTableText">
+Array Operations
+</div>
+</td>
+    <td><a name="wp444322"> </a><div class="pTableText">
+YES
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444324"> </a><div class="pTableText">
+Native Method Registration
+</div>
+</td>
+    <td><a name="wp444326"> </a><div class="pTableText">
+NO
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444328"> </a><div class="pTableText">
+Monitor Operations
+</div>
+</td>
+    <td><a name="wp444330"> </a><div class="pTableText">
+NO
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444332"> </a><div class="pTableText">
+JavaVM Interface
+</div>
+</td>
+    <td><a name="wp444334"> </a><div class="pTableText">
+NO
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444336"> </a><div class="pTableText">
+Reflection Support
+</div>
+</td>
+    <td><a name="wp444338"> </a><div class="pTableText">
+NO
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+
+</p>
+<a name="wp442834"> </a><p class="pBody">
+In addition, KNI introduces a set of new operations for method parameter (operand stack) access, and for manipulating handles to objects. These operations are KNI-specific and not available in the JNI.
+</p>
+<a name="wp442840"> </a><p class="pBody">
+Each of the supported function categories is introduced in more detail below. Note that the naming of these functions is different from JNI. Each function supported by the KNI uses a prefix &#8220;KNI_&#8221; in front of the function name.
+</p>
+<a name="wp442618"> </a><h2 class="pHeading1">
+3.1	Version Information
+</h2>
+<a name="wp442619"> </a><p class="pBody">
+<code class="cCode">KNI_GetVersion</code> function returns the version of the KNI interface.
+</p>
+<a name="wp442844"> </a><h2 class="pHeading1">
+3.2	Class and Interface Operations
+</h2>
+<ul class="pBullet1"><a name="wp442907"> </a><div class="pBullet1"><li><code class="cCode">KNI_FindClass</code> returns a reference to a class or interface type of a given name.</li></div>
+<a name="wp442845"> </a><div class="pBullet1Plus"><li><code class="cCode">KNI_GetSuperClass</code> function returns the superclass of a given class or interface.</li></div>
+<a name="wp442870"> </a><div class="pBullet1Last"><li><code class="cCode">KNI_IsAssignableFrom</code> function checks if an instance of one class or interface can be assigned to an instance of another class or interface. This function is useful for runtime type checking.</li></div>
+</ul>
+<a name="wp442620"> </a><h2 class="pHeading1">
+3.3	Exceptions
+</h2>
+<ul class="pBullet1"><a name="wp442621"> </a><div class="pBullet1"><li><code class="cCode">KNI_ThrowNew</code> function raises an exception in the current thread.</li></div>
+<a name="wp442622"> </a><div class="pBullet1Last"><li><code class="cCode">KNI_FatalError</code> function prints a descriptive message and terminates the current virtual machine instance.</li></div>
+</ul>
+<a name="wp442623"> </a><h2 class="pHeading1">
+3.4	Object Operations
+</h2>
+<ul class="pBullet1"><a name="wp442625"> </a><div class="pBullet1"><li><code class="cCode">KNI_GetObjectClass</code> function returns the class of a given instance.</li></div>
+<a name="wp442626"> </a><div class="pBullet1Last"><li><code class="cCode">KNI_IsInstanceOf</code> function checks whether an object is an instance of a given class or interface.</li></div>
+</ul>
+<a name="wp442628"> </a><h2 class="pHeading1">
+3.5	Instance Field Access
+</h2>
+<ul class="pBullet1"><a name="wp442863"> </a><div class="pBullet1"><li><code class="cCode">KNI_GetFieldID</code> function performs a symbolic lookup on a given class and returns the field ID of a named instance field.</li></div>
+<a name="wp442629"> </a><div class="pBullet1Last"><li><code class="cCode">KNI_Get&lt;Type&gt;Field</code> and <code class="cCode">KNI_Set&lt;Type&gt;Field</code> functions access the instance fields of primitive or reference types.</li></div>
+</ul>
+<a name="wp442630"> </a><h2 class="pHeading1">
+3.6	Static Field Access
+</h2>
+<ul class="pBullet1"><a name="wp442876"> </a><div class="pBullet1"><li><code class="cCode">KNI_GetStaticFieldID</code> function performs a symbolic lookup on a given class and returns the field ID of a named static field.</li></div>
+<a name="wp442631"> </a><div class="pBullet1Last"><li><code class="cCode">KNI_GetStatic&lt;Type&gt;Field</code> and <code class="cCode">KNI_SetStatic&lt;Type&gt;Field</code> functions  access the static fields of primitive or reference types.</li></div>
+</ul>
+<a name="wp442632"> </a><h2 class="pHeading1">
+3.7	String Operations
+</h2>
+<ul class="pBullet1"><a name="wp442635"> </a><div class="pBullet1"><li><code class="cCode">KNI_GetStringLength</code> function returns the number of Unicode characters in a string represented by a <code class="cCode">java.lang.String</code> object.</li></div>
+<a name="wp442883"> </a><div class="pBullet1Plus"><li><code class="cCode">KNI_GetStringRegion</code> function provides access to the content of a <code class="cCode">java.lang.String</code> object.</li></div>
+<a name="wp443544"> </a><div class="pBullet1Plus"><li><code class="cCode">KNI_NewString</code> function creates a <code class="cCode">java.lang.String</code> object from the given Unicode string.</li></div>
+<a name="wp443399"> </a><div class="pBullet1Last"><li><code class="cCode">KNI_NewStringUTF</code> function creates a <code class="cCode">java.lang.String</code> object from the given UTF-8 string.</li></div>
+</ul>
+<a name="wp442637"> </a><h2 class="pHeading1">
+3.8	Array Operations
+</h2>
+<ul class="pBullet1"><a name="wp442936"> </a><div class="pBullet1"><li><code class="cCode">KNI_GetArrayLength</code> function returns the number of elements in an array.</li></div>
+<a name="wp442641"> </a><div class="pBullet1Plus"><li><code class="cCode">KNI_Get&lt;Type&gt;ArrayElement</code> and <code class="cCode">KNI_Set&lt;Type&gt;ArrayElement</code> functions allow a native method to access arrays elements of primitive or reference types.</li></div>
+<a name="wp443380"> </a><div class="pBullet1Last"><li><code class="cCode">KNI_GetRawArrayRegion</code> and <code class="cCode">KNI_SetRawArrayRegion</code> functions copy multiple elements in or out of arrays of primitive types.</li></div>
+</ul>
+<a name="wp442642"> </a><h2 class="pHeading1">
+3.9	Parameter (Operand Stack) Access
+</h2>
+<ul class="pBullet1"><a name="wp442643"> </a><div class="pBullet1"><li><code class="cCode">KNI_GetParameterAs&lt;Type&gt;</code> functions allow a native method to access the method parameters (local variables) in the operand stack.</li></div>
+<a name="wp442947"> </a><div class="pBullet1Plus"><li><code class="cCode">KNI_GetThisPointer</code> function allows a non-static native method to access the &#8216;<code class="cCode">this</code>&#8217; pointer in the current stack frame.</li></div>
+<a name="wp442951"> </a><div class="pBullet1Plus"><li><code class="cCode">KNI_GetClassPointer</code> function allows a static native method to access the class pointer.</li></div>
+<a name="wp443416"> </a><div class="pBullet1Last"><li><code class="cCode">KNI_Return&lt;Type&gt;</code> functions allow a native method to return a value of a primitive type.</li></div>
+</ul>
+<a name="wp443417"> </a><h2 class="pHeading1">
+3.10	Handle Operations
+</h2>
+<ul class="pBullet1"><a name="wp443421"> </a><div class="pBullet1"><li><code class="cCode">KNI_StartHandles</code> function allocates space for a specified number of handles that can be used for holding object pointers inside a native function.</li></div>
+<a name="wp443425"> </a><div class="pBullet1Plus"><li>KNI_DeclareHandle function defines a local handle that can hold an object pointer inside a native function.</li></div>
+<a name="wp443507"> </a><div class="pBullet1Plus"><li>KNI_IsNullHandle function checks if a handle is null, i.e., not pointing to any object at the time.</li></div>
+<a name="wp443550"> </a><div class="pBullet1Plus"><li>KNI_IsSameObject function checks if two handles refer to the same object.</li></div>
+<a name="wp443517"> </a><div class="pBullet1Plus"><li>KNI_ReleaseHandle function sets the value of a handle to null.</li></div>
+<a name="wp443426"> </a><div class="pBullet1Plus"><li>KNI_EndHandles function undeclares and deallocates the handles that were allocated earlier by the matching KNI_StartHandles call.</li></div>
+<a name="wp443561"> </a><div class="pBullet1Last"><li>KNI_EndHandlesAndReturnObject function undeclares and deallocates the handles that were allocated earlier by the matching KNI_StartHandles call, and returns a value of a reference type.</li></div>
+</ul>
+<a name="wp443470"> </a><p class="pBody">
+
+</p>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" width="100%">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="02-Goals.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="04-DataTypes.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KNI Specification <br /> K Native Interface (KNI), 1.0</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    <p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169;
+       2002 Sun Microsystems, Inc. All rights reserved.</p>
+  </body>
+</html>

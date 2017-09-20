@@ -1,0 +1,344 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="508 Compliant Book Without Index" />
+    <meta name="LASTUPDATED" content="10/18/02 16:56:37" />
+    <title>ArrayReference Command Set</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="07-ThreadRef.html" />
+    <link rel="Next" href="09-EventReq.html" />
+    <link rel="Index" href="13-Appendix.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" width="100%">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="07-ThreadRef.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="09-EventReq.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp434477"> </a><h2 class="pChapNum">
+Chapter &#160; 8
+</h2>
+<a name="wp442163"> </a><h2 class="pNewHTMLPage">
+ArrayReference Command Set
+</h2>
+<hr class="pHr"/>
+<a name="wp439917"> </a><p class="pBody">
+This command set is numbered (13) to match the equivalent JDWP command set.
+</p>
+<a name="wp432739"> </a>
+&#160;Length Command (1)
+
+<a name="wp432741"> </a><p class="pBody">
+Returns the number of components in a given array. 
+</p>
+<a name="wp432743"> </a><h5 class="pHeading4">
+Out Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444497">
+  <caption><a name="wp444500"> </a><div class="pTableCaption">
+TABLE&#160;30&#160;&#160;&#8211;&#160;&#160;Structure of Out Data for Length Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp444506"> </a><div class="pTableText">
+<code class="cCode">arrayID</code>
+</div>
+</td>
+    <td><a name="wp444508"> </a><div class="pTableText">
+<em class="cEmphasis">arrayObject</em>
+</div>
+</td>
+    <td><a name="wp444510"> </a><div class="pTableText">
+The array object ID. &#160; 
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp434478"> </a><h5 class="pHeading4">
+Reply Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444526">
+  <caption><a name="wp444529"> </a><div class="pTableCaption">
+TABLE&#160;31&#160;&#160;&#8211;&#160;&#160;Structure of Reply Data for Length Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp444535"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp444537"> </a><div class="pTableText">
+<em class="cEmphasis">arrayLength</em>
+</div>
+</td>
+    <td><a name="wp444539"> </a><div class="pTableText">
+The length of the array.&#160;
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp434479"> </a>
+&#160;GetValues Command (2)
+
+<a name="wp432757"> </a><p class="pBody">
+Returns a range of array components. The specified range must be within the bounds of the array. 
+</p>
+<a name="wp432759"> </a><h5 class="pHeading4">
+Out Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444557">
+  <caption><a name="wp444560"> </a><div class="pTableCaption">
+TABLE&#160;32&#160;&#160;&#8211;&#160;&#160;Structure of Out Data for GetValues Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp444566"> </a><div class="pTableText">
+<code class="cCode">arrayID</code>
+</div>
+</td>
+    <td><a name="wp444568"> </a><div class="pTableText">
+<em class="cEmphasis">arrayObject</em>
+</div>
+</td>
+    <td><a name="wp444570"> </a><div class="pTableText">
+The array object ID. &#160; 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444572"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp444574"> </a><div class="pTableText">
+<em class="cEmphasis">firstIndex</em>
+</div>
+</td>
+    <td><a name="wp444576"> </a><div class="pTableText">
+The first index to retrieve.&#160; 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444578"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp444580"> </a><div class="pTableText">
+<em class="cEmphasis">length</em>
+</div>
+</td>
+    <td><a name="wp444582"> </a><div class="pTableText">
+The number of components to retrieve. If length == -1, retrieve all components of the array.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp434480"> </a><h5 class="pHeading4">
+Reply Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444598">
+  <caption><a name="wp444601"> </a><div class="pTableCaption">
+TABLE&#160;33&#160;&#160;&#8211;&#160;&#160;Structure of Reply Data for GetValues Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp444607"> </a><div class="pTableText">
+<code class="cCode">byte</code>
+</div>
+</td>
+    <td><a name="wp444609"> </a><div class="pTableText">
+<em class="cEmphasis">Type tag</em>
+</div>
+</td>
+    <td><a name="wp444611"> </a><div class="pTableText">
+The type of the components of the array
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444613"> </a><div class="pTableText">
+<code class="cCode">Int</code>
+</div>
+</td>
+    <td><a name="wp444615"> </a><div class="pTableText">
+<em class="cEmphasis">Length</em>
+</div>
+</td>
+    <td><a name="wp444617"> </a><div class="pTableText">
+The number of components being returned.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444619"> </a><div class="pTableText">
+<code class="cCode">Values</code>
+</div>
+</td>
+    <td><a name="wp444621"> </a><div class="pTableText">
+<em class="cEmphasis">Values</em>
+</div>
+</td>
+    <td><a name="wp444623"> </a><div class="pTableText">
+Type tagged KDWP. Tag values of each component being returned.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp434481"> </a>
+&#160;SetValues Command (3)
+
+<a name="wp432773"> </a><p class="pBody">
+Sets a range of array components. The specified range must be within the bounds of the array. For primitive values, each value&#39;s type must match the array component type exactly. For object values, there must be a widening reference conversion from the value&#39;s type to the array component type and the array component type must be loaded. 
+</p>
+<a name="wp432775"> </a><h5 class="pHeading4">
+Out Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444640">
+  <caption><a name="wp444643"> </a><div class="pTableCaption">
+TABLE&#160;34&#160;&#160;&#8211;&#160;&#160;Structure of Out Data for SetValues Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp444649"> </a><div class="pTableText">
+<code class="cCode">arrayID</code>
+</div>
+</td>
+    <td><a name="wp444651"> </a><div class="pTableText">
+<em class="cEmphasis">arrayObject</em>
+</div>
+</td>
+    <td><a name="wp444653"> </a><div class="pTableText">
+The array object ID. &#160; 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444655"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp444657"> </a><div class="pTableText">
+<em class="cEmphasis">firstIndex</em>
+</div>
+</td>
+    <td><a name="wp444659"> </a><div class="pTableText">
+The first index to set.&#160;
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444661"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp444663"> </a><div class="pTableText">
+<em class="cEmphasis">values</em>
+</div>
+</td>
+    <td><a name="wp444665"> </a><div class="pTableText">
+The number of values to set. &#160; 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="3" rowspan="1"><a name="wp444667"> </a><div class="pTableText">
+Repeated <em class="cEmphasis">values</em> times: 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444673"> </a><div class="pTableText">
+<code class="cCode">untagged-value</code>
+</div>
+</td>
+    <td><a name="wp444675"> </a><div class="pTableText">
+<em class="cEmphasis">value</em>
+</div>
+</td>
+    <td><a name="wp444677"> </a><div class="pTableText">
+A value to set. &#160; 
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp434482"> </a><h5 class="pHeading4">
+Reply Data 
+</h5>
+<a name="wp432782"> </a><p class="pBody">
+(None) 
+</p>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" width="100%">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="07-ThreadRef.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="09-EventReq.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KDWP Specification <br /> KVM Debug Wire Protocol, 1.0</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    <p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169;
+       2002 Sun Microsystems, Inc. All rights reserved. Use is
+       subject to license terms. Third-party software, including
+       font  technology,  is copyrighted  and  licensed from  Sun
+       suppliers. Sun, Sun Microsystems, the Sun logo, Java and
+       Solaris are trademarks or registered trademarks of Sun
+       Microsystems, Inc. in the US and other countries.  Federal
+       Acquisitions: Commercial Software - Government Users
+       Subject to Standard License Terms and Conditions.</p>
+
+    <p class="copyright"><a
+       href="copyright.html">Copyright</a> &#169; 2002
+       Sun Microsystems, Inc. Tous droits r&#233;serv&#233;s.
+       Distribu&#233; par des licences qui en restreignent
+       l'utilisation.  Le logiciel d&#233;tenu par des tiers, et
+       qui comprend la technologie relative aux polices de
+       caract&#232;res, est prot&#233;g&#233; par un copyright et
+       licenci&#233; par des fournisseurs de Sun.  Sun, Sun
+       Microsystems, le logo Sun, Java et Solaris sont des
+       marques de fabrique ou des marques d&#233;pos&#233;es de
+       Sun Microsystems, Inc. aux Etats-Unis et dans d'autres
+       pays. </p>	
+  </body>
+</html>

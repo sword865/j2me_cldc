@@ -1,0 +1,477 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="book-no-index" />
+    <meta name="LASTUPDATED" content="02/20/03 12:37:34" />
+    <title>Contents</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="" />
+    <link rel="Next" href="portingLOF.html" />
+    <link rel="Index" href="portingJavaDebugger.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" class="full-width">
+      <tr> 
+	<td class="sun-darkblue">
+              <p>&#160;</p>
+	      <h1>KVM Porting Guide</h1>
+	      <h2><br />
+	        CLDC 1.1</h2>
+	      <h4>March, 2003</h4>
+	</td>
+      </tr>
+      <tr>
+	<td class="sun-lightblue">&#160;</td>
+      </tr>
+        <td class="go-right">
+	  <img id="LongDescNotReq1" src="images/tocx.gif" alt="Contents" />
+          <img id="LongDescNotReq2" src="images/prevx.gif" alt="Previous" />
+          <a accesskey="n" href="portingLOF.html">
+            <img id="LongDescNotReq3" src="images/next.gif" alt="Next"
+              border="0" /></a>
+        </td>
+    </table>
+
+
+<a name="wp997247"> </a><h2 class="pTitle">
+Contents
+</h2>
+<hr class="pHr"/>
+<a name="wp1003585"> </a><p class="pTOC2">
+<a href="portingIntro.html#wp431762"> 1. About This Document</a>
+</p>
+<a name="wp1003587"> </a><p class="pTOC3">
+<a href="portingIntro.html#wp431843">1.1 Who should use this document </a>
+</p>
+<a name="wp1003589"> </a><p class="pTOC3">
+<a href="portingIntro.html#wp431869">1.2 Related documentation </a>
+</p>
+<a name="wp1003591"> </a><p class="pTOC2">
+<a href="portingKVMIntro.html#wp431762"> 2. Introduction to KVM</a>
+</p>
+<a name="wp1003593"> </a><p class="pTOC3">
+<a href="portingKVMIntro.html#wp431794">2.1 K Virtual Machine (KVM) </a>
+</p>
+<a name="wp1003595"> </a><p class="pTOC3">
+<a href="portingKVMIntro.html#wp423347">2.2 Differences between KVM 1.1 and KVM 1.0.3/4 </a>
+</p>
+<a name="wp1003597"> </a><p class="pTOC2">
+<a href="portingCompiler.html#wp431763"> 3. Compiler Requirements</a>
+</p>
+<a name="wp1003599"> </a><p class="pTOC2">
+<a href="portingRequired.html#wp431769"> 4. Required Port-Specific Files and Functions</a>
+</p>
+<a name="wp1003601"> </a><p class="pTOC3">
+<a href="portingRequired.html#wp423895">4.1 File machine_md.h </a>
+</p>
+<a name="wp1003603"> </a><p class="pTOC3">
+<a href="portingRequired.html#wp432245">4.2 File main.c </a>
+</p>
+<a name="wp1003605"> </a><p class="pTOC3">
+<a href="portingRequired.html#wp419578">4.3 Runtime functions that require porting efforts </a>
+</p>
+<a name="wp1003607"> </a><p class="pTOC3">
+<a href="portingRequired.html#wp427856">4.4 Required C library functions </a>
+</p>
+<a name="wp1003609"> </a><p class="pTOC2">
+<a href="portingDirStruct.html#wp431769"> 5. Directory Structure</a>
+</p>
+<a name="wp1003611"> </a><p class="pTOC3">
+<a href="portingDirStruct.html#wp434020">5.1 Overview </a>
+</p>
+<a name="wp1003613"> </a><p class="pTOC3">
+<a href="portingDirStruct.html#wp432235">5.2 Directory kvm/VmCommon </a>
+</p>
+<a name="wp1003615"> </a><p class="pTOC3">
+<a href="portingDirStruct.html#wp433822">5.3 Directory kvm/VmExtra </a>
+</p>
+<a name="wp1003617"> </a><p class="pTOC3">
+<a href="portingDirStruct.html#wp434232">5.4 Directory kvm/VmExtra/src/fp </a>
+</p>
+<a name="wp1003619"> </a><p class="pTOC2">
+<a href="portingFlags.html#wp431761"> 6. Compilation Flags, Definitions and Macros</a>
+</p>
+<a name="wp1003621"> </a><p class="pTOC3">
+<a href="portingFlags.html#wp432228">6.1 General compilation options </a>
+</p>
+<a name="wp1003623"> </a><p class="pTOC3">
+<a href="portingFlags.html#wp434697">6.2 General system configuration options </a>
+</p>
+<a name="wp1003625"> </a><p class="pTOC3">
+<a href="portingFlags.html#wp432422">6.3 Palm-specific system configuration options </a>
+</p>
+<a name="wp1003627"> </a><p class="pTOC3">
+<a href="portingFlags.html#wp432247">6.4 Memory allocation settings </a>
+</p>
+<a name="wp1003629"> </a><p class="pTOC3">
+<a href="portingFlags.html#wp432514">6.5 Garbage collection options </a>
+</p>
+<a name="wp1003631"> </a><p class="pTOC3">
+<a href="portingFlags.html#wp434016">6.6 Class loading options </a>
+</p>
+<a name="wp1003633"> </a><p class="pTOC3">
+<a href="portingFlags.html#wp431941">6.7 Interpreter execution options (since KVM 1.0) </a>
+</p>
+<a name="wp1003635"> </a><p class="pTOC3">
+<a href="portingFlags.html#wp432957">6.8 Interpreter execution techniques (after KVM 1.0.2) </a>
+</p>
+<a name="wp1003637"> </a><p class="pTOC4">
+<a href="portingFlags.html#wp433099">6.8.1 Copying the virtual machine registers to local variables </a>
+</p>
+<a name="wp1003639"> </a><p class="pTOC4">
+<a href="portingFlags.html#wp433225">6.8.2 Splitting uncommon bytecodes into a separate subroutine </a>
+</p>
+<a name="wp1003641"> </a><p class="pTOC4">
+<a href="portingFlags.html#wp433054">6.8.3 Moving the test for thread rescheduling to branchpoints </a>
+</p>
+<a name="wp1003643"> </a><p class="pTOC4">
+<a href="portingFlags.html#wp433058">6.8.4 Padding out the bytecode space </a>
+</p>
+<a name="wp1003645"> </a><p class="pTOC3">
+<a href="portingFlags.html#wp432965">6.9 Java-level debugging options </a>
+</p>
+<a name="wp1003647"> </a><p class="pTOC3">
+<a href="portingFlags.html#wp421026">6.10 VM-level debugging and tracing options </a>
+</p>
+<a name="wp1003649"> </a><p class="pTOC4">
+<a href="portingFlags.html#wp432652">6.10.1 Including and excluding debugging code </a>
+</p>
+<a name="wp1003651"> </a><p class="pTOC4">
+<a href="portingFlags.html#wp432657">6.10.2 Tracing options </a>
+</p>
+<a name="wp1003653"> </a><p class="pTOC3">
+<a href="portingFlags.html#wp436049">6.11 Error handling macros </a>
+</p>
+<a name="wp1003655"> </a><p class="pTOC3">
+<a href="portingFlags.html#wp432772">6.12 Miscellaneous macros and options </a>
+</p>
+<a name="wp1003657"> </a><p class="pTOC3">
+<a href="portingFlags.html#wp434006">6.13 Overriding the compilation flags and other options from makefiles </a>
+</p>
+<a name="wp1003659"> </a><p class="pTOC2">
+<a href="portingStartup.html#wp431761"> 7. Virtual Machine Startup</a>
+</p>
+<a name="wp1003661"> </a><p class="pTOC3">
+<a href="portingStartup.html#wp432222">7.1 Command line startup </a>
+</p>
+<a name="wp1003663"> </a><p class="pTOC3">
+<a href="portingStartup.html#wp432227">7.2 Alternative VM startup strategies </a>
+</p>
+<a name="wp1003665"> </a><p class="pTOC3">
+<a href="portingStartup.html#wp432241">7.3 Using a JAM (Java Application Manager) </a>
+</p>
+<a name="wp1003667"> </a><p class="pTOC2">
+<a href="portingClassLoad.html#wp431763"> 8. Class Loading, JAR Files, and Inflation</a>
+</p>
+<a name="wp1003669"> </a><p class="pTOC3">
+<a href="portingClassLoad.html#wp432303">8.1 Porting the class file loading interface </a>
+</p>
+<a name="wp1003671"> </a><p class="pTOC3">
+<a href="portingClassLoad.html#wp432023">8.2 JAR file reader </a>
+</p>
+<a name="wp1003673"> </a><p class="pTOC4">
+<a href="portingClassLoad.html#wp433160">8.2.1 Opening a JAR file </a>
+</p>
+<a name="wp1003675"> </a><p class="pTOC4">
+<a href="portingClassLoad.html#wp433081">8.2.2 Closing a JAR file </a>
+</p>
+<a name="wp1003677"> </a><p class="pTOC4">
+<a href="portingClassLoad.html#wp433162">8.2.3 Reading a JAR file entry </a>
+</p>
+<a name="wp1003679"> </a><p class="pTOC4">
+<a href="portingClassLoad.html#wp433163">8.2.4 Reading multiple JAR file directory </a>
+</p>
+<a name="wp1003681"> </a><p class="pTOC3">
+<a href="portingClassLoad.html#wp433190">8.3 Inflation </a>
+</p>
+<a name="wp1003683"> </a><p class="pTOC2">
+<a href="porting64bit.html#wp431766"> 9. 64-bit Support</a>
+</p>
+<a name="wp1003685"> </a><p class="pTOC3">
+<a href="porting64bit.html#wp426762">9.1 Setup </a>
+</p>
+<a name="wp1003687"> </a><p class="pTOC3">
+<a href="porting64bit.html#wp427615">9.2 Alignment issues </a>
+</p>
+<a name="wp1003689"> </a><p class="pTOC2">
+<a href="portingFloatingPoint.html#wp431766"> 10. Floating-Point Support</a>
+</p>
+<a name="wp1003691"> </a><p class="pTOC3">
+<a href="portingFloatingPoint.html#wp434678">10.1 Introduction </a>
+</p>
+<a name="wp1003693"> </a><p class="pTOC4">
+<a href="portingFloatingPoint.html#wp434866">10.1.1 IEEE 754 floating-point </a>
+</p>
+<a name="wp1003695"> </a><p class="pTOC4">
+<a href="portingFloatingPoint.html#wp434886">10.1.2 Implementing Java virtual machine floating-point semantics </a>
+</p>
+<a name="wp1003697"> </a><p class="pTOC4">
+<a href="portingFloatingPoint.html#wp434907">10.1.3 Java virtual machine floating-point semantics: strictfp </a>
+</p>
+<a name="wp1003699"> </a><p class="pTOC4">
+<a href="portingFloatingPoint.html#wp434916">10.1.4 Floating-point architectures </a>
+</p>
+<a name="wp1003701"> </a><p class="pTOC4">
+<a href="portingFloatingPoint.html#wp434997">10.1.4.2.2 Generating FP-strict code in C </a>
+</p>
+<a name="wp1003703"> </a><p class="pTOC4">
+<a href="portingFloatingPoint.html#wp435015">10.1.4.2.3 Default floating-point </a>
+</p>
+<a name="wp1003705"> </a><p class="pTOC4">
+<a href="portingFloatingPoint.html#wp435020">10.1.4.3 Other architectures </a>
+</p>
+<a name="wp1003707"> </a><p class="pTOC3">
+<a href="portingFloatingPoint.html#wp434780">10.2 Floating-point support in the virtual machine </a>
+</p>
+<a name="wp1003709"> </a><p class="pTOC4">
+<a href="portingFloatingPoint.html#wp434782">10.2.1 Floating-point bytecodes implementation </a>
+</p>
+<a name="wp1003711"> </a><p class="pTOC3">
+<a href="portingFloatingPoint.html#wp434787">10.3 CLDC 1.1 floating-point libraries and trigonometric functions </a>
+</p>
+<a name="wp1003713"> </a><p class="pTOC3">
+<a href="portingFloatingPoint.html#wp435568">10.4 Porting </a>
+</p>
+<a name="wp1003715"> </a><p class="pTOC4">
+<a href="portingFloatingPoint.html#wp433049">10.4.1 SPARC </a>
+</p>
+<a name="wp1003717"> </a><p class="pTOC4">
+<a href="portingFloatingPoint.html#wp434277">10.4.2 ARM </a>
+</p>
+<a name="wp1003719"> </a><p class="pTOC4">
+<a href="portingFloatingPoint.html#wp433051">10.4.3 x86 </a>
+</p>
+<a name="wp1003721"> </a><p class="pTOC2">
+<a href="portingNative.html#wp433196"> 11. Native Code</a>
+</p>
+<a name="wp1003723"> </a><p class="pTOC3">
+<a href="portingNative.html#wp436382">11.1 Using the K Native Interface (KNI) </a>
+</p>
+<a name="wp1003725"> </a><p class="pTOC3">
+<a href="portingNative.html#wp422794">11.2 Implementing old-style native methods </a>
+</p>
+<a name="wp1003727"> </a><p class="pTOC4">
+<a href="portingNative.html#wp433311">11.2.1 Include files </a>
+</p>
+<a name="wp1003729"> </a><p class="pTOC4">
+<a href="portingNative.html#wp433279">11.2.2 Accessing arguments from old-style native methods </a>
+</p>
+<a name="wp1003731"> </a><p class="pTOC4">
+<a href="portingNative.html#wp433317">11.2.3 Returning a result from an old-style native function </a>
+</p>
+<a name="wp1003733"> </a><p class="pTOC4">
+<a href="portingNative.html#wp434122">11.2.4 Shortcuts </a>
+</p>
+<a name="wp1003735"> </a><p class="pTOC4">
+<a href="portingNative.html#wp435213">11.2.5 Callbacks </a>
+</p>
+<a name="wp1003737"> </a><p class="pTOC4">
+<a href="portingNative.html#wp433332">11.2.6 Exception handling in old-style native code </a>
+</p>
+<a name="wp1003739"> </a><p class="pTOC4">
+<a href="portingNative.html#wp433338">11.2.7 Useful functions in old-style native code </a>
+</p>
+<a name="wp1003741"> </a><p class="pTOC4">
+<a href="portingNative.html#wp433347">11.2.8 Garbage collection issues </a>
+</p>
+<a name="wp1003743"> </a><p class="pTOC4">
+<a href="portingNative.html#wp435579">11.2.9 Initialization and reinitialization of global variables </a>
+</p>
+<a name="wp1003745"> </a><p class="pTOC3">
+<a href="portingNative.html#wp436508">11.3 Native code lookup tables </a>
+</p>
+<a name="wp1003747"> </a><p class="pTOC3">
+<a href="portingNative.html#wp433595">11.4 Asynchronous native methods </a>
+</p>
+<a name="wp1003749"> </a><p class="pTOC4">
+<a href="portingNative.html#wp433385">11.4.1 Design of asynchronous methods </a>
+</p>
+<a name="wp1003751"> </a><p class="pTOC4">
+<a href="portingNative.html#wp432269">11.4.2 Implementation of asynchronous methods </a>
+</p>
+<a name="wp1003753"> </a><p class="pTOC2">
+<a href="portingEvent.html#wp422645"> 12. Event Handling</a>
+</p>
+<a name="wp1003755"> </a><p class="pTOC3">
+<a href="portingEvent.html#wp425317">12.1 High-level description </a>
+</p>
+<a name="wp1003757"> </a><p class="pTOC4">
+<a href="portingEvent.html#wp432424">12.1.1 Synchronous notification (blocking) </a>
+</p>
+<a name="wp1003759"> </a><p class="pTOC4">
+<a href="portingEvent.html#wp432426">12.1.2 Polling in Java code </a>
+</p>
+<a name="wp1003761"> </a><p class="pTOC4">
+<a href="portingEvent.html#wp432428">12.1.3 Polling in the bytecode interpreter </a>
+</p>
+<a name="wp1003763"> </a><p class="pTOC4">
+<a href="portingEvent.html#wp432430">12.1.4 Asynchronous notification </a>
+</p>
+<a name="wp1003765"> </a><p class="pTOC3">
+<a href="portingEvent.html#wp432439">12.2 Parameter passing and garbage collection issues </a>
+</p>
+<a name="wp1003767"> </a><p class="pTOC3">
+<a href="portingEvent.html#wp432413">12.3 Implementation in KVM </a>
+</p>
+<a name="wp1003769"> </a><p class="pTOC3">
+<a href="portingEvent.html#wp432886">12.4 Battery power conservation </a>
+</p>
+<a name="wp1003771"> </a><p class="pTOC2">
+<a href="portingVerifier.html#wp431766"> 13. Class File Verification</a>
+</p>
+<a name="wp1003773"> </a><p class="pTOC3">
+<a href="portingVerifier.html#wp436763">13.1 Overview </a>
+</p>
+<a name="wp1003775"> </a><p class="pTOC3">
+<a href="portingVerifier.html#wp436390">13.2 Using the preverifier </a>
+</p>
+<a name="wp1003777"> </a><p class="pTOC4">
+<a href="portingVerifier.html#wp436265">13.2.1 General form </a>
+</p>
+<a name="wp1003779"> </a><p class="pTOC4">
+<a href="portingVerifier.html#wp434338">13.2.2 Preverifier options </a>
+</p>
+<a name="wp1003781"> </a><p class="pTOC4">
+<a href="portingVerifier.html#wp436733">13.2.3 Supported input file formats </a>
+</p>
+<a name="wp1003783"> </a><p class="pTOC4">
+<a href="portingVerifier.html#wp436201">13.2.4 JAR support in preverifier (since KVM 1.0.2) </a>
+</p>
+<a name="wp1003785"> </a><p class="pTOC3">
+<a href="portingVerifier.html#wp436214">13.3 Porting the verifier </a>
+</p>
+<a name="wp1003787"> </a><p class="pTOC4">
+<a href="portingVerifier.html#wp434339">13.3.1 Compiling the preverifier </a>
+</p>
+<a name="wp1003789"> </a><p class="pTOC2">
+<a href="portingJCC.html#wp431766"> 14. JavaCodeCompact (JCC)</a>
+</p>
+<a name="wp1003791"> </a><p class="pTOC3">
+<a href="portingJCC.html#wp434338">14.1 JavaCodeCompact options </a>
+</p>
+<a name="wp1003793"> </a><p class="pTOC3">
+<a href="portingJCC.html#wp435486">14.2 Porting JavaCodeCompact </a>
+</p>
+<a name="wp1003795"> </a><p class="pTOC3">
+<a href="portingJCC.html#wp434339">14.3 Compiling JavaCodeCompact </a>
+</p>
+<a name="wp1003797"> </a><p class="pTOC3">
+<a href="portingJCC.html#wp434396">14.4 JavaCodeCompact files </a>
+</p>
+<a name="wp1003799"> </a><p class="pTOC3">
+<a href="portingJCC.html#wp435793">14.5 Executing JavaCodeCompact </a>
+</p>
+<a name="wp1003801"> </a><p class="pTOC3">
+<a href="portingJCC.html#wp427641">14.6 Limitations </a>
+</p>
+<a name="wp1003803"> </a><p class="pTOC2">
+<a href="portingJAM.html#wp431766"> 15. Java Application Manager (JAM)</a>
+</p>
+<a name="wp1003805"> </a><p class="pTOC3">
+<a href="portingJAM.html#wp436129">15.1 Using the JAM to install applications </a>
+</p>
+<a name="wp1003807"> </a><p class="pTOC4">
+<a href="portingJAM.html#wp436180">15.1.1 Application launching </a>
+</p>
+<a name="wp1003809"> </a><p class="pTOC4">
+<a href="portingJAM.html#wp436188">15.1.2 Application updating </a>
+</p>
+<a name="wp1003811"> </a><p class="pTOC3">
+<a href="portingJAM.html#wp436209">15.2 JAM components </a>
+</p>
+<a name="wp1003813"> </a><p class="pTOC4">
+<a href="portingJAM.html#wp436211">15.2.1 Security requirements </a>
+</p>
+<a name="wp1003815"> </a><p class="pTOC4">
+<a href="portingJAM.html#wp436215">15.2.2 JAR file </a>
+</p>
+<a name="wp1003817"> </a><p class="pTOC4">
+<a href="portingJAM.html#wp436219">15.2.3 Application Descriptor File </a>
+</p>
+<a name="wp1003819"> </a><p class="pTOC4">
+<a href="portingJAM.html#wp436247">15.2.4 Network communication </a>
+</p>
+<a name="wp1003821"> </a><p class="pTOC3">
+<a href="portingJAM.html#wp436254">15.3 Application lifecycle management </a>
+</p>
+<a name="wp1003823"> </a><p class="pTOC4">
+<a href="portingJAM.html#wp436270">15.3.1 Termination of the KVM Task </a>
+</p>
+<a name="wp1003825"> </a><p class="pTOC3">
+<a href="portingJAM.html#wp436277">15.4 Error handling </a>
+</p>
+<a name="wp1003827"> </a><p class="pTOC4">
+<a href="portingJAM.html#wp436281">15.4.1 Error conditions </a>
+</p>
+<a name="wp1003829"> </a><p class="pTOC2">
+<a href="portingJavaDebugger.html#wp431766"> 16. Java-Level Debugging Support (KDWP)</a>
+</p>
+<a name="wp1003831"> </a><p class="pTOC3">
+<a href="portingJavaDebugger.html#wp436204">16.1 Overall architecture </a>
+</p>
+<a name="wp1003833"> </a><p class="pTOC3">
+<a href="portingJavaDebugger.html#wp436215">16.2 Debug Agent </a>
+</p>
+<a name="wp1003835"> </a><p class="pTOC4">
+<a href="portingJavaDebugger.html#wp436218">16.2.1 Connections between a debugger and the KVM </a>
+</p>
+<a name="wp1003837"> </a><p class="pTOC4">
+<a href="portingJavaDebugger.html#wp436242">16.2.2 Packet processing </a>
+</p>
+<a name="wp1003839"> </a><p class="pTOC3">
+<a href="portingJavaDebugger.html#wp436250">16.3 Debugger support within KVM </a>
+</p>
+<a name="wp1003841"> </a><p class="pTOC4">
+<a href="portingJavaDebugger.html#wp436254">16.3.1 Events </a>
+</p>
+<a name="wp1003843"> </a><p class="pTOC4">
+<a href="portingJavaDebugger.html#wp436273">16.3.2 Breakpoints </a>
+</p>
+<a name="wp1003845"> </a><p class="pTOC4">
+<a href="portingJavaDebugger.html#wp436290">16.3.3 Single stepping </a>
+</p>
+<a name="wp1003847"> </a><p class="pTOC4">
+<a href="portingJavaDebugger.html#wp437762">16.3.4 Suspend and nosuspend options </a>
+</p>
+<a name="wp1003849"> </a><p class="pTOC3">
+<a href="portingJavaDebugger.html#wp437524">16.4 Using the Debug Agent and the JPDA Debugger </a>
+</p>
+<a name="wp1003851"> </a><p class="pTOC4">
+<a href="portingJavaDebugger.html#wp437527">16.4.1 Starting a debug session </a>
+</p>
+<a name="wp1003853"> </a><p class="pTOC4">
+<a href="portingJavaDebugger.html#wp437653">16.4.2 Debugging example </a>
+</p>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" class="full-width">
+      <tr>
+        <td class="go-left">
+	  <img id="LongDescNotReq6" src="images/tocx.gif" alt="Contents" />
+          <img id="LongDescNotReq7" src="images/prevx.gif" alt="Previous" />
+ 	  <a href="portingLOF.html">
+	    <img id="LongDescNotReq8" src="images/next.gif" alt="Next"
+	      border="0" /></a>
+        </td>
+      </tr>
+      <tr>
+	<td>
+	  <p>&#160;</p>
+      <p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169; 2003 Sun Microsystems, Inc. 
+        All rights reserved.</p>
+        </td>
+      </tr>
+    </table>
+
+  </body>
+</html>

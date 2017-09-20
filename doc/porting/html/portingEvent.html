@@ -1,0 +1,237 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="book-no-index" />
+    <meta name="LASTUPDATED" content="02/20/03 12:37:49" />
+    <title>Event Handling</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="portingNative.html" />
+    <link rel="Next" href="portingVerifier.html" />
+    <link rel="Index" href="portingJavaDebugger.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" class="full-width">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="portingNative.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="portingVerifier.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp424501"> </a><h2 class="pChapNum">
+Chapter &#160; 12
+</h2>
+<a name="wp422645"> </a><h2 class="pTitle">
+Event Handling
+</h2>
+<hr class="pHr"/>
+<a name="wp425317"> </a><h2 class="pHeading1">
+12.1	High-level description
+</h2>
+<a name="wp432418"> </a><p class="pBody">
+The Java Virtual Machine Specification does not define how the virtual machine interacts with events that arrive from the host operating system or from the target device. The KVM implementation, however, provides a variety of mechanisms that were designed to facilitate the integration of the KVM with the event system mechanisms of the host operating system or device.
+</p>
+<a name="wp433219"> </a><p class="pBody">
+There are four ways in which notification and handling of events can be accomplished in KVM:
+</p>
+<ol class="pList1"><a name="wp432419"> </a><div class="pList1"><li>Synchronous notification (blocking).</li></div>
+<a name="wp432420"> </a><div class="pList1Plus"><li>Polling in Java code.</li></div>
+<a name="wp432421"> </a><div class="pList1Plus"><li>Polling in the bytecode interpreter.</li></div>
+<a name="wp432422"> </a><div class="pList1Last"><li>Asynchronous notification.</li></div>
+</ol>
+<a name="wp433183"> </a><p class="pBody">
+Different solutions may be appropriate for different ports of the KVM, depending on which user interface libraries are supported, what kinds of networking libraries are used, and so forth.
+</p>
+<a name="wp432424"> </a><h3 class="pHeading2">
+12.1.1	Synchronous notification (blocking)
+</h3>
+<a name="wp432425"> </a><p class="pBody">
+By synchronous notification we refer to a situation in which the KVM performs event handling by calling a native I/O or event system function directly from the virtual machine. Since the KVM has only one physical thread of control inside the virtual machine, no other Java threads can be processed while the native function is being executed, and no VM system functions such as garbage collection can occur either. This is the simplest form of event notification, but there are many situations in which this solution is quite acceptable, provided that the person designing the native functions is careful enough to keep the native functions as short and efficient as possible.
+</p>
+<a name="wp432501"> </a><p class="pBody">
+For instance, writing a datagram into the network can typically be performed efficiently using this approach, since typically the datagram is sent to a network stack that contains a buffer and the time spent waiting for the event to complete is very small. In contrast, reading a datagram is often a very different story, and is often handled better using the other solutions described below. Using a native function to wait until a whole datagram is received would block the whole KVM while the read operation is in progress.
+</p>
+<a name="wp432426"> </a><h3 class="pHeading2">
+12.1.2	Polling in Java code
+</h3>
+<a name="wp432427"> </a><p class="pBody">
+Often event handling can be implemented efficiently using a combination of native and Java code. This is a simple way to allow other Java threads to execute while waiting for an event to complete. When using this approach, a polling Java loop is normally put somewhere in the Java runtime libraries so that the loop is hidden from applications. The normal procedure is for the runtime library to initiate a short native I/O operation and then repeatedly query the status of the I/O operation until it is finished. The polling Java code loop should always contain a call to <code class="cCode">Thread.yield</code> so that other Java threads can be allowed to run efficiently.
+</p>
+<a name="wp432525"> </a><p class="pBody">
+This method of waiting for event notification is very easy to implement and is free of any complexities typically associated with genuinely asynchronous threads (such as requiring critical sections, semaphores or monitors.) There are two disadvantages with this design. First, CPU cycles are needed to perform the Java-level polling that could otherwise be used to run application code (although the overhead is usually very small.) Second, due to the interpretation overhead, there may be some extra latency associated with event notification (especially if you forget to call <code class="cCode">Thread.yield</code> in the polling Java code loop.) Again, this overhead is usually negligible in all but most time-critical applications.
+</p>
+<a name="wp432428"> </a><h3 class="pHeading2">
+12.1.3	Polling in the bytecode interpreter
+</h3>
+<a name="wp432429"> </a><p class="pBody">
+The third approach to implement event handling is to use the bytecode interpreter periodically make calls to the native event handling operations. This approach is a variation of the synchronous notification approach described above. This approach was originally used extensively in the KVM, for example, to implement GUI event handling for the Palm platform.
+</p>
+<a name="wp432535"> </a><p class="pBody">
+In this approach, a native event handling function is called periodically from the interpreter loop. For performance reasons this is not normally done before every bytecode, but every few hundred bytecodes or so. This way the cost of performing event handling is well amortized. By changing the number of bytecodes executed before calling the event handling code, the virtual machine designer can control the latency of event delivery versus the CPU time spent looking for a new event. The smaller the number, the smaller latency and the larger CPU overhead. A large number reduces CPU overhead but increases the latency in event handling.
+</p>
+<a name="wp432545"> </a><p class="pBody">
+The advantage of this approach is that the cost in performance is less than polling in Java, and the event notification latency is more predictable and controllable. The way this approach works is closely related to asynchronous notification described in the next subsection.
+</p>
+<a name="wp432430"> </a><h3 class="pHeading2">
+12.1.4	Asynchronous notification
+</h3>
+<a name="wp432431"> </a><p class="pBody">
+The original KVM implementation supported only the three event handling implementations discussed above. However, in order to support truly asynchronous event handling, some new mechanisms have been introduced.
+</p>
+<a name="wp432580"> </a><p class="pBody">
+By asynchronous notification we refer to a situation in which event handling can occur in parallel while the virtual machine continues its execution. This is generally the most efficient event handling approach and will typically result in a very low notification latency. However, this approach generally requires that the underlying operating system provides the appropriate facilities for implementing asynchronous event handling. Such facilities may not be available in all operating systems. Also, this approach is quite a bit more complex to implement, as the virtual machine designer must be aware of possible locking and mutual exclusion issues. The reference implementation provides some examples that can be used as a starting point when implementing more device-specific event handling operations.
+</p>
+<a name="wp432589"> </a><p class="pBody">
+The general procedure in asynchronous notification is as follows. A thread calls a native function to start an I/O operation. The native code then suspends the thread&#39;s execution and immediately exits back to the interpreter loop, letting other threads continue execution. The interpreter then selects a new thread to run. Some time later an asynchronous event occurs and as a result some native code is executed which resumes the suspended thread. The interpreter then restarts the execution of the thread that had been waiting for an event to occur.
+</p>
+<a name="wp432432"> </a><p class="pBody">
+At the implementation level, there are two ways to implement such asynchronous notification. One is to use native (operating system) threads, and the other is to use some kind of software interrupt, callback routine or a polling routine.
+</p>
+<a name="wp432607"> </a><p class="pBody">
+In the first case, before the native function is called and the Java thread is suspended, a new operating system thread is created (or reawakened) and it is this thread which enters the native function. There is now an additional native thread of control running inside the virtual machine. After the native I/O thread is started, the order of execution inside the virtual machine is no longer fully deterministic, but depends on the occurrence of external events. Typically, the original thread starts executing another Java thread in the interpreter loop, and the new thread starts the I/O operation with what is almost always a blocking I/O operation to the operating system.
+</p>
+<a name="wp432627"> </a><p class="pBody">
+It is important to note that the native I/O function will execute out of context meaning that the context of the virtual machine will be a different thread. A special set of C macros were written that will hide this fact for the most part, but special care should be taken to be sure that no contextual pointers are used in this routine. When the blocking call is finished the native I/O thread resumes execution and unblocks the Java thread it was representing. The Java thread is then rescheduled, and the native I/O thread is either destroyed, or placed in a dormant state until it needs to be used again. The Win32 port of the KVM reference implementation does this by creating a pool of I/O threads that are reused when <br />I/O is to be performed.
+</p>
+<a name="wp432433"> </a><p class="pBody">
+The second implementation of asynchronous event handling can be done by utilizing callback functions associated with I/O requests. Here the native code is entered using the normal interpreter thread, I/O is started and then when the I/O operation is completed a callback routine is called by the operating system and the Java thread is unsuspended. In this scenario the native code is split into two routines, the first being a routine that starts the I/O operation and the second invoked when I/O is completed. In this case the first routine runs in the context of the calling Java thread, and the second one does not.
+</p>
+<a name="wp432434"> </a><p class="pBody">
+The final, less efficient variation of asynchronous event handling is where the I/O routine is polled for completion by the interpreter loop. This is very similar to the callback approach except that the second routine is called repeatedly by the interpreter to check if the I/O has finished. Eventually when the I/O operation has completed the routine unblocks the waiting Java thread. This calling of the native code by the interpreter is always done even when there are no pending events, and the native code must determine what Java threads should be restarted.
+</p>
+<a name="wp432577"> </a><p class="pBody">
+<b class="cBold">Synchronization issues.</b> It is very important to remember that in the cases where a separate native event handling thread or callback routine is used, the code for event handling may interrupt the virtual machine at any point. Therefore, the person porting the virtual machine must remember to add critical sections, monitors or semaphores to all locations where the program may be manipulating common data structures and a possible mutual exclusion problem might occur. The most obvious shared data structures are the queues of suspended and active Java threads. These are always manipulated using special routine in the virtual machine that is already properly synchronized. If there are any other shared data structures they must be synchronized in the native code. Failure to do this correctly will produce spurious bugs that are very hard to debug.
+</p>
+<a name="wp432439"> </a><h2 class="pHeading1">
+12.2	Parameter passing and garbage collection issues
+</h2>
+<a name="wp432713"> </a><p class="pBody">
+When native event handling code is called, its parameters will be on the stack for the calling Java thread. These are popped off the stack by the native code, and the if there is a result value to be returned this is pushed onto the Java stack just prior to resuming the execution of the thread. Native parameter passing issues are discussed in <a  href="portingNative.html#wp422649"><span style="color: #3366CC">Chapter&#160;11</span></a>.
+</p>
+<a name="wp432714"> </a><p class="pBody">
+Because native event handling code can access object memory, there are possible garbage collection issues especially when running long, asynchronous I/O operations. In general, the garbage collector is prevented from running when there is any native code is running. This is a problem when certain long I/O operations are performed. The most obvious case is waiting for a incoming network request. To solve this problem two functions called <code class="cCode">decrementAsyncCount</code> and <code class="cCode">incrementAsyncCount</code> are provided. The first allows the garbage collector to start, and the second prevents the collector from starting, and waits for it to stop if it was running.
+</p>
+<a name="wp432444"> </a><p class="pBody">
+It should be noted that if an object reference is passed to a native method, but no other reference to it exists in Java code after the call to <code class="cCode">incrementAsyncCount</code>, the object could be reclaimed accidentally by the garbage collector. It is hard to think of a realistic scenario where this could occur, but the possibility should be kept in mind. A possible example of such code is the following:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+native read(byte[]);<a name="wp432447"> </a>
+void skipBytes(int n) {<a name="wp432449"> </a>
+    read(new byte[n]);<a name="wp432450"> </a>
+}<a name="wp432451"> </a>
+</pre></div>
+<a name="wp432453"> </a><p class="pBody">
+Here the only reference to the byte array object exists on the parameter stack to the native function. If the native code calls <code class="cCode">incrementAsyncCount</code> after popping the parameter from the stack the array could be garbage collected.
+</p>
+<a name="wp432413"> </a><h2 class="pHeading1">
+12.3	Implementation in KVM
+</h2>
+<a name="wp432792"> </a><p class="pBody">
+The event handling implementation in KVM is composed of two main layers that both need to be taken into account when porting the KVM onto new hardware platforms.
+</p>
+<a name="wp432820"> </a><p class="pBody">
+At the top of the interpreter loop is the following code (starting from KVM 1.0.2, this code is actually located in macros):
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;if (isTimeToReschedule())<a name="wp433993"> </a>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;reschedule();<a name="wp432822"> </a>
+</pre></div>
+<a name="wp432823"> </a><p class="pBody">
+The standard rescheduling code performs the following operations.
+</p>
+<ol class="pList1"><a name="wp432906"> </a><div class="pList1"><li>Checks to see if there are any active Java threads and stops the VM if there are none.</li></div>
+<a name="wp432907"> </a><div class="pList1Plus"><li>Checks to see if enough time has passed to allow a thread that was waiting for a specific time to be restarted. If there is such a thread, it is automatically restarted.</li></div>
+<a name="wp432908"> </a><div class="pList1Plus"><li>Checks to see if any I/O events have occurred and where appropriate it allows the relevant threads to contend for CPU time</li></div>
+<a name="wp432909"> </a><div class="pList1Last"><li>Attempts to switch to another thread.</li></div>
+</ol>
+<a name="wp432834"> </a><p class="pBody">
+For performance reasons, the operations above are implemented as macros that are, by default, defined in <code class="cCode">VmCommon/h/events.h</code>. It is here that device-specific event handling code can be placed. By default, the <code class="cCode">isTimeToReschedule</code> macro decrements a global counter and tests for it being zero. When it is zero the second macro is executed. The idea here is for the reschedule to be executed only once for a fairly large number of bytecode executions. As the name implies, reschedule is where the thread context switching is done, if necessary.
+</p>
+<a name="wp432842"> </a><p class="pBody">
+The second layer in event handling implementation is the function
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;<code class="cCode">GetAndStoreNextKVMEvent(bool_t forever, ulong64 waitUntil)</code><a name="wp434066"> </a>
+</pre></div>
+<a name="wp434067"> </a><p class="pBody">
+If a new event is available from the host operating system, this function must call a special function called <code class="cCode">StoreKVMEvent</code> to make the details of the event available to the KVM. If no new events are available from the host operating system, then the function can simply return.
+</p>
+<a name="wp432982"> </a><p class="pBody">
+The arguments to the <code class="cCode">GetAndStoreNextKVMEvent</code> function are as follows:
+</p>
+<ul class="pBullet1"><a name="wp432975"> </a><div class="pBullet1"><li>If the forever argument is <code class="cCode">TRUE</code>, this function should wait for as long as necessary for an event to occur (used for battery conservation as described below.)</li></div>
+<a name="wp432976"> </a><div class="pBullet1Last"><li>If the forever argument is <code class="cCode">FALSE</code>, this function should wait until at most <code class="cCode">waitUntil</code> for an event to occur.</li></div>
+</ul>
+<a name="wp434131"> </a><p class="pBody">
+Some battery conservation features were included in the reference implementation of these functions. This is to pass to the event checking function the &#8220;forever&#8221; flag or the maximum wait time. If there are no pending events, the native implementation of the <code class="cCode">GetAndStoreNextKVMEvent</code> function can then put the device &#8220;to sleep&#8221; until the next event occurs. Battery conservation issues are discussed in more detail in the next subsection.
+</p>
+<a name="wp432886"> </a><h2 class="pHeading1">
+12.4	Battery power conservation
+</h2>
+<a name="wp432887"> </a><p class="pBody">
+Most KVM target devices are battery-operated, and the manufacturers of these devices are typically extremely concerned of excessive battery power consumption. To minimize battery usage, KVM is designed to stop the KVM interpreter loop from running whenever there are no active Java threads in the virtual machine and when the virtual machine is waiting for external events to occur. This requires support from the underlying operating system, however.
+</p>
+<a name="wp432888"> </a><p class="pBody">
+In order to take advantage of the power conservation features, you must port the following low-level event reading function
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<code class="cCode">GetAndStoreNextKVMEvent(bool_t forever, ulong64 waitUntil)</code><a name="wp432889"> </a>
+</pre></div>
+<a name="wp432890"> </a><p class="pBody">
+so that it calls the host system specific sleep/hibernation features when the virtual machine calls this function with the <code class="cCode">forever</code> argument set <code class="cCode">TRUE</code>. The KVM has been designed to automatically call this function with the <code class="cCode">forever</code> argument set <code class="cCode">TRUE</code> if the virtual machine has nothing else to do at the time.
+</p>
+<a name="wp433045"> </a><p class="pBody">
+This allows the native implementation of the event reading function to call the appropriate device-specific sleep/hibernation features until the next native event occurs.
+</p>
+<a name="wp433087"> </a><p class="pBody">
+Additionally, the macro <code class="cCode">SLEEP_UNTIL(wakeupTime)</code> should be defined in such a fashion that the target device goes to sleep until <code class="cCode">wakeupTime</code> milliseconds has passed.
+</p>
+<a name="wp431856"> </a><p class="pBody">
+
+</p>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" class="full-width">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="portingNative.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="portingVerifier.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KVM Porting Guide <br /> , CLDC 1.1</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    
+<p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169; 2003 Sun Microsystems, Inc. 
+  All rights reserved.</p>
+  </body>
+</html>

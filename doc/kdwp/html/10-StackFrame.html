@@ -1,0 +1,328 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="508 Compliant Book Without Index" />
+    <meta name="LASTUPDATED" content="10/18/02 16:56:38" />
+    <title>StackFrame Command Set</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="09-EventReq.html" />
+    <link rel="Next" href="11-Event.html" />
+    <link rel="Index" href="13-Appendix.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" width="100%">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="09-EventReq.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="11-Event.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp432821"> </a><h2 class="pChapNum">
+Chapter &#160; 10
+</h2>
+<a name="wp442179"> </a><h2 class="pNewHTMLPage">
+StackFrame Command Set
+</h2>
+<hr class="pHr"/>
+<a name="wp439935"> </a><p class="pBody">
+This command set is numbered (16) to match the equivalent JDWP command set.
+</p>
+<a name="wp432825"> </a>
+&#160;GetValues Command (1)
+
+<a name="wp432827"> </a><p class="pBody">
+Returns the value of one or more local variables in a given frame. Each variable must be visible at the current frame code index.  Even if local variable information is not available, values can be retrieved if the front-end is able to determine the correct local variable index. (Typically, this index can be determined for method arguments from the method signature without access to the local variable table information.) 
+</p>
+<a name="wp432829"> </a><h5 class="pHeading4">
+Out Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444446">
+  <caption><a name="wp444449"> </a><div class="pTableCaption">
+TABLE&#160;38&#160;&#160;&#8211;&#160;&#160;Structure of Out Data for GetValues Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp444455"> </a><div class="pTableText">
+<code class="cCode">threadID</code>
+</div>
+</td>
+    <td><a name="wp444457"> </a><div class="pTableText">
+<em class="cEmphasis">threadObject</em>
+</div>
+</td>
+    <td><a name="wp444459"> </a><div class="pTableText">
+The frame&#39;s thread. &#160; 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444461"> </a><div class="pTableText">
+<code class="cCode">frameID</code>
+</div>
+</td>
+    <td><a name="wp444463"> </a><div class="pTableText">
+<em class="cEmphasis">frame</em>
+</div>
+</td>
+    <td><a name="wp444465"> </a><div class="pTableText">
+The frame ID. &#160; 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444467"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp444469"> </a><div class="pTableText">
+<em class="cEmphasis">slots</em>
+</div>
+</td>
+    <td><a name="wp444471"> </a><div class="pTableText">
+The number of values to get. &#160;
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="3" rowspan="1"><a name="wp444473"> </a><div class="pTableText">
+Repeated <em class="cEmphasis">slots</em> times: 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444479"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp444481"> </a><div class="pTableText">
+<em class="cEmphasis">slot</em>
+</div>
+</td>
+    <td><a name="wp444483"> </a><div class="pTableText">
+The local variable&#39;s index in the frame. &#160;
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444485"> </a><div class="pTableText">
+<code class="cCode">byte</code>
+</div>
+</td>
+    <td><a name="wp444487"> </a><div class="pTableText">
+<em class="cEmphasis">sigbyte</em>
+</div>
+</td>
+    <td><a name="wp444489"> </a><div class="pTableText">
+A tag identifying the type of the variable &#160;
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp434486"> </a><h5 class="pHeading4">
+Reply Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444508">
+  <caption><a name="wp444511"> </a><div class="pTableCaption">
+TABLE&#160;39&#160;&#160;&#8211;&#160;&#160;Structure of Reply Data for GetValues Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp444517"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp444519"> </a><div class="pTableText">
+<em class="cEmphasis">values</em>
+</div>
+</td>
+    <td><a name="wp444521"> </a><div class="pTableText">
+The number of values retrieved. &#160;
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="3" rowspan="1"><a name="wp444523"> </a><div class="pTableText">
+Repeated values times:
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444529"> </a><div class="pTableText">
+<code class="cCode">value</code>
+</div>
+</td>
+    <td><a name="wp444531"> </a><div class="pTableText">
+<em class="cEmphasis">slotValue</em>
+</div>
+</td>
+    <td><a name="wp444533"> </a><div class="pTableText">
+The value of the local variable. &#160;
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp434487"> </a>
+&#160;SetValues Command (2)
+
+<a name="wp432843"> </a><p class="pBody">
+Sets the value of one or more local variables. Each variable must be visible at the current frame code index. For primitive values, the value&#39;s type must match the variable&#39;s type exactly. For object values, there must be a widening reference conversion from the value&#39;s type to the variable&#39;s type and the variable&#39;s type must be loaded. 
+</p>
+<a name="wp432845"> </a><p class="pBody">
+Even if local variable information is not available, values can be set, if the front-end is able to determine the correct local variable index. (Typically, this index can be determined for method arguments from the method signature without access to the local variable table information.) 
+</p>
+<a name="wp432847"> </a><h5 class="pHeading4">
+Out Data</h5><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq444553">
+  <caption><a name="wp444556"> </a><div class="pTableCaption">
+TABLE&#160;40&#160;&#160;&#8211;&#160;&#160;Structure of Out Data for SetValues Command
+</div>
+</caption>
+  <tr align="left">    <td><a name="wp444562"> </a><div class="pTableText">
+<code class="cCode">threadID</code>
+</div>
+</td>
+    <td><a name="wp444564"> </a><div class="pTableText">
+<em class="cEmphasis">threadObject</em>
+</div>
+</td>
+    <td><a name="wp444566"> </a><div class="pTableText">
+The frame&#39;s thread. &#160;
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444568"> </a><div class="pTableText">
+<code class="cCode">frameID</code>
+</div>
+</td>
+    <td><a name="wp444570"> </a><div class="pTableText">
+<em class="cEmphasis">frame</em>
+</div>
+</td>
+    <td><a name="wp444572"> </a><div class="pTableText">
+The frame ID. &#160;
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444574"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp444576"> </a><div class="pTableText">
+<em class="cEmphasis">slotValues</em>
+</div>
+</td>
+    <td><a name="wp444578"> </a><div class="pTableText">
+The number of values to set. &#160;
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="3" rowspan="1"><a name="wp444580"> </a><div class="pTableText">
+Repeated slotValues times:
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444586"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp444588"> </a><div class="pTableText">
+<em class="cEmphasis">slot</em>
+</div>
+</td>
+    <td><a name="wp444590"> </a><div class="pTableText">
+The slot ID. &#160; 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp444592"> </a><div class="pTableText">
+<code class="cCode">value</code>
+</div>
+</td>
+    <td><a name="wp444594"> </a><div class="pTableText">
+<em class="cEmphasis">slotValue</em>
+</div>
+</td>
+    <td><a name="wp444596"> </a><div class="pTableText">
+The value to set. &#160; 
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<h5 class="pHeading4">
+
+</h5>
+<a name="wp434488"> </a><h5 class="pHeading4">
+Reply Data 
+</h5>
+<a name="wp432854"> </a><p class="pBody">
+(None) 
+</p>
+<a name="wp434501"> </a><p class="pBody">
+
+</p>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" width="100%">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="09-EventReq.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="11-Event.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KDWP Specification <br /> KVM Debug Wire Protocol, 1.0</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    <p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169;
+       2002 Sun Microsystems, Inc. All rights reserved. Use is
+       subject to license terms. Third-party software, including
+       font  technology,  is copyrighted  and  licensed from  Sun
+       suppliers. Sun, Sun Microsystems, the Sun logo, Java and
+       Solaris are trademarks or registered trademarks of Sun
+       Microsystems, Inc. in the US and other countries.  Federal
+       Acquisitions: Commercial Software - Government Users
+       Subject to Standard License Terms and Conditions.</p>
+
+    <p class="copyright"><a
+       href="copyright.html">Copyright</a> &#169; 2002
+       Sun Microsystems, Inc. Tous droits r&#233;serv&#233;s.
+       Distribu&#233; par des licences qui en restreignent
+       l'utilisation.  Le logiciel d&#233;tenu par des tiers, et
+       qui comprend la technologie relative aux polices de
+       caract&#232;res, est prot&#233;g&#233; par un copyright et
+       licenci&#233; par des fournisseurs de Sun.  Sun, Sun
+       Microsystems, le logo Sun, Java et Solaris sont des
+       marques de fabrique ou des marques d&#233;pos&#233;es de
+       Sun Microsystems, Inc. aux Etats-Unis et dans d'autres
+       pays. </p>	
+  </body>
+</html>

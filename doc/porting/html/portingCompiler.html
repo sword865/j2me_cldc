@@ -1,0 +1,266 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="book-no-index" />
+    <meta name="LASTUPDATED" content="02/20/03 12:37:37" />
+    <title>Compiler Requirements</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="portingKVMIntro.html" />
+    <link rel="Next" href="portingRequired.html" />
+    <link rel="Index" href="portingJavaDebugger.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" class="full-width">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="portingKVMIntro.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="portingRequired.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp418775"> </a><h2 class="pChapNum">
+Chapter &#160; 3
+</h2>
+<a name="wp431763"> </a><h2 class="pTitle">
+Compiler Requirements
+</h2>
+<hr class="pHr"/>
+<a name="wp419037"> </a><p class="pBody">
+In order to be able to compile the KVM codebase, you must have a C compiler capable of compiling ANSI-compliant C files. Your compiler must define the basic C types as shown below in </p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq425867">
+  <caption><a name="wp425922"> </a><div class="pTableCaption">
+TABLE&#160;1&#160;&#160;&#8211;&#160;&#160;Basic types
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp425869"> </a><div style="text-align: left" class="pTableHead">
+Type
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp425871"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp425873"> </a><div class="pTableText">
+<code class="cCode">char</code>
+</div>
+</td>
+    <td><a name="wp425875"> </a><div class="pTableText">
+An 8-bit quantity. It can be signed or unsigned.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp425877"> </a><div class="pTableText">
+signed <code class="cCode">char</code>
+</div>
+</td>
+    <td><a name="wp425879"> </a><div class="pTableText">
+A signed 8-bit quantity.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp425881"> </a><div class="pTableText">
+unsigned <code class="cCode">char</code>
+</div>
+</td>
+    <td><a name="wp428301"> </a><div class="pTableText">
+An unsigned 8-bit quantity.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp425885"> </a><div class="pTableText">
+<code class="cCode">short</code>
+</div>
+</td>
+    <td><a name="wp425887"> </a><div class="pTableText">
+A signed 16-bit quantity.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp425889"> </a><div class="pTableText">
+unsigned <code class="cCode">short</code>
+</div>
+</td>
+    <td><a name="wp425891"> </a><div class="pTableText">
+An unsigned 16-bit quantity.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp425893"> </a><div class="pTableText">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp425895"> </a><div class="pTableText">
+A signed quantity. It is either 16 or 32 bits.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp425897"> </a><div class="pTableText">
+unsigned <code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp425899"> </a><div class="pTableText">
+A unsigned quantity. It is either 16 or 32 bits.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp425901"> </a><div class="pTableText">
+<code class="cCode">long</code>
+</div>
+</td>
+    <td><a name="wp425903"> </a><div class="pTableText">
+A signed 32-bit quantity.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp425905"> </a><div class="pTableText">
+unsigned <code class="cCode">long</code>
+</div>
+</td>
+    <td><a name="wp425907"> </a><div class="pTableText">
+An unsigned 32-bit quantity.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp425917"> </a><div class="pTableText">
+<code class="cCode">void</code> *
+</div>
+</td>
+    <td><a name="wp425919"> </a><div class="pTableText">
+A 32-bit pointer.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+<a  href="portingCompiler.html#wp425922">Table&#160;1</a>.
+</p>
+<a name="wp425865"> </a><p class="pBody">
+If your J2ME configuration or profile supports floating point numbers, your compiler must support the floating point types shown below</p><div align="left">
+<table border="0" cellpadding="7"   id="SummaryNotReq428306">
+  <caption><a name="wp428361"> </a><div class="pTableCaption">
+TABLE&#160;2&#160;&#160;&#8211;&#160;&#160;Floating point types
+</div>
+</caption>
+<thead>
+<tr  align="center">    <th  class="sun-verylightblue" scope="col"><a name="wp428308"> </a><div style="text-align: left" class="pTableHead">
+Type
+</div>
+
+</th>
+    <th  class="sun-verylightblue" scope="col"><a name="wp428310"> </a><div style="text-align: left" class="pTableHead">
+Description
+</div>
+
+</th>
+</tr>
+</thead>
+  <tr align="left">    <td><a name="wp428348"> </a><div class="pTableText">
+<code class="cCode">float</code>
+</div>
+</td>
+    <td><a name="wp428350"> </a><div class="pTableText">
+A 32-bit floating point value.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp428352"> </a><div class="pTableText">
+<code class="cCode">double</code>
+</div>
+</td>
+    <td><a name="wp428354"> </a><div class="pTableText">
+A 64-bit floating point value.
+</div>
+</td>
+</tr>
+<tr><td colspan="15"><hr class="pTableHr" /></td></tr>
+</table>
+</div>
+<p class="pBody">
+ in <a  href="portingCompiler.html#wp428361">Table&#160;2</a>.
+</p>
+<a name="wp431773"> </a><p class="pBody">
+All KVM implementations support the Java type <code class="cCode">long</code>.<a href="#wp431794"><span class="Footnote">1</span></a> It is preferable that your compiler support 64-bit integers; however this is not a requirement. Porting the Java type <code class="cCode">long</code> is discussed in <a  href="porting64bit.html#wp431766"><span style="color: #3366CC">Chapter&#160;9, &quot;64-bit Support</span></a>.&#8221;
+</p>
+<a name="wp431774"> </a><p class="pBody">
+Your compiler must have some means of indicating additional directories to be searched for &#8220;includes&#8221; of the form:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;<code style="font-style: normal" class="cCode">#include &lt;</code>filename<code class="cCode">&gt;</code><a name="wp432778"> </a>
+</pre></div>
+<a name="wp420541"> </a><p class="pBody">
+Our reference implementation has only been tested on machines with 32-bit pointers and that do not require &#8220;far&#8221; pointers of any sort. We do not know if it will run successfully on platforms with pointers of other sizes.
+</p>
+<a name="wp425948"> </a><p class="pBody">
+The codebase has been successfully compiled with the following compilers:
+</p>
+<ul class="pBullet1"><a name="wp431837"> </a><div class="pBullet1"><li>Sun C Compiler 5.0, 5.2 and 5.3 on Solaris,</li></div>
+<a name="wp432074"> </a><div class="pBullet1Plus"><li>GNU C 2.91.66 (egcs-1.1.2) compiler on Red Hat Linux,</li></div>
+<a name="wp432068"> </a><div class="pBullet1Plus"><li>GNU C 2.95.2 compiler on Solaris and Windows NT 4.0,</li></div>
+<a name="wp431849"> </a><div class="pBullet1Last"><li>Microsoft Visual C++ 6.0 Professional on Windows NT 4.0 and Windows 2000.</li></div>
+</ul>
+<a name="wp431840"> </a><p class="pBody">
+The only non-ANSI C feature in the KVM source code base is its use of 64-bit integer arithmetic. Refer to <a  href="porting64bit.html#wp418771"><span style="color: #3366CC">Chapter&#160;9</span></a> for further information on 64-bit support.
+</p>
+<a name="wp423347"> </a><p class="pBody">
+
+</p>
+
+  <a name="wp431794"> </a><div class="pFootNote">
+<a href="#wp431773"><span class="Footnote">1</span></a>Note that in the Java programming language, the type long is always 64 bits. <a  href="portingCompiler.html#wp425922">TABLE&#160;1</a> assumes that, as in 
+most current C implementations, the type long represents a 32-bit quantity. This document uses the phrase 
+&#8220;The Java type long&#8221; to refer to the 64-bit meaning.
+
+</div>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" class="full-width">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="portingKVMIntro.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="portingRequired.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KVM Porting Guide <br /> , CLDC 1.1</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    
+<p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169; 2003 Sun Microsystems, Inc. 
+  All rights reserved.</p>
+  </body>
+</html>

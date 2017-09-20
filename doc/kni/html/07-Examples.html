@@ -1,0 +1,531 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="06-ProgOverview.html" />
+    <link rel="Next" href="" />
+    <link rel="Index" href="07-Examples.html" />
+
+  
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="book-no-index" />
+    <meta name="LASTUPDATED" content="10/19/02 17:36:36" />
+    <title>Examples</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" width="100%">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="06-ProgOverview.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="">
+	  <img id="LongDescNotReq3" src="images/nextx.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp434413"> </a><h2 class="pChapNum">
+Chapter &#160; 7
+</h2>
+<a name="wp442099"> </a><h2 class="pNewHTMLPage">
+Examples
+</h2>
+<hr class="pHr"/>
+<a name="wp442606"> </a><p class="pBody">
+This chapter contains simple examples that illustrate the use of the K Native Interface.
+</p>
+<a name="wp443141"> </a><h2 class="pHeading1">
+7.1	Parameter Passing
+</h2>
+<a name="wp443630"> </a><p class="pBody">
+Consider the following Java class that illustrates parameter passing from a Java program to a set of native methods:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<a name="wp443551"> </a>
+package mypackage;<a name="wp443768"> </a>
+<a name="wp443556"> </a>
+public class ParameterPassing {<a name="wp443756"> </a>
+    private native void passOne(int i1);<a name="wp443558"> </a>
+    private native void passTwo(int i1, int i2);<a name="wp443559"> </a>
+    private native void passThree(int i1, int i2, int i3);<a name="wp443560"> </a>
+    <a name="wp443561"> </a>
+    public static void main(String[] args) {<a name="wp443753"> </a>
+        ParameterPassing p = new ParameterPassing();<a name="wp443563"> </a>
+        p.passOne(2);<a name="wp443564"> </a>
+        p.passTwo(2, 4);<a name="wp443565"> </a>
+        p.passThree(2, 4, 8);<a name="wp443566"> </a>
+    }<a name="wp443562"> </a>
+}<a name="wp443557"> </a>
+</pre></div>
+<a name="wp443552"> </a><p class="pBody">
+Below is the corresponding C programming language implementation of the native methods declared above:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#include &lt;kni.h&gt;<a name="wp443567"> </a>
+#include &lt;stdio.h&gt;<a name="wp443586"> </a>
+<a name="wp443587"> </a>
+KNIEXPORT KNI_RETURNTYPE_VOID Java_mypackage_ParameterPassing_passOne() {<a name="wp443585"> </a>
+    jint i1 = KNI_GetParameterAsInt(1);<a name="wp443600"> </a>
+    fprintf(stdout, &#8220;Parameter(s) passed: %ld\n&#8221;, i1);<a name="wp443601"> </a>
+    KNI_ReturnVoid();<a name="wp444731"> </a>
+}<a name="wp443572"> </a>
+KNIEXPORT KNI_RETURNTYPE_VOID Java_mypackage_ParameterPassing_passTwo() {<a name="wp443575"> </a>
+    jint i1 = KNI_GetParameterAsInt(1);<a name="wp443603"> </a>
+    jint i2 = KNI_GetParameterAsInt(2)<a name="wp443619"> </a>
+    fprintf(stdout, &#8220;Parameter(s) passed: %ld, %ld\n&#8221;, i1, i2);<a name="wp443604"> </a>
+    KNI_ReturnVoid();<a name="wp443573"> </a>
+}<a name="wp444736"> </a>
+KNIEXPORT KNI_RETURNTYPE_VOID Java_mypackage_ParameterPassing_passThree() {<a name="wp443581"> </a>
+    jint i1 = KNI_GetParameterAsInt(1);<a name="wp443615"> </a>
+    jint i2 = KNI_GetParameterAsInt(2);<a name="wp443628"> </a>
+    jint i3 = KNI_GetParameterAsInt(3);<a name="wp443629"> </a>
+    fprintf(stdout, &#8220;Parameter(s) passed: %ld, %ld, %ld\n&#8221;,<a name="wp443616"> </a>
+            i1, i2, i3);<a name="wp443627"> </a>
+    KNI_ReturnVoid();<a name="wp443579"> </a>
+}<a name="wp444741"> </a>
+</pre></div>
+<a name="wp444030"> </a><p class="pBody">
+In general, methods parameters of a primitive type can be accessed in native code by calling the appropriate <code class="cCode">KNI_GetParameterAs&lt;Type&gt;(jint index)</code> function with <code class="cCode">index</code> starting at one (1). Parameters are mapped from left to right, i.e., <code class="cCode">index</code> value 1 always refers to the leftmost parameter that has been passed on from the Java method to the native method. It is important to remember that long and double parameters occupy two entries in the operand stack.
+</p>
+<a name="wp443763"> </a><p class="pBody">
+<b class="cBold">Accessing the &#8216;this&#8217; pointer in instance methods</b>. In instance native methods (non-static native methods), the reference to the current instance (the value of the &#8216;<code class="cCode">this</code>&#8217; pointer) can be obtained by calling function <code class="cCode">KNI_GetThisPointer(thisHandle), where thisHandle is a handle declared in the context of the current native method</code>. Handle <code class="cCode">thisHandle </code>will contain the value of the &#8216;<code class="cCode">this</code>&#8217; pointer after calling this function.
+</p>
+<hr class="pHr"/><div class="note">
+<a name="wp443881"> </a>
+<b>Note &#8211;</b>  The &#8216;<code class="cCode">this</code>&#8217; pointer is not available in static native methods. The return value of the <code class="cCode">KNI_GetThisPointer</code> function is unspecified for static native methods.
+<hr class="pHr"/>
+<a name="wp443976"> </a><p class="pBody">
+<b class="cBold">Accessing the class pointer in static methods</b>. In static methods, the class pointer can be obtained by calling function <code class="cCode">KNI_GetClassPointer(classHandle)</code>, where <code class="cCode">classHandle</code> is a handle declared in the context of the current native method. Handle <code class="cCode">classHandle </code>will contain the value of the class pointer after calling this function.
+</p>
+<hr class="pHr"/><div class="note">
+<a name="wp444763"> </a>
+<b>Note &#8211;</b>  If you need to access the class pointer in an instance (non-static) method, it is recommended that you do this by calling <code class="cCode">KNI_GetThisPointer</code> first to obtain a handle to an object pointer, and then calling <code class="cCode">KNI_GetObjectClass.</code>
+<hr class="pHr"/>
+<a name="wp444837"> </a><h2 class="pHeading1">
+7.2	Returning Values from Native Functions
+</h2>
+<a name="wp444838"> </a><p class="pBody">
+Every KNI function MUST call one of the <code class="cCode">KNI_ReturnVoid</code>, <code class="cCode">KNI_Return&lt;Type&gt;</code> or <code class="cCode">KNI_EndHandlesAndReturnObject</code> functions.
+</p>
+<a name="wp444866"> </a><p class="pBody">
+Even when a native function does not want to return any value back to the calling Java function, function <code class="cCode">KNI_ReturnVoid</code> must be called, or otherwise the operand stack of the Java virtual machine may become corrupted.
+</p>
+<a name="wp444875"> </a><h3 class="pHeading2">
+7.2.1	Returning Primitive Values
+</h3>
+<a name="wp444876"> </a><p class="pBody">
+Below is a small native code fragment that illustrates how to return a primitive value from a native function. 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<a name="wp444882"> </a>
+#include &lt;kni.h&gt;<a name="wp444889"> </a>
+KNIEXPORT KNI_RETURNTYPE_INT Java_mypackage_MyClass_myNativeFunction1() {<a name="wp445027"> </a>
+    // Return integer 123 to the calling Java method<a name="wp444886"> </a>
+    KNI_ReturnInt(123);<a name="wp444893"> </a>
+}<a name="wp444892"> </a>
+</pre></div>
+<a name="wp444895"> </a><h3 class="pHeading2">
+7.2.2	Returning Object References
+</h3>
+<a name="wp444896"> </a><p class="pBody">
+Because all the object references in KNI are handles rather than direct object references, returning object refereces from KNI function is slightly more complicated than returning primitive values. Below is a small native code fragment that illustrates how to return an object reference from a native function. In this example, we will simply return the &#8216;this&#8217; pointer that is implicitly passed to every instance (non-static) method in Java.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#include &lt;kni.h&gt;<a name="wp445193"> </a>
+KNIEXPORT KNI_RETURNTYPE_OBJECT Java_mypackage_MyClass_myNativeFunction2() {<a name="wp445023"> </a>
+    <a name="wp444900"> </a>
+    KNI_StartHandles(1);<a name="wp444921"> </a>
+    KNI_DeclareHandle(objectHandle);<a name="wp444922"> </a>
+<a name="wp444924"> </a>
+    // Read the &#8216;this&#8217; pointer<a name="wp444928"> </a>
+    KNI_GetThisPointer(objectHandle);<a name="wp445297"> </a>
+<a name="wp444925"> </a>
+    // Return the &#8216;this&#8217; pointer to the calling Java method<a name="wp444929"> </a>
+    KNI_EndHandlesAndReturnObject(objectHandle);<a name="wp444901"> </a>
+}<a name="wp444902"> </a>
+</pre></div>
+<a name="wp444980"> </a><h3 class="pHeading2">
+7.2.3	Returning Null Object References
+</h3>
+<a name="wp444981"> </a><p class="pBody">
+If a native function wants to return a NULL pointer back to the calling Java function, the object handle must be set to NULL explicitly by calling <code class="cCode">KNI_ReleaseHandle</code>. Below is a small example.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#include &lt;kni.h&gt;<a name="wp446168"> </a>
+KNIEXPORT KNI_RETURNTYPE_OBJECT Java_mypackage_MyClass_myNativeFunction3() {<a name="wp444984"> </a>
+    <a name="wp444985"> </a>
+    KNI_StartHandles(1);<a name="wp444986"> </a>
+    KNI_DeclareHandle(objectHandle);<a name="wp444987"> </a>
+<a name="wp444988"> </a>
+    // Set the handle explicitly to NULL<a name="wp445015"> </a>
+    KNI_ReleaseHandle(objectHandle);<a name="wp444989"> </a>
+<a name="wp444990"> </a>
+    // Return the null reference to the calling Java method<a name="wp444991"> </a>
+    KNI_EndHandlesAndReturnObject(objectHandle);<a name="wp444994"> </a>
+}<a name="wp444995"> </a>
+</pre></div>
+<a name="wp443015"> </a><h2 class="pHeading1">
+7.3	Accessing Fields
+</h2>
+<a name="wp443018"> </a><p class="pBody">
+The Java programming language supports two kinds of fields. Each instance of a class has its own copy of the <em class="cEmphasis">instance fields</em> of the class, whereas all instances of a class share the <em class="cEmphasis">static fields</em> of the class.
+</p>
+<a name="wp443863"> </a><h3 class="pHeading2">
+7.3.1	General Procedure for Accessing Fields
+</h3>
+<a name="wp443864"> </a><p class="pBody">
+Field access is a two-step process. For instance fields, you first call <code class="cCode">KNI_GetFieldID</code> to obtain the <em class="cEmphasis">field ID</em> for the given class reference, field name, and field descriptor (refer to <a  href="04-DataTypes.html#wp442813"><span style="color: #3366CC">Section&#160;4.3.3 &#8220;Field Descriptors</span></a>&#8221; for an overview of field descriptors):
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<a name="wp443865"> </a>
+  fid = KNI_GetFieldID(classHandle, &quot;count&quot;, &quot;I&quot;);<a name="wp443866"> </a>
+</pre></div>
+<a name="wp443867"> </a><p class="pBody">
+Once you have obtained the <em class="cEmphasis">field ID</em>, you can pass the <em class="cEmphasis">object reference</em> and the <em class="cEmphasis">field ID</em> to the appropriate instance field access function:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+  jint count = KNI_GetIntField(objectHandle, fid);<a name="wp444782"> </a>
+</pre></div>
+<a name="wp443869"> </a><p class="pBody">
+For static fields, the procedure is similar, except that a separate set of functions is used:
+</p>
+<ol class="pList1"><a name="wp443870"> </a><div class="pList1"><li>Call <code class="cCode">KNI_GetStaticFieldID</code> for static fields instead of <code class="cCode">KNI_GetFieldID</code> for instance fields. <code class="cCode">KNI_GetStaticFieldID</code> and <code class="cCode">KNI_GetFieldID</code> have the same return type <code class="cCode">jfieldID</code>.</li></div>
+<a name="wp443871"> </a><div class="pList1Last"><li>Once a static field ID has been obtained, one can pass the <em class="cEmphasis">class reference</em>, instead of the <em class="cEmphasis">object reference</em>, to the appropriate static field access function.</li></div>
+</ol>
+<div class="pPreformatted"><pre class="pPreformatted">
+  fid = KNI_GetStaticFieldID(classHandle, &quot;staticCount&quot;, &quot;I&quot;);<a name="wp444790"> </a>
+  jint staticCount = KNI_GetStaticIntField(classHandle, fid);<a name="wp445197"> </a>
+</pre></div>
+<a name="wp445117"> </a><p class="pBody">
+Remember that when you access a field of a reference type (a field that contains an object instead of a primitive value), the object reference will be returned as a handle. Below is a small example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+KNI_GetObjectField(objectHandle, fid, toHandle);<a name="wp445195"> </a>
+</pre></div>
+<a name="wp445196"> </a><p class="pBody">
+This function would read the instance field represented by fid, and assign the value of that field to <code class="cCode">toHandle</code>.
+</p>
+<a name="wp443019"> </a><h3 class="pHeading2">
+7.3.2	Accessing Instance Fields
+</h3>
+<a name="wp443020"> </a><p class="pBody">
+Let us take a look at an example program that illustrates how to access instance fields from a native method implementation.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<a name="wp443794"> </a>
+package mypackage;<a name="wp443022"> </a>
+<a name="wp443023"> </a>
+public class InstanceFieldAccess {<a name="wp443024"> </a>
+    private int value;<a name="wp443025"> </a>
+<a name="wp443026"> </a>
+    private native void accessFieldNatively();<a name="wp443027"> </a>
+<a name="wp443028"> </a>
+    public static void main(String[] args) {<a name="wp443029"> </a>
+        InstanceFieldAccess p = new InstanceFieldAccess();<a name="wp443030"> </a>
+        p.value = 100;<a name="wp443031"> </a>
+        p.accessFieldNatively();<a name="wp443032"> </a>
+        System.out.println(&quot;In Java:&quot;);<a name="wp443033"> </a>
+        System.out.println(&quot;  Value = &quot; + p.value);<a name="wp443034"> </a>
+    }<a name="wp443035"> </a>
+}<a name="wp443036"> </a>
+</pre></div>
+<a name="wp443037"> </a><p class="pBody">
+The <code class="cCode">InstanceFieldAccess</code> class defines an instance field <code class="cCode">value</code>. The <code class="cCode">main</code> method creates an object of this class, sets the instance field, and then calls the native method <code class="cCode">InstanceFieldAccess.accessFieldNatively</code>. As we will see shortly, the native method prints to the standard output the value of the instance field.
+</p>
+<a name="wp443038"> </a><p class="pBody">
+Below is the implementation of the native method <code class="cCode">mypackage.InstanceFieldAccess.accessFieldNatively</code>.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<a name="wp443800"> </a>
+#include &lt;kni.h&gt;<a name="wp443040"> </a>
+#include &lt;stdio.h&gt;<a name="wp443041"> </a>
+<a name="wp443042"> </a>
+KNIEXPORT KNI_RETURNTYPE_VOID  Java_mypackage_InstanceFieldAccess_accessFieldNatively() {<a name="wp443043"> </a>
+<a name="wp443048"> </a>
+    /* Declare handles */<a name="wp444577"> </a>
+    KNI_StartHandles(2);<a name="wp445139"> </a>
+    KNI_DeclareHandle(objectHandle);<a name="wp443990"> </a>
+    KNI_DeclareHandle(classHandle);<a name="wp444652"> </a>
+<a name="wp444653"> </a>
+    /* Get &#8216;this&#8217; pointer */<a name="wp444654"> </a>
+    KNI_GetThisPointer(objectHandle);<a name="wp444609"> </a>
+<a name="wp444578"> </a>
+    /* Get instance&#8217;s class */<a name="wp445135"> </a>
+    KNI_GetObjectClass(objectHandle, classHandle);<a name="wp444610"> </a>
+<a name="wp443050"> </a>
+    /* Get field id and value */<a name="wp444580"> </a>
+    jfieldID fid = KNI_GetFieldID(classHandle, &quot;value&quot;, &quot;I&quot;);<a name="wp443051"> </a>
+    jint value = KNI_GetIntField(objectHandle, fid);<a name="wp443052"> </a>
+<a name="wp443054"> </a>
+    /* Print field value */<a name="wp444581"> </a>
+    fprintf(stdout, &quot;In C:\n  Value = %ld\n&quot;, value);<a name="wp443991"> </a>
+<a name="wp444612"> </a>
+    KNI_EndHandles();<a name="wp444613"> </a>
+    KNI_ReturnVoid();<a name="wp445246"> </a>
+}<a name="wp444659"> </a>
+</pre></div>
+<a name="wp443057"> </a><p class="pBody">
+Interpreting the <code class="cCode">InstanceFieldAccess</code> class with the KVM runtime interpreter produces the following output:
+</p>
+<a name="wp443058"> </a><p class="pBody">
+In C:
+</p>
+<a name="wp443059"> </a><p class="pBody">
+  Value = 100
+</p>
+<a name="wp443060"> </a><p class="pBody">
+In Java:
+</p>
+<a name="wp443061"> </a><p class="pBody">
+  Value = 100
+</p>
+<a name="wp443071"> </a><h3 class="pHeading2">
+7.3.3	Accessing Static Fields
+</h3>
+<a name="wp443072"> </a><p class="pBody">
+Accessing static fields is similar to accessing instance fields. Let us take a look at a minor variation of the <code class="cCode">InstanceFieldAccess</code> example:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+package mypackage;<a name="wp443074"> </a>
+<a name="wp443075"> </a>
+public class StaticFieldAccess {<a name="wp443076"> </a>
+    private static int value;<a name="wp443077"> </a>
+<a name="wp443078"> </a>
+    private native void accessFieldNatively();<a name="wp443079"> </a>
+<a name="wp443080"> </a>
+    public static void main(String[] args) {<a name="wp443081"> </a>
+        StaticFieldAccess p = new StaticFieldAccess();<a name="wp443082"> </a>
+        value = 100;<a name="wp443083"> </a>
+        p.accessFieldNatively();<a name="wp443084"> </a>
+        System.out.println(&quot;In Java: &quot;);<a name="wp443085"> </a>
+        System.out.println(&quot;  Value = &quot; + value);<a name="wp443086"> </a>
+    }<a name="wp443087"> </a>
+}<a name="wp443088"> </a>
+</pre></div>
+<a name="wp443089"> </a><p class="pBody">
+The <code class="cCode">StaticFieldAccess</code> class defines a static integer field <code class="cCode">value</code>. The <code class="cCode">StaticFieldAccess.main</code> method creates an object, initializes the static field, and then calls the native method <code class="cCode">StaticFieldAccess.accessFieldNatively</code>. The native method prints to the standard output the value of the static field and then sets the field to a new value. To verify that the field has indeed changed, the program prints the static field value again after the native method returns.
+</p>
+<a name="wp443090"> </a><p class="pBody">
+Below is the implementation of the native method <code class="cCode">StaticFieldAccess.accessFieldNatively</code>.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<a name="wp443092"> </a>
+#include &lt;kni.h&gt;<a name="wp443827"> </a>
+#include &lt;stdio.h&gt;<a name="wp443093"> </a>
+<a name="wp443094"> </a>
+KNIEXPORT KNI_RETURNTYPE_VOID  Java_mypackage_StaticFieldAccess_accessFieldNatively() {<a name="wp443095"> </a>
+<a name="wp444668"> </a>
+    /* Declare handle */<a name="wp444669"> </a>
+    KNI_StartHandles(1);<a name="wp445151"> </a>
+    KNI_DeclareHandle(classHandle);<a name="wp444670"> </a>
+<a name="wp444671"> </a>
+    /* Get class pointer */<a name="wp444573"> </a>
+    KNI_GetClassPointer(classHandle);<a name="wp444615"> </a>
+<a name="wp443101"> </a>
+    /* Get &#8220;I&#8221; &#8220;value&#8221; field id and its value */<a name="wp444574"> </a>
+    jfieldID fid = KNI_GetStaticFieldID(classHandle, &quot;value&quot;, &quot;I&quot;);<a name="wp443102"> </a>
+    jint value = KNI_GetStaticIntField(classHandle, fid);<a name="wp443103"> </a>
+<a name="wp443104"> </a>
+    /* Print &#8220;I&#8221; &#8220;value&#8221; field */<a name="wp444575"> </a>
+    fprintf(stdout, &quot;In C:\n  Value = %ld\n&quot;, value);<a name="wp443105"> </a>
+<a name="wp443106"> </a>
+    /* Change &#8220;I&#8221; &#8220;value&#8221; field */<a name="wp444576"> </a>
+    KNI_SetStaticIntField(classHandle, fid, 200);<a name="wp443994"> </a>
+<a name="wp444616"> </a>
+    KNI_EndHandles();<a name="wp444618"> </a>
+    KNI_ReturnVoid();<a name="wp445251"> </a>
+}<a name="wp443107"> </a>
+</pre></div>
+<a name="wp443108"> </a><p class="pBody">
+Interpreting the <code class="cCode">StaticFieldAccess</code> class with the KVM runtime interpreter produces the following output:
+</p>
+<a name="wp443109"> </a><p class="pBody">
+In C:
+</p>
+<a name="wp443110"> </a><p class="pBody">
+  Value = 100
+</p>
+<a name="wp443111"> </a><p class="pBody">
+In Java:
+</p>
+<a name="wp443112"> </a><p class="pBody">
+  Value = 200
+</p>
+<a name="wp443117"> </a><h2 class="pHeading1">
+7.4	Accessing Arrays
+</h2>
+<a name="wp444287"> </a><p class="pBody">
+The KNI provides access to arrays of a <em class="cEmphasis">primitive or reference type</em>.  For example, in the following code segment written in the The Java Programming Language<a href="#wp444292"><span class="Footnote">1</span></a>:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+    int[] iarr;<a name="wp444288"> </a>
+    float[] farr;<a name="wp443304"> </a>
+    int[][] aiarr<a name="wp444619"> </a>
+</pre></div>
+<a name="wp443307"> </a><p class="pBody">
+<code class="cCode">iarr</code> and <code class="cCode">farr</code> are primitive arrays while <code class="cCode">aiarr</code> is an array of a reference type.
+</p>
+<a name="wp443311"> </a><p class="pBody">
+Accessing arrays of a primitive type in a native method requires use of the family of <code class="cCode">KNI_Get/Set&lt;Type&gt;ArrayElement</code> where <code class="cCode">&lt;Type&gt;</code> is any one of the primitive types.
+</p>
+<a name="wp443880"> </a><p class="pBody">
+Let us look at a simple example.  The main method of the following Java class calls a native method <code class="cCode">sumArrayNatively</code> that adds up the contents of an <code class="cCode">int</code> array.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<a name="wp443336"> </a>
+package mypackage;<a name="wp443900"> </a>
+<a name="wp443340"> </a>
+public class SumIntArray {<a name="wp443901"> </a>
+    private native int sumArrayNatively(int[] arr);<a name="wp443341"> </a>
+    public static void main(String[] args) {<a name="wp444821"> </a>
+        SumIntArray p = new SumIntArray();<a name="wp443345"> </a>
+        int arr[] = new int[10];<a name="wp443346"> </a>
+        for (int i = 0; i &lt; 10; i++) {<a name="wp443995"> </a>
+            arr[i] = i;<a name="wp443486"> </a>
+        }<a name="wp443487"> </a>
+        int sum = p.sumArrayNatively(arr);<a name="wp443903"> </a>
+        System.out.println(&#8220;sum: &#8220; + sum);<a name="wp443996"> </a>
+    }<a name="wp443343"> </a>
+}<a name="wp443344"> </a>
+</pre></div>
+<a name="wp443379"> </a><p class="pBody">
+
+</p>
+<a name="wp444822"> </a><p class="pBody">
+The corresponding native C programming language code is shown below.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<a name="wp443907"> </a>
+#include &lt;kni.h&gt;<a name="wp444825"> </a>
+#include &lt;stdio.h&gt;<a name="wp444827"> </a>
+<a name="wp444828"> </a>
+KNIEXPORT KNI_RETURNTYPE_INT Java_mypackage_SumIntArray_sumArrayNatively() {<a name="wp443593"> </a>
+    jint i, sum = 0;<a name="wp443431"> </a>
+<a name="wp444675"> </a>
+    /* Declare handle */<a name="wp445311"> </a>
+    KNI_StartHandles(1);<a name="wp445167"> </a>
+    KNI_DeclareHandle(arrayHandle);<a name="wp445163"> </a>
+<a name="wp444565"> </a>
+    /* Read parameter #1 to arrayHandle */<a name="wp445166"> </a>
+    KNI_GetParameterAsObject(1, arrayHandle);<a name="wp444623"> </a>
+<a name="wp444571"> </a>
+    /* Sum int array components */<a name="wp444567"> </a>
+    for (i = 0; i &lt; 10; i++) {<a name="wp443908"> </a>
+        sum += KNI_GetIntArrayElement(arrayHandle, i);<a name="wp443434"> </a>
+    }<a name="wp443435"> </a>
+<a name="wp444572"> </a>
+    /* Set result sum */<a name="wp444568"> </a>
+    KNI_EndHandles();<a name="wp443462"> </a>
+    KNI_ReturnInt(sum);<a name="wp445259"> </a>
+}<a name="wp444679"> </a>
+</pre></div>
+<a name="wp443944"> </a><p class="pBody">
+Remember that in KNI, arrays are represented by the <code class="cCode">jarray</code> reference type and its &#8220;subtypes&#8221; such as <code class="cCode">jintArray</code>.  Just as a <code class="cCode">jstring</code> is not a C string type, neither is <code class="cCode">jarray</code> a C array type. One cannot implement the <code class="cCode">Java_IntArray_sumArray</code> native method by indirecting through a <code class="cCode">jarray</code> reference. Instead, one must use the proper <code class="cCode">KNI_Get&lt;Type&gt;ArrayElement</code> or <code class="cCode">KNI_Set&lt;Type&gt;ArrayElement</code> functions to access the array elements.
+</p>
+<a name="wp444441"> </a><h2 class="pHeading1">
+7.5	Accessing Strings
+</h2>
+<a name="wp443516"> </a><p class="pBody">
+Below is a small sample program that illustrates string access using KNI.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<a name="wp444465"> </a>
+package mypackage;<a name="wp446113"> </a>
+<a name="wp444466"> </a>
+public class StringAccess {<a name="wp444467"> </a>
+<a name="wp444469"> </a>
+    private native void accessStringNatively();<a name="wp444470"> </a>
+<a name="wp444471"> </a>
+    public static void main(String[] args) {<a name="wp444472"> </a>
+        StringAccess p = new StringAccess();<a name="wp444473"> </a>
+        p.accessStringNatively(&#8220;Parameter&#8221;);<a name="wp444475"> </a>
+    }<a name="wp444478"> </a>
+}<a name="wp444479"> </a>
+</pre></div>
+<a name="wp444447"> </a><p class="pBody">
+The corresponding native code is below.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+#include &lt;kni.h&gt;<a name="wp444490"> </a>
+#include &lt;stdio.h&gt;<a name="wp444491"> </a>
+<a name="wp444492"> </a>
+KNIEXPORT KNI_RETURNTYPE_VOID Java_mypackage_StringAccess_accessStringNatively() {<a name="wp444493"> </a>
+<a name="wp444494"> </a>
+    /* Allocate static buffer for the Unicode string */<a name="wp445176"> </a>
+    jchar buffer[256];<a name="wp445177"> </a>
+    jsize size;<a name="wp445178"> </a>
+    int i;<a name="wp445182"> </a>
+<a name="wp445179"> </a>
+    /* Declare handle */<a name="wp445170"> </a>
+    KNI_StartHandles(1);<a name="wp444685"> </a>
+    KNI_DeclareHandle(stringHandle);<a name="wp445033"> </a>
+<a name="wp444686"> </a>
+    /* Read parameter #1 to stringHandle */<a name="wp444498"> </a>
+    KNI_GetParameterAsObject(1, stringHandle);<a name="wp444627"> </a>
+<a name="wp444532"> </a>
+    /* Get the length of the string */<a name="wp444533"> </a>
+    size = KNI_GetStringLength(stringHandle);<a name="wp444499"> </a>
+<a name="wp444516"> </a>
+    /* Copy the Java string to our own buffer (as Unicode) */<a name="wp444520"> </a>
+    KNI_GetStringRegion(stringHandle, 0, size, buffer);<a name="wp444519"> </a>
+<a name="wp444500"> </a>
+    /* Print the Unicode characters as 8-bit chars */<a name="wp444524"> </a>
+    for (int i = 0; i &lt; length; i++) {<a name="wp444525"> </a>
+        fprintf(stdout, &quot;%c&quot;, (char)buffer[i]);<a name="wp444501"> </a>
+    }<a name="wp444530"> </a>
+<a name="wp444628"> </a>
+    KNI_EndHandles();<a name="wp444630"> </a>
+    KNI_ReturnVoid();<a name="wp445268"> </a>
+}<a name="wp444488"> </a>
+</pre></div>
+<hr class="pHr"/><div class="note">
+<a name="wp444462"> </a>
+<b>Note &#8211;</b>  IMPORTANT: Remember that function <code class="cCode">KNI_GetStringRegion</code> returns a Unicode string. This means that each returned character is 16 bits wide. It is important to take this into account when allocating buffer space for the returned string region.
+<hr class="pHr"/>
+<a name="wp444451"> </a><p class="pBody">
+
+</p>
+
+  <a name="wp444292"> </a><div class="pFootNote">
+<a href="#wp444287"><span class="Footnote">1</span></a>The Java&#8482; Programming Language (Java Series), Second Edition by Ken Arnold and James Gosling (Addison-
+Wesley, 1998)
+
+</div>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" width="100%">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="06-ProgOverview.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="">
+	    <img id="LongDescNotReq3" src="images/nextx.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KNI Specification <br /> K Native Interface (KNI), 1.0</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    <p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169;
+       2002 Sun Microsystems, Inc. All rights reserved.</p>
+  </div></div></div></body>
+</html>
