@@ -1,7 +1,7 @@
 /*
  * @(#)SearchPath.java    1.4 99/05/21
  *
- * Copyright © 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms. IN NO EVENT WILL SUN OR ITS
  * LICENSORS BE LIABLE FOR ANY LOST REVENUE, PROFIT OR DATA, OR FOR DIRECT,
  * INDIRECT, SPECIAL, CONSEQUENTIAL, INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER

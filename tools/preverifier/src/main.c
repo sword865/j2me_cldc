@@ -1,6 +1,6 @@
 /* * @(#)main.c    1.6 00/08/26
  *
- * Copyright © 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

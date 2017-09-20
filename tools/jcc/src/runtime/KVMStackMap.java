@@ -1,7 +1,7 @@
 /*
  *        KVMStackMap.java        1.4        01/02/02        SMI
  *
- * Copyright © 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 package runtime;

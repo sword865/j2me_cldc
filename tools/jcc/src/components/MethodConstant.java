@@ -1,7 +1,7 @@
 /*
  *    MethodConstant.java    1.2    97/05/27 SMI
  *
- * Copyright © 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
