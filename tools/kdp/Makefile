@@ -31,8 +31,8 @@ eraselists:
 compilefiles:
 	@if [ '!' -d classes ]; then rm -rf classes; mkdir classes; fi;
 	@if [ -f .filelist ]; then \
-		echo $(JAVAC) `cat .filelist`; \
-		$(JAVAC) -g$(DEBUGFLAG) -d classes -classpath classes \
+		echo $(JAVAC) -source 1.4 -target jsr14 `cat .filelist`; \
+		$(JAVAC) -source 1.4 -target jsr14 -g$(DEBUGFLAG) -d classes -classpath classes \
 	              `cat .filelist`; \
 		fi
 

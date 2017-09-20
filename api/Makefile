@@ -55,9 +55,9 @@ eraselists:
 compilefiles:$(PREVERIFY)
 	@if [ '!' -d tmpclasses ]; then rm -rf tmpclasses; mkdir tmpclasses; fi;
 	@if [ -f .filelist ]; then \
-		echo $(JAVAC) -g$(DEBUGFLAG) -d tmpclasses -bootclasspath classes \
+		echo $(JAVAC) -source 1.4 -target jsr14 -g$(DEBUGFLAG) -d tmpclasses -bootclasspath classes \
 		      -classpath classes `cat .filelist`; \
-		$(JAVAC) -g$(DEBUGFLAG) -d tmpclasses -bootclasspath classes \
+		$(JAVAC) -source 1.4 -target jsr14 -g$(DEBUGFLAG) -d tmpclasses -bootclasspath classes \
 		      -classpath classes `cat .filelist` || exit 1; \
 		echo $(PREVERIFY) -d classes tmpclasses; \
 		$(PREVERIFY) -d classes tmpclasses || exit 1; \

@@ -28,8 +28,8 @@ eraselists:
 compilefiles:
 	@if [ '!' -d classes ]; then rm -rf classes; mkdir classes; fi;
 	@if [ -f .filelist ]; then \
-		echo $(JAVAC) `cat .filelist`; \
-		$(JAVAC) -d classes -classpath classes:src \
+		echo $(JAVAC) -source 1.4 -target jsr14 `cat .filelist`; \
+		$(JAVAC) -source 1.4 -target jsr14 -d classes -classpath classes:src \
 	              `cat .filelist`; \
 	fi
 
