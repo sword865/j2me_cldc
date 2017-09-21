@@ -92,8 +92,8 @@ vpath %.c  $(TOP)/kvm/VmCommon/src/ $(TOP)/kvm/VmExtra/src/fp \
 		   $(TOP)/tools/jcc/ $(TOP)/jam/src/
 
 ifeq ($(GCC), true)
-   CC = gcc
-   LD = gcc
+   CC = gcc-3.3
+   LD = gcc-3.3
    LIBS= -luser32 -lgdi32 -lkernel32 -lmsvcrt -lwsock32
    CPPFLAGS = -DWIN32 -DGCC -I$(TOP)/kvm/VmCommon/h -I$(TOP)/kvm/VmWin/h \
 	   -I$(TOP)/kvm/VmExtra/h -I$(TOP)/jam/h -I$(TOP)/kvm/VmCommon/src

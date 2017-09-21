@@ -32,8 +32,8 @@ CFLAGS = \
 	-DTRIMMED \
 	-D$(ARCH) $(EXTRACFLAGS)
 
-CC = gcc
-LD = gcc
+CC = gcc-3.3
+LD = gcc-3.3
 
 DEBUG_FLAG =  
 LDFLAGS =

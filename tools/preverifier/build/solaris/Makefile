@@ -33,8 +33,8 @@ CFLAGS = \
 	-D$(ARCH) $(EXTRACFLAGS)
 
 ifeq ($(GCC), true)
-   CC = gcc
-   LD = gcc
+   CC = gcc-3.3
+   LD = gcc-3.3
    CFLAGS +=  -Wall $(CPPFLAGS) $(OTHER_FLAGS)
    DEBUG_FLAG =  
    LDFLAGS =

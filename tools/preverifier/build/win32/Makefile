@@ -34,8 +34,8 @@ OTHER_FLAGS += \
     $(EXTRACFLAGS)
 
 ifeq ($(GCC), true)
-   CC = gcc
-   LD = gcc
+   CC = gcc-3.3
+   LD = gcc-3.3
    CFLAGS = -DWIN32 -DGCC -mno-cygwin -mcpu=i386 -Wall $(OTHER_FLAGS)
    LIBS= -luser32 -lkernel32 -lmsvcrt -lwsock32
    CPPFLAGS += 

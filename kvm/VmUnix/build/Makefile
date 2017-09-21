@@ -92,7 +92,7 @@ CPPFLAGS = -DUNIX -DLINUX -D$(ARCH) \
 endif
 
 ifeq ($(GCC), true)
-   CC = gcc
+   CC = gcc-3.3
    CFLAGS =  -Wall $(CPPFLAGS) $(ROMFLAGS) $(OTHER_FLAGS)
    DEBUG_FLAG = -g 
    OPTIMIZE_FLAG = -O2

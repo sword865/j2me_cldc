@@ -1576,8 +1576,8 @@ static unsigned long get4bytes(CICcontext *context)
         JAVA_ERROR(context, "Truncated class file");
         return 0;
     } else {
-        unsigned long value = (ptr[0] << 24) + (ptr[1] << 16) +
-                                 (ptr[2] << 8) + ptr[3];
+        unsigned long value = ((unsigned long)ptr[0] << 24) + ((unsigned long)ptr[1] << 16) +
+                                 ((unsigned long)ptr[2] << 8) + (unsigned long)ptr[3];
         (context->ptr) += 4;
         return value;
     }

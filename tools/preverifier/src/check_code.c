@@ -759,8 +759,8 @@ verify_opcode_operands(context_type *context, int inumber, int offset)
     case opc_tableswitch: 
     case opc_lookupswitch: {
     /* Set the ->operand to be a table of possible instruction targets. */
-    long *lpc = (long *) UCALIGN(code + offset + 1);
-    long *lptr;
+    int *lpc = (int *) UCALIGN(code + offset + 1);
+    int *lptr;
     int *saved_operand;
     int keys;
     int k, delta;
@@ -772,8 +772,8 @@ verify_opcode_operands(context_type *context, int inumber, int offset)
         delta = 2;
         /* Make sure that the tableswitch items are sorted */
         for (k = keys - 1, lptr = &lpc[2]; --k >= 0; lptr += 2) {
-        long this_key = ntohl(lptr[0]);    /* NB: ntohl may be unsigned */
-        long next_key = ntohl(lptr[2]);
+            int this_key = ntohl(lptr[0]);    /* NB: ntohl may be unsigned */
+            int next_key = ntohl(lptr[2]);
         if (this_key >= next_key) { 
             CCerror(context, "Unsorted lookup switch");
         }
@@ -1238,17 +1238,17 @@ static int instruction_length(unsigned char *iptr)
     int instruction = *iptr;
     switch (instruction) {
         case opc_tableswitch: {
-        long *lpc = (long *) UCALIGN(iptr + 1);
+        int *lpc = (int *) UCALIGN(iptr + 1);
         int index = ntohl(lpc[2]) - ntohl(lpc[1]);
         if ((index < 0) || (index > 65535)) {
         return -1;    /* illegal */
-        } else { 
+        } else {
         return (unsigned char *)(&lpc[index + 4]) - iptr;
             }
     }
         
     case opc_lookupswitch: {
-        long *lpc = (long *) UCALIGN(iptr + 1);
+        int *lpc = (int *) UCALIGN(iptr + 1);
         int npairs = ntohl(lpc[1]);
         if (npairs < 0 || npairs >= 8192) 
         return  -1;
